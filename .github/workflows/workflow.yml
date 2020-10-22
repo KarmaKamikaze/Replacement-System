@@ -10,4 +10,4 @@ jobs:
       - name: GitHub Issue Due Dates Action
         uses: alexleventer/github-issue-due-dates-action@1.0.12
         with:
-          GH_TOKEN: "${{993d4597dc4d1b01218967acd36c97c7af01a8fa}}"
+          GH_TOKEN: "${{ 993d4597dc4d1b01218967acd36c97c7af01a8fa }}"
