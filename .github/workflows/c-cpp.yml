@@ -18,7 +18,7 @@ jobs:
       # uses: ArtificialAmateur/cpp-linter-action@6281cc1ef3abe25ee492f19f7d8b184ca873db34
       uses: ArtificialAmateur/cpp-linter-action@0.01  
       with:
-          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
+          GITHUB_TOKEN: "${{ secrets.C_CPP_CI }}"
     - name: configure
       run: ./configure
     - name: make
