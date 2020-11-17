@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: C/C++ code linter (clang-tidy, clang-format, and cppcheck)
+    #- name: C/C++ code linter (clang-tidy, clang-format, and cppcheck)
       # You may pin to the exact commit or the version.
       # uses: ArtificialAmateur/cpp-linter-action@6281cc1ef3abe25ee492f19f7d8b184ca873db34
-      uses: ArtificialAmateur/cpp-linter-action@0.01
+      #uses: ArtificialAmateur/cpp-linter-action@0.01
     - name: make
       run: make
     env:
