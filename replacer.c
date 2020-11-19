@@ -1,6 +1,8 @@
+#include <json-c/json.h>
 #include <stdio.h>
 
 #define MAX_POSITIONS 20
+#define MAX_STRING_LENGTH 1000
 
 typedef enum titles {
   closing_responsible,
@@ -29,6 +31,19 @@ int main(int argc, char const *argv[]) {
   print_employee(employee);
 
   return 0;
+}
+
+void parse_employee_data(employee_s employee) {
+  FILE *fp;
+  char input_file_data[MAX_STRING_LENGTH];
+
+  fp = fopen("employees.json", "r");
+  if (fp == NULL)
+    printf("Cannot open employee.json data file.\n");
+
+  fscanf(fp, "%s", input_file_data);
+
+  fclose(fp);
 }
 
 void print_employee(employee_s employee) {
