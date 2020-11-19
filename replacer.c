@@ -12,8 +12,8 @@ typedef enum titles {
 } titles;
 
 typedef struct employee_s {
-  int youth_worker; /* Boolean */
-  int number_of_positions;
+  int youth_worker;        /* Boolean */
+  int number_of_positions; /* Used internally */
   int positions[MAX_POSITIONS];
 } employee_s;
 
@@ -35,8 +35,9 @@ void print_employee(employee_s employee) {
   int i;
   int size = employee.number_of_positions;
 
-  printf("Under 18? %d\nTitles:", employee.youth_worker);
+  printf("Under 18? %s\nTitles:", employee.youth_worker ? "Yes." : "No.");
   for (i = 0; i <= size; i++) {
-    printf(" %d\n", employee.positions[i]);
+    printf(" %d", employee.positions[i]);
   }
+  printf("\n");
 }
