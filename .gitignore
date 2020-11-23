@@ -36,6 +36,11 @@
 *.x86_64
 *.hex
 
+# Files without an extension.
+*
+!/**/
+!*.*
+
 # Debug files
 *.dSYM/
 *.su
