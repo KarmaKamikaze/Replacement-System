@@ -41,12 +41,10 @@ void parse_employee_data(employee_s employee[]) {
   FILE *fp;
   int i; /* Counter */
 
-  /* Creates af file if it doesn't exist.*/
-  do
-  {
+  /* Creates a new file if it does not exist.*/
+  do {
     fp = fopen("employee.txt", "r");
-    if (fp == NULL)
-    {
+    if (fp == NULL) {
       printf("file employee.txt was not found, creating new file.");
       fp = fopen("employee.txt", "w");
       fclose(fp);
@@ -55,27 +53,20 @@ void parse_employee_data(employee_s employee[]) {
 
   printf(" elements counted %d \n", count_elements(fp));
 
-  for (i = 0; i <= count_elements(fp); i++)
-  {
-
+  for (i = 0; i <= count_elements(fp); i++) {
   }
   /* fscanf(fp, "%s, %s, %d"); */
 
   fclose(fp);
 }
 
-
-
-/*  */ 
-int count_elements(FILE *fp)
-{
+int count_elements(FILE *fp) {
   int elements = 0, ch = 0;
-  fseek(fp, 0, SEEK_SET); /* Makes sure we ALWAYS reed from the start of our file.*/
-  while (ch != EOF)
-  {
+  /* Makes sure we ALWAYS read from the start of our file. */
+  fseek(fp, 0, SEEK_SET);
+  while (ch != EOF) {
     ch = fgetc(fp);
-    if (ch == ',' || ch == '\n')
-    {
+    if (ch == ',' || ch == '\n') {
       elements++;
     }
   }
