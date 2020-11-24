@@ -1,3 +1,0 @@
-Name, position, 4
-Name2, position2, 6
-Name3, position3, 8
