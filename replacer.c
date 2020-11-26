@@ -55,7 +55,7 @@ void print_employee(employee_s employee) {
 void add_new_employee(employee_s employees[], int *num_of_employee) {
   char positions_str_arr[TOTAL_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"};
   char temp_string[10];
-  int i;
+  int i, j, duplicates_check_bool;
   printf("FULL NAME: ");
   scanf(" %[a-zA-Z ]", employees[*num_of_employee+1].name);
   
@@ -72,7 +72,7 @@ void add_new_employee(employee_s employees[], int *num_of_employee) {
   After the loops, the answer is converted into a boolean integer*/
   do {
     printf("IS EMPLOYEE A YOUTH WORKER? (YES/NO) ");
-    scanf(" %[YESNOyesno]", temp_string);
+    scanf(" %s", temp_string);
     if (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N')
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N');
@@ -84,7 +84,7 @@ void add_new_employee(employee_s employees[], int *num_of_employee) {
 
   do {
     printf("IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16? (YES/NO) ");
-    scanf(" %[YESNOyesno]", temp_string);
+    scanf(" %s", temp_string);
     if (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N')
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N');
@@ -116,22 +116,40 @@ void add_new_employee(employee_s employees[], int *num_of_employee) {
         break;
       }
     }
-    /*HER SKAL DER LAVES ET FOR LOOP ELLER NOGET SOM TJEKKER EFTER DUPLICATES. FX kan brugeren skrive 1,2,4,5,1. 
-    Et for loop skal breake og få brugeren til at indtaste listen igen!*/
 
-  } while (employees[*num_of_employee+1].positions[i-1] < 0 || employees[*num_of_employee+1].positions[i-1] > TOTAL_POSITIONS); 
+    /*This for-loop checks if there are duplicate values in the array of positions. The upper for loop counts the value that is being checked
+      while the inner for loop checks if the other values in the array is equal to i (the value the upper for loop counts)
+      Note the for loops condition. The upper for loop doesn't count the last value, since it has been checked earlier iterations. 
+      The inner for loop however checks the last value, because the second to last value has not been checked with the last value*/
+    duplicates_check_bool = 0;
+    for (i = 0; i < employees[*num_of_employee+1].number_of_positions - 1; i++){
+      for (j = i + 1; j <= employees[*num_of_employee+1].number_of_positions - 1; j++){
+        if (employees[*num_of_employee+1].positions[i] == employees[*num_of_employee+1].positions[j]){
+          duplicates_check_bool = 1;
+          break;
+        }
+      }
+      if (duplicates_check_bool){
+        printf("INVALID INPUT! TRY AGAIN!\n");
+        break;
+      }  
+    }
+
+  } while (employees[*num_of_employee+1].positions[i-1] < 0 || employees[*num_of_employee+1].positions[i-1] > TOTAL_POSITIONS || duplicates_check_bool); 
   /*Her trækkes 1 fra i, siden for loopet incrementer inden den breakes hvilket betyder at i er for høj*/
   
-  printf("\nCHOSEN POSITIONS:\n");
-  for (i = 0; i < employees[*num_of_employee+1].number_of_positions; i++) 
-    printf("%s\n", positions_str_arr[employees[*num_of_employee+1].positions[i]]);
   
+    /*Denne blok kan skrives som en printf, men dette er mere læsbart*/
   printf("\nEMPLOYEE %s WAS SUCCESFULLY ADDED.\n", employees[*num_of_employee+1].name);
   printf("PHONE NUMBER: %s\n", employees[*num_of_employee+1].phone_number);
   printf("YOUTH WORKER: %s\n", employees[*num_of_employee+1].youth_worker == 1 ? "YES" : "NO");
   printf("AVAILABLE ON WEEKDAYS FROM 8-16: %s\n", employees[*num_of_employee+1].weekday_availability == 1 ? "YES" : "NO");
   printf("NUMBER OF POSITIONS: %d\n", employees[*num_of_employee+1].number_of_positions);
-  /*Denne blok kan skrives som en printf, men dette er mere læsbart*/
+  printf("CHOSEN POSITIONS: ");
+  for (i = 0; i < employees[*num_of_employee+1].number_of_positions; i++) 
+    printf("[%s] ", positions_str_arr[employees[*num_of_employee+1].positions[i]]);
+  printf("\n");
+
 
  /*Slet employee funktionen kan bruges her til at slette hvis man ikke er tilfreds med resultatet*/
   num_of_employee++;
