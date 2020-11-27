@@ -22,8 +22,14 @@ typedef struct employee_s {
   int positions[TOTAL_POSITIONS];
 } employee_s;
 
-void print_employee(employee_s employee);
-void add_new_employee(employee_s employees[], int *num_of_employee);
+/*void print_employee(employee_s employee);*/
+void add_new_employee(employee_s employees[], int *num_of_employees);
+void scan_name(employee_s employees[], int current_employee, char *throwaway_string);
+void scan_phone_number(employee_s employees[], int current_employee, char *throwaway_string);
+void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *throwaway_string, char *string_youth_or_availability);
+void scan_number_of_positions(employee_s employees[], int current_employee, char *throwaway_string);
+void scan_positions(employee_s employees[], int current_employee, char *throwaway_string , char positions_str_arr[TOTAL_POSITIONS][20]);
+void print_employee_after_adding(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]);
 
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_EMPLOYEES];
@@ -41,6 +47,7 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 
+/*
 void print_employee(employee_s employee) {
   int i;
   int size = employee.number_of_positions;
@@ -50,107 +57,156 @@ void print_employee(employee_s employee) {
     printf(" %d\n", employee.positions[i]);
   }
 }
+*/
 
 /*Denne funktion tilføjer en ny employee til arrayet employees[]. */
-void add_new_employee(employee_s employees[], int *num_of_employee) {
+void add_new_employee(employee_s employees[], int *num_of_employees) {
   char positions_str_arr[TOTAL_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"};
-  char temp_string[10];
-  int i, j, duplicates_check_bool;
-  printf("FULL NAME: ");
-  scanf(" %[a-zA-Z ]", employees[*num_of_employee+1].name);
+  char throwaway_string[10]; /*throwaway_string is used to prevent scanf-overflow*/
   
-  /*Denne do-while scanner efter 8-cifret telefonnummer. Hvis det er for langt eller for kort kører løkken igen*/
+  
+  scan_name(employees, *num_of_employees+1, throwaway_string);
+
+  scan_phone_number(employees, *num_of_employees+1, throwaway_string);
+
+  scan_youth_worker_or_availability(employees, *num_of_employees+1, throwaway_string, "youth");
+  
+  scan_youth_worker_or_availability(employees, *num_of_employees+1, throwaway_string, "availability");
+  
+  scan_number_of_positions(employees, *num_of_employees+1, throwaway_string);
+  
+  scan_positions(employees, *num_of_employees+1, throwaway_string, positions_str_arr);
+  
+  print_employee_after_adding(employees, *num_of_employees+1, positions_str_arr);
+  
+   
+
+
+ /*Slet employee funktionen kan bruges her til at slette hvis man ikke er tilfreds med resultatet*/
+  *num_of_employees++;
+}
+
+
+
+/*This function scans after a name*/
+void scan_name(employee_s employees[], int current_employee, char *throwaway_string){
+  printf("FULL NAME: ");
+  scanf(" %[a-zA-Z ]", employees[current_employee].name);
+  gets(throwaway_string);
+}
+
+/*This function scans after a phone number. If the number is too lang or too short the do-while loop repeats*/
+void scan_phone_number(employee_s employees[], int current_employee, char *throwaway_string){
   do {
     printf("PHONE NUMBER: ");
-    scanf(" %[0-9]", employees[*num_of_employee+1].phone_number);
-    if (strlen(employees[*num_of_employee+1].phone_number) != 8)
+    scanf(" %[0-9]", employees[current_employee].phone_number);
+    gets(throwaway_string);
+    if (strlen(employees[current_employee].phone_number) != 8)
       printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (strlen(employees[*num_of_employee+1].phone_number) != 8);
-  
-  /*De næste 2 do-whiles kan laves om til én funktion der kaldes to gange. Vi skal blive enige om hvordan vi laver funktioner*/
-  /*These 2 next do-while loops asks a yes/no question and only accepts words that start with y or n. Case insensitive.
-  After the loops, the answer is converted into a boolean integer*/
+  } while (strlen(employees[current_employee].phone_number) != 8);
+}
+
+/*This function asks a yes/no question and only accepts words that start with y or n. Case insensitive.
+ *After the loops, the answer is converted into a boolean integer.
+ *A string is inserted when the function is called and this is used to determine which question is asked*/
+void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *throwaway_string, char *string_youth_or_availability){
+  char temp_string[10];
   do {
-    printf("IS EMPLOYEE A YOUTH WORKER? (YES/NO) ");
+    printf("%s (YES/NO) ", !strcmp(string_youth_or_availability, "youth") ? "IS EMPLOYEE A YOUTH WORKER?" : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     scanf(" %s", temp_string);
+    gets(throwaway_string);
     if (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N')
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N');
   
-  if (toupper(temp_string[0]) == 'Y'){
-    employees[*num_of_employee+1].youth_worker = 1;}
-  else {
-    employees[*num_of_employee+1].youth_worker = 0;}
+  if (!strcmp(string_youth_or_availability, "youth")){
+    if (toupper(temp_string[0]) == 'Y'){
+      employees[current_employee].youth_worker = 1;}
+    else {
+      employees[current_employee].youth_worker = 0;}
+  }
 
-  do {
-    printf("IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16? (YES/NO) ");
-    scanf(" %s", temp_string);
-    if (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N')
-      printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N');
-  
-  if (toupper(temp_string[0]) == 'Y'){
-    employees[*num_of_employee+1].weekday_availability = 1;}
-  else {
-    employees[*num_of_employee+1].weekday_availability = 0;}
+  if (!strcmp(string_youth_or_availability, "availability")){
+    if (toupper(temp_string[0]) == 'Y'){
+      employees[current_employee].weekday_availability = 1;}
+    else {
+      employees[current_employee].weekday_availability = 0;}
+  }
+}
 
-  /*This do-while loop asks for the number of positions the employee has and only accepts values larger than 0 and less than TOTAL_POSITIONS */
+
+/*This function scans after the number of positions the employee has and only accepts values larger than 0 and less than TOTAL_POSITIONS*/
+void scan_number_of_positions(employee_s employees[], int current_employee, char *throwaway_string){
   do {
     printf("NUMBER OF POSITIONS: ");
-    scanf(" %d", &employees[*num_of_employee+1].number_of_positions);
-    if (employees[*num_of_employee+1].number_of_positions > TOTAL_POSITIONS || employees[*num_of_employee+1].number_of_positions <= 0)
+    scanf(" %d", &employees[current_employee].number_of_positions);
+    gets(throwaway_string);
+    if (employees[current_employee].number_of_positions > TOTAL_POSITIONS || employees[current_employee].number_of_positions <= 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (employees[*num_of_employee+1].number_of_positions > TOTAL_POSITIONS || employees[*num_of_employee+1].number_of_positions <= 0);
+  } while (employees[current_employee].number_of_positions > TOTAL_POSITIONS || employees[current_employee].number_of_positions <= 0);
+}
 
-  /*This do-while loop prints the available positions and their corresponding integers. 
-  Afterwards it scans for the integers in a for-loop, performing scanf overflow. As soon as an integer is too small or too large, 
-  the for loop breaks and the while loop starts over*/
+
+/*This function prints the choosable positions and scans after them. The positions and their corresponding integers are printed.
+ *Afterwards it scans for the integers in a for-loop, performing scanf overflow. As soon as an integer is too small or too large, 
+ *the for loop breaks and the while loop starts over*/
+void scan_positions(employee_s employees[], int current_employee, char *throwaway_string , char positions_str_arr[TOTAL_POSITIONS][20]){
+  int i, j, has_duplicates_bool, number_of_scanned_numbers;
+
   do {
     printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
     for (i = 0; i <= TOTAL_POSITIONS-1; i++)
       printf("%s = %d\n", positions_str_arr+i, i);  /*Indeksering virker ikke helt her, så der bruges +i istedet*/
-    for (i = 0; i < employees[*num_of_employee+1].number_of_positions; i++){
-      scanf("%d,", &employees[*num_of_employee+1].positions[i]);
-      if (employees[*num_of_employee+1].positions[i] < 0 || employees[*num_of_employee+1].positions[i] > TOTAL_POSITIONS){
+    number_of_scanned_numbers = 0;
+    for (i = 0; i < employees[current_employee].number_of_positions; i++){
+      number_of_scanned_numbers += scanf("%d,", &employees[current_employee].positions[i]); 
+      /*scanf returns the number of items scanned. number_of_scanned_numbers is used to check if all positions are scanned in the while-loop*/
+      
+      if (employees[current_employee].positions[i] < 0 || employees[current_employee].positions[i] > TOTAL_POSITIONS){
         printf("INVALID INPUT! TRY AGAIN!\n"); 
         break;
       }
     }
+    gets(throwaway_string);
 
-    /*This for-loop checks if there are duplicate values in the array of positions. The upper for loop counts the value that is being checked
-      while the inner for loop checks if the other values in the array is equal to i (the value the upper for loop counts)
-      Note the for loops condition. The upper for loop doesn't count the last value, since it has been checked earlier iterations. 
-      The inner for loop however checks the last value, because the second to last value has not been checked with the last value*/
-    duplicates_check_bool = 0;
-    for (i = 0; i < employees[*num_of_employee+1].number_of_positions - 1; i++){
-      for (j = i + 1; j <= employees[*num_of_employee+1].number_of_positions - 1; j++){
-        if (employees[*num_of_employee+1].positions[i] == employees[*num_of_employee+1].positions[j]){
-          duplicates_check_bool = 1;
+    /*This for-loop checks if there are duplicate values in the array of positions. The outer for-loop counts the value that is being checked
+     *while the inner for-loop checks if the other values in the array is equal to i (the value the outer for-loop counts)
+     *Note the for-loops condition. The outer for-loop doesn't count the last value, since it has been checked earlier iterations. 
+     *The inner for-loop however checks the last value, because the second to last value has not been checked with the last value*/
+    has_duplicates_bool = 0;
+    for (i = 0; i < employees[current_employee].number_of_positions - 1; i++){
+      for (j = i + 1; j <= employees[current_employee].number_of_positions - 1; j++){
+        if (employees[current_employee].positions[i] == employees[current_employee].positions[j]){
+          has_duplicates_bool = 1;
           break;
         }
       }
-      if (duplicates_check_bool){
+      if (has_duplicates_bool){
         printf("INVALID INPUT! TRY AGAIN!\n");
         break;
       }  
     }
 
-  } while (employees[*num_of_employee+1].positions[i-1] < 0 || employees[*num_of_employee+1].positions[i-1] > TOTAL_POSITIONS || duplicates_check_bool); 
+  } while (employees[current_employee].positions[i-1] < 0 || employees[current_employee].positions[i-1] > TOTAL_POSITIONS || number_of_scanned_numbers != employees[current_employee].number_of_positions ||has_duplicates_bool); 
   /*Her trækkes 1 fra i, siden for loopet incrementer inden den breakes hvilket betyder at i er for høj*/
-  
-  
-    /*Denne blok kan skrives som en printf, men dette er mere læsbart*/
-  printf("\nEMPLOYEE %s WAS SUCCESFULLY ADDED.\n", employees[*num_of_employee+1].name);
-  printf("PHONE NUMBER: %s\n", employees[*num_of_employee+1].phone_number);
-  printf("YOUTH WORKER: %s\n", employees[*num_of_employee+1].youth_worker == 1 ? "YES" : "NO");
-  printf("AVAILABLE ON WEEKDAYS FROM 8-16: %s\n", employees[*num_of_employee+1].weekday_availability == 1 ? "YES" : "NO");
-  printf("NUMBER OF POSITIONS: %d\n", employees[*num_of_employee+1].number_of_positions);
-  printf("CHOSEN POSITIONS: ");
-  for (i = 0; i < employees[*num_of_employee+1].number_of_positions; i++) 
-    printf("[%s] ", positions_str_arr[employees[*num_of_employee+1].positions[i]]);
-  printf("\n");
-
-
- /*Slet employee funktionen kan bruges her til at slette hvis man ikke er tilfreds med resultatet*/
-  num_of_employee++;
 }
+
+
+/*This function prints the employee. The printf functions can be written into one, but this is more readable*/
+void print_employee_after_adding(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]){
+  int i;
+ 
+  printf("\nEMPLOYEE %s WAS SUCCESFULLY ADDED.\n", employees[current_employee].name);
+  printf("PHONE NUMBER: %s\n", employees[current_employee].phone_number);
+  printf("YOUTH WORKER: %s\n", employees[current_employee].youth_worker == 1 ? "YES" : "NO");
+  printf("AVAILABLE ON WEEKDAYS FROM 8-16: %s\n", employees[current_employee].weekday_availability == 1 ? "YES" : "NO");
+  printf("NUMBER OF POSITIONS: %d\n", employees[current_employee].number_of_positions);
+  printf("CHOSEN POSITIONS: ");
+  for (i = 0; i < employees[current_employee].number_of_positions; i++) 
+    printf("[%s] ", positions_str_arr[employees[current_employee].positions[i]]);
+  printf("\n");
+}
+
+
+
+
