@@ -21,6 +21,8 @@
 *.a
 *.la
 *.lo
+*.txt
+*.csv
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -35,6 +37,11 @@
 *.i*86
 *.x86_64
 *.hex
+
+# Files without an extension.
+*
+!/**/
+!*.*
 
 # Debug files
 *.dSYM/
