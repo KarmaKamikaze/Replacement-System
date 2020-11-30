@@ -29,6 +29,7 @@ void scan_youth_worker_or_availability(employee_s employees[], int current_emplo
 void scan_number_of_positions(employee_s employees[], int current_employee);
 void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]);
 void print_employee_after_adding(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]);
+void capitalize_word(char *str);
 
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_EMPLOYEES];
@@ -67,7 +68,6 @@ void add_new_employee(employee_s employees[], int *num_of_employees) {
 }
 
 
-
 /*This function scans after a name*/
 void scan_name(employee_s employees[], int current_employee){
   char throwaway_string[10]; /*throwaway_string is used to prevent scanf-overflow*/
@@ -97,19 +97,20 @@ void scan_youth_worker_or_availability(employee_s employees[], int current_emplo
     printf("%s (YES/NO) ", !strcmp(string_youth_or_availability, "youth") ? "IS EMPLOYEE A YOUTH WORKER?" : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     scanf(" %s", temp_string);
     gets(throwaway_string);
-    if (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N')
+    capitalize_word(temp_string);
+    if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (toupper(temp_string[0]) != 'Y' && toupper(temp_string[0]) != 'N');
-  
+  } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
+
   if (!strcmp(string_youth_or_availability, "youth")){
-    if (toupper(temp_string[0]) == 'Y'){
+    if (!strcmp(temp_string, "YES")){
       employees[current_employee].youth_worker = 1;}
     else {
       employees[current_employee].youth_worker = 0;}
   }
 
   if (!strcmp(string_youth_or_availability, "availability")){
-    if (toupper(temp_string[0]) == 'Y'){
+    if (!strcmp(temp_string, "YES")){
       employees[current_employee].weekday_availability = 1;}
     else {
       employees[current_employee].weekday_availability = 0;}
@@ -192,5 +193,9 @@ void print_employee_after_adding(employee_s employees[], int current_employee, c
 }
 
 
-
+void capitalize_word(char *str){
+  int i;
+  for (i = 0; i < strlen(str); i++)
+    str[i] = toupper(str[i]);
+}
 
