@@ -31,9 +31,10 @@ void add_new_employee(employee_s employees[], int *num_of_employees, char positi
 
 void edit_employee(employee_s employees[], int *num_of_employees)
 {
-    int current_employee;
+    /*int current_employee;
     scan_name_edit_employee(employees,*num_of_employees, &current_employee);
     printf("WHAT EMPLOYEE INFORMATION DO YOU WANT TO CHANGE");
+    */
     
 
 }
@@ -167,8 +168,10 @@ void print_employee_after_adding(employee_s employees[], int current_employee, c
   printf("\n");
 }
 
+
 void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int *current_employee)
 {
+  /*
     int i, found_employee_bool = 0;
     char temp_name_string[50];
     do
@@ -190,6 +193,7 @@ void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int 
         }
     } while (!found_employee_bool);
     *current_employee = i;
+    */
 }
     
 void capitalize_string(char *str){
