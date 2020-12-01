@@ -16,17 +16,17 @@ typedef struct employee_s {
 } employee_s;
 
 /* Function prototypes */
-int parse_employee_data(employee_s employee[]);
+int parse_employee_data(employee_s employees[]);
 int count_elements(FILE *fp);
-void print_employee(const employee_s employee[], int num_of_employees);
+void print_employee(const employee_s employees[], int num_of_employees);
 
 int main(int argc, char const *argv[]) {
-  employee_s employee[MAX_POSITIONS];
+  employee_s employees[MAX_POSITIONS];
   int num_of_employees;
-  char positions_str_arr[TOTAL_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"}; /*This array of strings is a placeholder for an array that is extracted from a csv-file*/
+  char positions_str_arr[MAX_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"}; /*This array of strings is a placeholder for an array that is extracted from a csv-file*/
 
-  num_of_employees = parse_employee_data(employee);
-  print_employee(employee, num_of_employees);
+  num_of_employees = parse_employee_data(employees);
+  print_employee(employees, num_of_employees);
   
   add_new_employee(employees, &num_of_employees, positions_str_arr);
 
@@ -38,10 +38,10 @@ int main(int argc, char const *argv[]) {
  * employee struct array, which it then returns together with the amount of
  * employees.
  *
- * @param employee Output parameter. An employee struct array.
+ * @param employees Output parameter. An employee struct array.
  * @return int The amount of employees parsed from file to array.
  */
-int parse_employee_data(employee_s employee[]) {
+int parse_employee_data(employee_s employees[]) {
   FILE *fp;
   int i, j; /* Counters */
   int num_of_elements;
@@ -63,19 +63,19 @@ int parse_employee_data(employee_s employee[]) {
   fseek(fp, 0, SEEK_SET);
   for (i = 0; i < num_of_elements; i++) {
     fgets(input_string, MAX_LINE_LENGTH, fp);
-    sscanf(input_string, "%[^,],%d,%d,%8[^,],%d,%[^\n]", employee[i].name,
-           &employee[i].youth_worker, &employee[i].weekday_availability,
-           employee[i].phone_numbers, &employee[i].number_of_positions,
+    sscanf(input_string, "%[^,],%d,%d,%8[^,],%d,%[^\n]", employees[i].name,
+           &employees[i].youth_worker, &employees[i].weekday_availability,
+           employees[i].phone_numbers, &employees[i].number_of_positions,
            temp_positions);
-    employee[i].name[MAX_STRING_LENGTH - 1] = '\0';
-    employee[i].phone_numbers[MAX_PHONE - 1] = '\0';
+    employees[i].name[MAX_STRING_LENGTH - 1] = '\0';
+    employees[i].phone_numbers[MAX_PHONE - 1] = '\0';
 
     /* Get the first token */
     token = strtok(temp_positions, ",");
     /* Get remaining tokens */
     j = 0;
     while (token != NULL) {
-      strcpy(employee[i].positions[j], token);
+      strcpy(employees[i].positions[j], token);
       token = strtok(NULL, ",");
       j++;
     }
@@ -108,19 +108,19 @@ int count_elements(FILE *fp) {
  * @brief This function prints the employee struct array to show that it has
  * been filled correctly.
  *
- * @param employee An employee struct array witch is prefilled.
+ * @param employees An employee struct array witch is prefilled.
  * @param num_of_employees The number of employees in the struct array.
  */
-void print_employee(const employee_s employee[], int num_of_employees) {
+void print_employee(const employee_s employees[], int num_of_employees) {
   int i, j;
 
   for (i = 0; i < num_of_employees; i++) {
-    printf("%s %d %d %s %d", employee[i].name, employee[i].youth_worker,
-           employee[i].weekday_availability, employee[i].phone_numbers,
-           employee[i].number_of_positions);
+    printf("%s %d %d %s %d", employees[i].name, employees[i].youth_worker,
+           employees[i].weekday_availability, employees[i].phone_numbers,
+           employees[i].number_of_positions);
     j = 0;
-    while (employee[i].positions[j][0] != '\0') {
-      printf(" %s", employee[i].positions[j]);
+    while (employees[i].positions[j][0] != '\0') {
+      printf(" %s", employees[i].positions[j]);
       j++;
     }
     printf("\n");
