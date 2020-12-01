@@ -19,10 +19,10 @@ typedef struct employee_s {
   int youth_worker; /* Boolean */
   int weekday_availability; /* Boolean */
   int number_of_positions;
-  int positions[TOTAL_POSITIONS];
+  char positions[TOTAL_POSITIONS][20];
 } employee_s;
 
-void add_new_employee(employee_s employees[], int *num_of_employees);
+void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[TOTAL_POSITIONS][20]);
 void scan_name(employee_s employees[], int current_employee);
 void scan_phone_number(employee_s employees[], int current_employee);
 void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *string_youth_or_availability);
@@ -34,15 +34,15 @@ void capitalize_word(char *str);
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_EMPLOYEES];
   int num_of_employees = 10; /*Denne variable skal bestemmes ud fra csv filen. Værdien er bare en placeholder pt.*/
+  char positions_str_arr[TOTAL_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"}; /*This array of strings is a placeholder for an array that is extracted from a csv-file*/
   
-  add_new_employee(employees, &num_of_employees);
+  add_new_employee(employees, &num_of_employees, positions_str_arr);
 
   return 0;
 }
 
 /*This function adds a new employee to the employees array.*/
-void add_new_employee(employee_s employees[], int *num_of_employees) {
-  char positions_str_arr[TOTAL_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"};
+void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[TOTAL_POSITIONS][20]) {
   
   
   /*Note that the index of the employees array is 1 smaller that the num_of_employees, which means that the 10th employee has the index 9. 
@@ -137,6 +137,7 @@ void scan_number_of_positions(employee_s employees[], int current_employee){
 void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]){
   int i, j, has_duplicates_bool, number_of_scanned_numbers;
   char throwaway_string[10];
+  int temp_array[TOTAL_POSITIONS];
 
   do {
     printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
@@ -144,10 +145,10 @@ void scan_positions(employee_s employees[], int current_employee, char positions
       printf("%s = %d\n", positions_str_arr+i, i);  /*Indeksering virker ikke helt her, så der bruges +i istedet*/
     number_of_scanned_numbers = 0;
     for (i = 0; i < employees[current_employee].number_of_positions; i++){
-      number_of_scanned_numbers += scanf("%d,", &employees[current_employee].positions[i]); 
+      number_of_scanned_numbers += scanf("%d,", &temp_array[i]); 
       /*scanf returns the number of items scanned. number_of_scanned_numbers is used to check if all positions are scanned in the while-loop*/
       
-      if (employees[current_employee].positions[i] < 0 || employees[current_employee].positions[i] > TOTAL_POSITIONS){
+      if (temp_array[i] < 0 || temp_array[i] > TOTAL_POSITIONS){
         printf("INVALID INPUT! TRY AGAIN!\n"); 
         break;
       }
@@ -161,7 +162,7 @@ void scan_positions(employee_s employees[], int current_employee, char positions
     has_duplicates_bool = 0;
     for (i = 0; i < employees[current_employee].number_of_positions - 1; i++){
       for (j = i + 1; j <= employees[current_employee].number_of_positions - 1; j++){
-        if (employees[current_employee].positions[i] == employees[current_employee].positions[j]){
+        if (temp_array[i] == temp_array[j]){
           has_duplicates_bool = 1;
           break;
         }
@@ -172,9 +173,14 @@ void scan_positions(employee_s employees[], int current_employee, char positions
       }  
     }
 
-  } while (employees[current_employee].positions[i-1] < 0 || employees[current_employee].positions[i-1] > TOTAL_POSITIONS || number_of_scanned_numbers != employees[current_employee].number_of_positions ||has_duplicates_bool); 
+  } while (temp_array[i-1] < 0 || temp_array[i-1] > TOTAL_POSITIONS || number_of_scanned_numbers != employees[current_employee].number_of_positions ||has_duplicates_bool); 
   /*Here 1 is subtracted from i, since the for-loop increments i before it breaks, which means i is too large*/
-}
+
+  for (i = 0; i < employees[current_employee].number_of_positions; i++)
+    strcpy(employees[current_employee].positions[i], positions_str_arr[temp_array[i]]);
+} 
+
+
 
 
 /*This function prints the employee. The printf functions can be written into one, but this is more readable*/
@@ -188,7 +194,7 @@ void print_employee_after_adding(employee_s employees[], int current_employee, c
   printf("NUMBER OF POSITIONS: %d\n", employees[current_employee].number_of_positions);
   printf("CHOSEN POSITIONS: ");
   for (i = 0; i < employees[current_employee].number_of_positions; i++) 
-    printf("[%s] ", positions_str_arr[employees[current_employee].positions[i]]);
+    printf("[%s] ", employees[current_employee].positions[i]);
   printf("\n");
 }
 
