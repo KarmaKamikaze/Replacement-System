@@ -9,7 +9,7 @@ void add_new_employee(employee_s employees[], int *num_of_employees, char positi
   
   /*Note that the index of the employees array is 1 smaller that the num_of_employees, which means that the 10th employee has the index 9. 
    *Therefore the new employee (employee 11) has the index equal to num_of_employees (10)*/
-  scan_name(employees, *num_of_employees);
+  scan_name_add_employee(employees, *num_of_employees);
 
   scan_phone_number(employees, *num_of_employees);
 
@@ -29,16 +29,23 @@ void add_new_employee(employee_s employees[], int *num_of_employees, char positi
   *num_of_employees++;
 }
 
+void edit_employee(employee_s employees[], int *num_of_employees)
+{
+    int current_employee;
+    scan_name_edit_employee(employees,*num_of_employees, &current_employee);
+    printf("WHAT EMPLOYEE INFORMATION DO YOU WANT TO CHANGE");
+    
 
+}
 /*This function scans after a name*/
-void scan_name(employee_s employees[], int current_employee){
+void scan_name_add_employee(employee_s employees[], int current_employee){
   char throwaway_string[10]; /*throwaway_string is used to prevent scanf-overflow*/
   printf("FULL NAME: ");
   scanf(" %[a-zA-Z ]", employees[current_employee].name);
   gets(throwaway_string);
 }
 
-/*This function scans after a phone number. If the number is too lang or too short the do-while loop repeats*/
+/*This function scans after a phone number. If the number is too long or too short the do-while loop repeats*/
 void scan_phone_number(employee_s employees[], int current_employee){
   char throwaway_string[10];
   do {
@@ -59,7 +66,7 @@ void scan_youth_worker_or_availability(employee_s employees[], int current_emplo
     printf("%s (YES/NO) ", !strcmp(string_youth_or_availability, "youth") ? "IS EMPLOYEE A YOUTH WORKER?" : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     scanf(" %s", temp_string);
     gets(throwaway_string);
-    capitalize_word(temp_string);
+    capitalize_string(temp_string);
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
@@ -160,8 +167,32 @@ void print_employee_after_adding(employee_s employees[], int current_employee, c
   printf("\n");
 }
 
-
-void capitalize_word(char *str){
+void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int *current_employee)
+{
+    int i, found_employee_bool = 0;
+    char temp_name_string[50];
+    do
+    {
+        printf("EMPLOYEE TO EDIT (FULL NAME): ");
+        scanf("%[a-zA-Z ]",temp_name_string);
+        capitalize_string(temp_name_string);
+        for (i = 0; i < num_of_employees; i++)
+        {
+            if (!strcmp(temp_name_string,employees[i].name))
+            {
+                found_employee_bool = 1;
+                break;
+            }            
+        }
+        if (!found_employee_bool)
+        {
+            printf("EMPLOYEE NOT FOUND! TRY AGAIN!");
+        }
+    } while (!found_employee_bool);
+    *current_employee = i;
+}
+    
+void capitalize_string(char *str){
   int i;
   for (i = 0; i < strlen(str); i++)
     str[i] = toupper(str[i]);
