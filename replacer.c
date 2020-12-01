@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "schedule.h"
 
 #define MAX_POSITIONS 100
 #define MAX_LINE_LENGTH 500
@@ -23,6 +24,8 @@ void print_employee(const employee_s employee[], int num_of_employees);
 int main(int argc, char const *argv[]) {
   employee_s employee[MAX_POSITIONS];
   int num_of_employees;
+
+  print_something();
 
   num_of_employees = parse_employee_data(employee);
   print_employee(employee, num_of_employees);
