@@ -3,9 +3,12 @@ TARGET = replacer
 
 .PHONY: clean
 
-$(TARGET).exe: replacer.c
-	gcc $(CFLAGS) -o $(TARGET).exe replacer.c
+$(TARGET).exe: employee.o replacer.c
+	gcc $(CFLAGS) -o $(TARGET).exe employee.o \
+	replacer.c
 
+employee.o: employee.c employee.h
+	gcc $(CFLAGS) -o employee.c
 
 clean:
 	$(RM) *.o $(TARGET).exe *~
