@@ -23,9 +23,12 @@ void print_employee(const employee_s employee[], int num_of_employees);
 int main(int argc, char const *argv[]) {
   employee_s employee[MAX_POSITIONS];
   int num_of_employees;
+  char positions_str_arr[TOTAL_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"}; /*This array of strings is a placeholder for an array that is extracted from a csv-file*/
 
   num_of_employees = parse_employee_data(employee);
   print_employee(employee, num_of_employees);
+  
+  add_new_employee(employees, &num_of_employees, positions_str_arr);
 
   return 0;
 }
