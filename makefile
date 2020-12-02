@@ -10,8 +10,8 @@ $(TARGET).exe: employee.o replacer.c
 replacer.o: replacer.c replacer.h
 	gcc $(CFLAGS) -c replacer.c
 
-employee.o: employee.c employee.h replacer.o
-	gcc $(CFLAGS) -c employee.c replacer.o
+employee.o: employee.c employee.h
+	gcc $(CFLAGS) -c employee.c
 
 clean:
 	$(RM) *.o $(TARGET).exe *~

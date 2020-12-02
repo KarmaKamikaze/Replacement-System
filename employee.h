@@ -1,7 +1,5 @@
 #include "replacer.h"
 
-
-
 void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]);
 void scan_name_add_employee(employee_s employees[], int current_employee);
 void scan_phone_number(employee_s employees[], int current_employee);
