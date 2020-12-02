@@ -4,7 +4,8 @@
 #include <string.h>
 
 void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]);
-void edit_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]); 
+void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][20]); 
+void delete_employee(employee_s employees[], int *num_of_employees);
 void scan_name(employee_s employees[], int current_employee);
 void scan_phone_number(employee_s employees[], int current_employee);
 void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *string_youth_or_availability);
@@ -12,16 +13,16 @@ void scan_number_of_positions(employee_s employees[], int current_employee);
 void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]);
 void print_employee_after_adding_or_editing(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20], char *string_add_or_edit);
 
-void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int *current_employee);
-void choose_information_to_change(int *information_to_change);
-int finished_editing_prompt();
+void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employees, int *current_employee, char *string_edit_or_delete);
+void choose_employee_information_to_change(int *information_to_change);
+int finished_editing_or_delete_prompt(char *string_edit_or_delete);
 
 char *capitalize_string(char *str);
 
 
 
 
-/*This function adds a new employee to the employees array.*/
+
 void add_new_employee(employee_s employees[], int *num_of_employees,
                       char positions_str_arr[MAX_POSITIONS][20]) {
 
@@ -50,13 +51,12 @@ void add_new_employee(employee_s employees[], int *num_of_employees,
   (*num_of_employees)++;
 }
 
-void edit_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]) {
+void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][20]) {
   int current_employee, information_to_change;
 
-  scan_name_edit_employee(employees, num_of_employees, &current_employee);
+  scan_name_edit_or_delete_employee(employees, num_of_employees, &current_employee, "edit");
   do {
-    
-    choose_information_to_change(&information_to_change);
+    choose_employee_information_to_change(&information_to_change);
 
     switch (information_to_change) {
     case 0:
@@ -79,11 +79,47 @@ void edit_employee(employee_s employees[], int *num_of_employees, char positions
       break;
     }
           /*This while-loop short-circuits*/
-  } while (information_to_change != 5 && !finished_editing_prompt());
+  } while (information_to_change != 5 && !finished_editing_or_delete_prompt("edit"));
   print_employee_after_adding_or_editing(employees, current_employee, positions_str_arr, "edit");
 }
 
+void delete_employee(employee_s employees[], int *num_of_employees){
+  int current_employee, i, j;
 
+  scan_name_edit_or_delete_employee(employees, *num_of_employees, &current_employee, "delete");
+
+  printf("EMPLOYEE SELECTED:\n");
+  printf("NAME: %s\n", employees[current_employee].name);
+  printf("PHONE NUMBER: %s\n", employees[current_employee].phone_number);
+  printf("YOUTH WORKER: %s\n",
+         employees[current_employee].youth_worker == 1 ? "YES" : "NO");
+  printf("AVAILABLE ON WEEKDAYS FROM 8-16: %s\n",
+         employees[current_employee].weekday_availability == 1 ? "YES" : "NO");
+  printf("NUMBER OF POSITIONS: %d\n",
+         employees[current_employee].number_of_positions);
+  printf("CHOSEN POSITIONS: ");
+  for (i = 0; i < employees[current_employee].number_of_positions; i++)
+    printf("[%s] ", employees[current_employee].positions[i]);
+  printf("\n");
+
+  if (finished_editing_or_delete_prompt("delete")){
+    printf("EMPLOYEE %s WAS SUCCESFULLY DELETED\n", employees[current_employee].name);
+    /*This for-loop deletes an employee by overriding the information with the next employee in the array.
+     *All the next employees are rearranged one index lower*/
+    for (i = current_employee; i < *num_of_employees; i++){
+      strcpy(employees[i].name, employees[i+1].name);
+      strcpy(employees[i].phone_number, employees[i+1].phone_number);
+      employees[i].youth_worker = employees[i+1].youth_worker;
+      employees[i].weekday_availability = employees[i+1].weekday_availability;
+      employees[i].number_of_positions = employees[i+1].number_of_positions;
+      for (j = 0; j < employees[i+1].number_of_positions; j++)
+        strcpy(employees[i].positions[j], employees[i+1].positions[j]);
+    }
+    (*num_of_employees)--;
+  }
+  else 
+    printf("EMPLOYEE %s WAS NOT DELETED\n", employees[current_employee].name);
+}
 
 void scan_name(employee_s employees[], int current_employee) {
   char throwaway_string[50]; /*throwaway_string is used to prevent
@@ -246,17 +282,17 @@ void print_employee_after_adding_or_editing(employee_s employees[], int current_
   printf("\n");
 }
 
-void scan_name_edit_employee(employee_s employees[], int *num_of_employees,
-                             int *current_employee) {
+void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employees,
+                             int *current_employee, char *string_edit_or_delete) {
 
   int i, found_employee_bool;
   char temp_name_string[50], throwaway_string[50];
   do {
-    printf("EMPLOYEE TO EDIT (FULL NAME): ");
+    printf("EMPLOYEE TO %s (FULL NAME): ", !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
     scanf("%[a-zA-Z ]", temp_name_string);
     fgets(throwaway_string, 50, stdin);
     found_employee_bool = 0;
-    for (i = 0; i <= *num_of_employees; i++) {
+    for (i = 0; i <= num_of_employees; i++) {
       if (!strcmp(capitalize_string(temp_name_string), capitalize_string(employees[i].name))) {
         found_employee_bool = 1;
         break;
@@ -269,7 +305,7 @@ void scan_name_edit_employee(employee_s employees[], int *num_of_employees,
   *current_employee = i;
 }
 
-void choose_information_to_change(int *information_to_change){
+void choose_employee_information_to_change(int *information_to_change){
   do {
     printf("ENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT TO CHANGE:\n"
            "0 = NAME\n"
@@ -287,10 +323,10 @@ void choose_information_to_change(int *information_to_change){
 
 
 /*This function returns a boolean value*/
-int finished_editing_prompt(){
+int finished_editing_or_delete_prompt(char *string_edit_or_delete){
   char temp_string[4];
   do {
-    printf("FINISHED EDITING EMPLOYEE? (YES/NO) ");
+    printf("%s (YES/NO) ", !strcmp(string_edit_or_delete, "edit") ? "FINISHED EDITING EMPLOYEE?" : "ARE YOU SURE YOU WANT TO DELETE EMPLOYEE?");
     scanf(" %s", temp_string);
     strcpy(temp_string, capitalize_string(temp_string));
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0)
