@@ -79,7 +79,8 @@ void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shif
 
 
 void print_schedule (schedule_s schedule[], int shifts) {
-  int i;
+  int i, j, start_day, start_month, days_forward;
+  int seperator[] = {"+-------------------------\0"};
 
 /*   for (i = 0; i < shifts; i++) {
     printf("%-9s %.2d/%.2d %.4d-%.4d %-10s %s \n", schedule[i].weekday,
@@ -88,18 +89,16 @@ void print_schedule (schedule_s schedule[], int shifts) {
            schedule[i].employee_name, schedule[i].shift_position);
   } */
 
+  printf("Enter the start date and end date you wish to see (dd/mm days):\n");
+  scanf("%d/%d %d", &start_day, &start_month, &days_forward);
+
+  for(i = start_day; i <= days_forward ;i++){
+
+  }
 }
 
-int seperator[] = {"+-------------------------\0"};
-int start_day, start_month, end_day, end_month;
 
-  printf("Enter the start date and end date you wish to see (dd/mm-dd/mm):\n");
-  scanf("%d/%d-%d/%d", start_day, start_month, end_day, end_month);
-
-
-
-
-int separator[] = {"+-------------------------\0"};
+/*  int separator[] = {"+-------------------------\0"};
   printf("\n\n\n\n%s%s%s%s+\n", separator, separator, separator, separator);
   printf("|%-25s|%-25s|%-25s|%-25s|\n", "TEAM NAME", "POINTS", "GOALS SCORED BY TEAM", "GOALS SCORED AGAINST TEAM");
   for (i = 0; i < number_teams; i++) {
@@ -107,4 +106,4 @@ int separator[] = {"+-------------------------\0"};
   printf("|%-25s|%-25d|%-25d|%-25d|\n",
   teams[i].name, teams[i].points, teams[i].goals_by_team, teams[i].goals_against_team);
   }
-  printf("%s%s%s%s+\n\n\n\n", separator, separator, separator, separator);
+  printf("%s%s%s%s+\n\n\n\n", separator, separator, separator, separator); */
