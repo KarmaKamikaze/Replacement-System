@@ -1,33 +1,24 @@
+#include "employee.h"
 #include <stdio.h>
 #include <string.h>
-
-#define MAX_POSITIONS 100
-#define MAX_LINE_LENGTH 500
-#define MAX_STRING_LENGTH 100
-#define MAX_PHONE 9
-
-typedef struct employee_s {
-  char name[MAX_STRING_LENGTH];
-  int youth_worker;         /* Boolean */
-  int weekday_availability; /* Boolean */
-  char phone_numbers[MAX_PHONE];
-  int number_of_positions; /* Used internally */
-  char positions[MAX_POSITIONS][MAX_STRING_LENGTH];
-} employee_s;
 
 /* Function prototypes */
 int parse_employee_data(employee_s employees[]);
 int count_elements(FILE *fp);
 void print_employee(const employee_s employees[], int num_of_employees);
 
+
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
   int num_of_employees;
-  char positions_str_arr[MAX_POSITIONS][20] = {"pos0", "pos1", "pos2", "pos3", "pos4", "pos5"}; /*This array of strings is a placeholder for an array that is extracted from a csv-file*/
+  char positions_str_arr[MAX_POSITIONS][20] = {
+      "pos0", "pos1", "pos2", "pos3",
+      "pos4", "pos5"}; /*This array of strings is a placeholder for an array
+                          that is extracted from a csv-file*/
 
   num_of_employees = parse_employee_data(employees);
   print_employee(employees, num_of_employees);
-  
+
   add_new_employee(employees, &num_of_employees, positions_str_arr);
 
   return 0;
@@ -65,10 +56,10 @@ int parse_employee_data(employee_s employees[]) {
     fgets(input_string, MAX_LINE_LENGTH, fp);
     sscanf(input_string, "%[^,],%d,%d,%8[^,],%d,%[^\n]", employees[i].name,
            &employees[i].youth_worker, &employees[i].weekday_availability,
-           employees[i].phone_numbers, &employees[i].number_of_positions,
+           employees[i].phone_number, &employees[i].number_of_positions,
            temp_positions);
     employees[i].name[MAX_STRING_LENGTH - 1] = '\0';
-    employees[i].phone_numbers[MAX_PHONE - 1] = '\0';
+    employees[i].phone_number[MAX_PHONE - 1] = '\0';
 
     /* Get the first token */
     token = strtok(temp_positions, ",");
@@ -116,7 +107,7 @@ void print_employee(const employee_s employees[], int num_of_employees) {
 
   for (i = 0; i < num_of_employees; i++) {
     printf("%s %d %d %s %d", employees[i].name, employees[i].youth_worker,
-           employees[i].weekday_availability, employees[i].phone_numbers,
+           employees[i].weekday_availability, employees[i].phone_number,
            employees[i].number_of_positions);
     j = 0;
     while (employees[i].positions[j][0] != '\0') {
