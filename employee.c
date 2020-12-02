@@ -3,6 +3,21 @@
 #include <stdio.h>
 #include <string.h>
 
+void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]);
+void edit_employee(employee_s employees[], int *num_of_employees); 
+void scan_name_add_employee(employee_s employees[], int current_employee);
+void scan_phone_number(employee_s employees[], int current_employee);
+void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *string_youth_or_availability);
+void scan_number_of_positions(employee_s employees[], int current_employee);
+void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]);
+void print_employee_after_adding(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]);
+
+void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int *current_employee);
+void capitalize_string(char *str);
+
+
+
+
 /*This function adds a new employee to the employees array.*/
 void add_new_employee(employee_s employees[], int *num_of_employees,
                       char positions_str_arr[MAX_POSITIONS][20]) {
@@ -34,7 +49,7 @@ void add_new_employee(employee_s employees[], int *num_of_employees,
 
 void edit_employee(employee_s employees[], int *num_of_employees) {
   int current_employee;
-  scan_name_edit_employee(employees, *num_of_employees, &current_employee);
+  scan_name_edit_employee(employees, num_of_employees, &current_employee);
   printf("WHAT EMPLOYEE INFORMATION DO YOU WANT TO CHANGE");
 }
 /*This function scans after a name*/
@@ -206,7 +221,7 @@ void scan_name_edit_employee(employee_s employees[], int *num_of_employees,
     printf("EMPLOYEE TO EDIT (FULL NAME): ");
     scanf("%[a-zA-Z ]", temp_name_string);
     capitalize_string(temp_name_string);
-    for (i = 0; i < num_of_employees; i++) {
+    for (i = 0; i < *num_of_employees; i++) {
       if (!strcmp(temp_name_string, employees[i].name)) {
         found_employee_bool = 1;
         break;

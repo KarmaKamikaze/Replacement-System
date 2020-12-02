@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
+/* Function prototypes */
+int parse_employee_data(employee_s employees[]);
+int count_elements(FILE *fp);
+void print_employee(const employee_s employees[], int num_of_employees);
+
+
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
   int num_of_employees;
