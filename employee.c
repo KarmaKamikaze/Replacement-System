@@ -144,7 +144,7 @@ void scan_positions(employee_s employees[], int current_employee,
   do {
     printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
     for (i = 0; i <= MAX_POSITIONS - 1; i++)
-      printf("%s = %d\n", *positions_str_arr + i,
+      printf("%s = %d\n", positions_str_arr + i,
              i); /*Indeksering virker ikke helt her, så der bruges +i istedet*/
     number_of_scanned_numbers = 0;
     for (i = 0; i < employees[current_employee].number_of_positions; i++) {
