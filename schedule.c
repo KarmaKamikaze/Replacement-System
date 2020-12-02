@@ -10,6 +10,7 @@
 
 /* ~~ STRUCTS ~~ */
 typedef struct schedule_s {
+  int day_of_year; /* Used to track which day it is. */
   char weekday[MAX_WEEK_DAY_NAME];
   int day;
   int month;
@@ -67,7 +68,7 @@ void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shif
   fseek(schedule_fp, 0, SEEK_SET);
   for (i = 0; i < shifts; i++) {
     fgets(input_string, MAX_LINE_LENGTH, schedule_fp);
-    sscanf(input_string, "%[^,],%d,%d,%d,%d,%[^,],%[^\n]s,\n", schedule[i].weekday,
+    sscanf(input_string, "%d,%[^,],%d,%d,%d,%d,%[^,],%[^\n]s,\n", &schedule[i].day_of_year, schedule[i].weekday,
            &schedule[i].day, &schedule[i].month,
            &schedule[i].shift_start, &schedule[i].shift_end,
            schedule[i].employee_name, schedule[i].shift_position);
@@ -77,25 +78,22 @@ void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shif
 
 }
 
-
-void print_schedule (schedule_s schedule[], int shifts) {
+/* Denne del ikke ikke færdig endnu! */
+/* void print_schedule (schedule_s schedule[], int shifts) {
   int i, j, start_day, start_month, days_forward;
-  int seperator[] = {"+-------------------------\0"};
-
-/*   for (i = 0; i < shifts; i++) {
-    printf("%-9s %.2d/%.2d %.4d-%.4d %-10s %s \n", schedule[i].weekday,
-           schedule[i].day, schedule[i].month,
-           schedule[i].shift_start, schedule[i].shift_end,
-           schedule[i].employee_name, schedule[i].shift_position);
-  } */
 
   printf("Enter the start date and end date you wish to see (dd/mm days):\n");
   scanf("%d/%d %d", &start_day, &start_month, &days_forward);
 
-  for(i = start_day; i <= days_forward ;i++){
-
+  for (i = 0; i < 100; i++){ /* 100 is number of shifts. temporary and should be changed!! */
+    /* if(start_day == schedule[i].day && start_month == schedule[i].month){
+      printf("%d %-9s %.2d/%.2d %.4d-%.4d %-10s %s \n", schedule[i].day_of_year, schedule[i].weekday,
+            schedule[i].day, schedule[i].month,
+            schedule[i].shift_start, schedule[i].shift_end,
+            schedule[i].employee_name, schedule[i].shift_position);
+    }
   }
-}
+}  */
 
 
 /*  int separator[] = {"+-------------------------\0"};
