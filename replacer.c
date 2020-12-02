@@ -100,6 +100,15 @@ int count_elements(FILE *fp) {
   return elements;
 }
 
+/**
+ * @brief This function stored the array of employee structs to a file, after
+ * the program has completed all other tasks. This is done to ensure that all
+ * changes are stored for the next time the program is launched.
+ *
+ * @param employees An array of employee structs containing the information
+ * about each worker.
+ * @param num_of_employees The number of current employees in the system.
+ */
 void store_employee_data(const employee_s employees[], int num_of_employees) {
   FILE *fp;
   int i, j; /* Counters */
