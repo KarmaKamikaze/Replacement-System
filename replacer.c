@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]) {
   employee_s employee[MAX_POSITIONS];
   int num_of_employees;
 
-  print_something();
+  schedule_function();
 
   num_of_employees = parse_employee_data(employee);
   print_employee(employee, num_of_employees);
