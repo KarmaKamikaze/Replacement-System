@@ -8,7 +8,7 @@ $(TARGET).exe: employee.o replacer.c
 	replacer.c
 
 employee.o: employee.c employee.h
-	gcc $(CFLAGS) -o employee.c
+	gcc $(CFLAGS) -c employee.c
 
 clean:
 	$(RM) *.o $(TARGET).exe *~
