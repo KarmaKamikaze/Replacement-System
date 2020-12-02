@@ -4,7 +4,7 @@
 #include "replacer.h"
 
 /*This function adds a new employee to the employees array.*/
-void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[TOTAL_POSITIONS][20]) {
+void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]) {
   
   
   /*Note that the index of the employees array is 1 smaller that the num_of_employees, which means that the 10th employee has the index 9. 
@@ -31,10 +31,10 @@ void add_new_employee(employee_s employees[], int *num_of_employees, char positi
 
 void edit_employee(employee_s employees[], int *num_of_employees)
 {
-    /*int current_employee;
+    int current_employee;
     scan_name_edit_employee(employees,*num_of_employees, &current_employee);
     printf("WHAT EMPLOYEE INFORMATION DO YOU WANT TO CHANGE");
-    */
+    
     
 
 }
@@ -88,37 +88,37 @@ void scan_youth_worker_or_availability(employee_s employees[], int current_emplo
 }
 
 
-/*This function scans after the number of positions the employee has and only accepts values larger than 0 and less than TOTAL_POSITIONS*/
+/*This function scans after the number of positions the employee has and only accepts values larger than 0 and less than MAX_POSITIONS*/
 void scan_number_of_positions(employee_s employees[], int current_employee){
   char throwaway_string[10];
   do {
     printf("NUMBER OF POSITIONS: ");
     scanf(" %d", &employees[current_employee].number_of_positions);
     gets(throwaway_string);
-    if (employees[current_employee].number_of_positions > TOTAL_POSITIONS || employees[current_employee].number_of_positions <= 0)
+    if (employees[current_employee].number_of_positions > MAX_POSITIONS || employees[current_employee].number_of_positions <= 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (employees[current_employee].number_of_positions > TOTAL_POSITIONS || employees[current_employee].number_of_positions <= 0);
+  } while (employees[current_employee].number_of_positions > MAX_POSITIONS || employees[current_employee].number_of_positions <= 0);
 }
 
 
 /*This function prints the choosable positions and scans after them. The positions and their corresponding integers are printed.
  *Afterwards it scans for the integers in a for-loop, performing scanf overflow. As soon as an integer is too small or too large, 
  *the for loop breaks and the while loop starts over*/
-void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]){
+void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]){
   int i, j, has_duplicates_bool, number_of_scanned_numbers;
   char throwaway_string[10];
-  int temp_array[TOTAL_POSITIONS];
+  int temp_array[MAX_POSITIONS];
 
   do {
     printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
-    for (i = 0; i <= TOTAL_POSITIONS-1; i++)
+    for (i = 0; i <= MAX_POSITIONS-1; i++)
       printf("%s = %d\n", positions_str_arr+i, i);  /*Indeksering virker ikke helt her, så der bruges +i istedet*/
     number_of_scanned_numbers = 0;
     for (i = 0; i < employees[current_employee].number_of_positions; i++){
       number_of_scanned_numbers += scanf("%d,", &temp_array[i]); 
       /*scanf returns the number of items scanned. number_of_scanned_numbers is used to check if all positions are scanned in the while-loop*/
       
-      if (temp_array[i] < 0 || temp_array[i] > TOTAL_POSITIONS){
+      if (temp_array[i] < 0 || temp_array[i] > MAX_POSITIONS){
         printf("INVALID INPUT! TRY AGAIN!\n"); 
         break;
       }
@@ -143,7 +143,7 @@ void scan_positions(employee_s employees[], int current_employee, char positions
       }  
     }
 
-  } while (temp_array[i-1] < 0 || temp_array[i-1] > TOTAL_POSITIONS || number_of_scanned_numbers != employees[current_employee].number_of_positions ||has_duplicates_bool); 
+  } while (temp_array[i-1] < 0 || temp_array[i-1] > MAX_POSITIONS || number_of_scanned_numbers != employees[current_employee].number_of_positions ||has_duplicates_bool); 
   /*Here 1 is subtracted from i, since the for-loop increments i before it breaks, which means i is too large*/
 
   for (i = 0; i < employees[current_employee].number_of_positions; i++)
@@ -154,7 +154,7 @@ void scan_positions(employee_s employees[], int current_employee, char positions
 
 
 /*This function prints the employee. The printf functions can be written into one, but this is more readable*/
-void print_employee_after_adding(employee_s employees[], int current_employee, char positions_str_arr[TOTAL_POSITIONS][20]){
+void print_employee_after_adding(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]){
   int i;
  
   printf("\nEMPLOYEE %s WAS SUCCESFULLY ADDED.\n", employees[current_employee].name);
@@ -171,7 +171,7 @@ void print_employee_after_adding(employee_s employees[], int current_employee, c
 
 void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int *current_employee)
 {
-  /*
+  
     int i, found_employee_bool = 0;
     char temp_name_string[50];
     do
@@ -193,7 +193,7 @@ void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int 
         }
     } while (!found_employee_bool);
     *current_employee = i;
-    */
+    
 }
     
 void capitalize_string(char *str){
