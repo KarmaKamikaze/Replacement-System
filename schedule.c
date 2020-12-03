@@ -1,11 +1,12 @@
-/* #include "replacer.h" */
+#include "replacer.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "schedule.h"
 
-void schedule_function (void);
+/* void schedule_function (void);
 void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shifts);
 int count_shifts (FILE *schedule_fp);
-void print_schedule (schedule_s schedule[], int shifts);
+void print_schedule (schedule_s schedule[], int shifts); */
 
 void schedule_function(void) {
   schedule_s schedule[DAYS_IN_SCHEDULE];
@@ -16,25 +17,11 @@ void schedule_function(void) {
     perror("Error (41): ");
     exit(EXIT_FAILURE);
   }
-  schedule_fp = open_schedule_file(schedule_fp);
   number_of_shifts = count_elements(schedule_fp);
   fill_schedule_with_data(schedule, schedule_fp, number_of_shifts);
   /*   print_schedule (schedule, number_of_shifts
   ); */
   fclose(schedule_fp);
-}
-
-int count_elements(FILE *fp) {
-  int elements = 0, ch = 0;
-  /* Makes sure we ALWAYS read from the start of our file. */
-  fseek(fp, 0, SEEK_SET);
-  while (ch != EOF) {
-    ch = fgetc(fp);
-    if (ch == '\n') {
-      elements++;
-    }
-  }
-  return elements;
 }
 
 void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,

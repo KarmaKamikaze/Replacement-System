@@ -22,5 +22,4 @@ typedef struct schedule_s {
 /* ~~ PROTOTYPES ~~ */
 void schedule_function (void);
 void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shifts);
-int count_shifts (FILE *schedule_fp);
 void print_schedule (schedule_s schedule[], int shifts);
