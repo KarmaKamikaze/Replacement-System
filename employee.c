@@ -11,14 +11,10 @@ void scan_youth_worker_or_availability(employee_s employees[], int current_emplo
 void scan_number_of_positions(employee_s employees[], int current_employee);
 void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]);
 void print_employee_after_adding_or_editing(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20], char *string_add_or_edit);
-
 void scan_name_edit_employee(employee_s employees[], int *num_of_employees, int *current_employee);
 void choose_information_to_change(int *information_to_change);
 int finished_editing_prompt();
-
 char *capitalize_string(char *str);
-
-
 
 
 /*This function adds a new employee to the employees array.*/
@@ -82,8 +78,6 @@ void edit_employee(employee_s employees[], int *num_of_employees, char positions
   } while (information_to_change != 5 && !finished_editing_prompt());
   print_employee_after_adding_or_editing(employees, current_employee, positions_str_arr, "edit");
 }
-
-
 
 void scan_name(employee_s employees[], int current_employee) {
   char throwaway_string[50]; /*throwaway_string is used to prevent
@@ -248,7 +242,6 @@ void print_employee_after_adding_or_editing(employee_s employees[], int current_
 
 void scan_name_edit_employee(employee_s employees[], int *num_of_employees,
                              int *current_employee) {
-
   int i, found_employee_bool;
   char temp_name_string[50], throwaway_string[50];
   do {
