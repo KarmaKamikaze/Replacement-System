@@ -3,28 +3,25 @@
 #include <stdio.h>
 #include <string.h>
 
-void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][20]);
-void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][20]); 
+void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]);
+void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]); 
+void choose_employee_information_to_change(int *information_to_change);
 void delete_employee(employee_s employees[], int *num_of_employees);
 void scan_name(employee_s employees[], int current_employee);
 void scan_phone_number(employee_s employees[], int current_employee);
 void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *string_youth_or_availability);
 void scan_number_of_positions(employee_s employees[], int current_employee);
-void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20]);
-void print_employee_after_adding_or_editing(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][20], char *string_add_or_edit);
+void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]);
+void print_employee_after_adding_or_editing(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], char *string_add_or_edit);
 
 void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employees, int *current_employee, char *string_edit_or_delete);
-void choose_employee_information_to_change(int *information_to_change);
 int finished_editing_or_delete_prompt(char *string_edit_or_delete);
 
 char *capitalize_string(char *str);
 
 
-
-
-
 void add_new_employee(employee_s employees[], int *num_of_employees,
-                      char positions_str_arr[MAX_POSITIONS][20]) {
+                      char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
 
   /*Note that the index of the employees array is 1 smaller that the
    *num_of_employees, which means that the 10th employee has the index 9.
@@ -51,7 +48,7 @@ void add_new_employee(employee_s employees[], int *num_of_employees,
   (*num_of_employees)++;
 }
 
-void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][20]) {
+void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   int current_employee, information_to_change;
 
   scan_name_edit_or_delete_employee(employees, num_of_employees, &current_employee, "edit");
@@ -81,6 +78,23 @@ void edit_employee(employee_s employees[], int num_of_employees, char positions_
           /*This while-loop short-circuits*/
   } while (information_to_change != 5 && !finished_editing_or_delete_prompt("edit"));
   print_employee_after_adding_or_editing(employees, current_employee, positions_str_arr, "edit");
+}
+
+
+void choose_employee_information_to_change(int *information_to_change){
+  do {
+    printf("ENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT TO CHANGE:\n"
+           "0 = NAME\n"
+           "1 = PHONE NUMBER\n"
+           "2 = YOUTH WORKER\n"
+           "3 = WEEKDAY AVAILABILITY\n"
+           "4 = POSITIONS\n"
+           "5 = CHANGE NOTHING\n");
+
+    scanf("%d", information_to_change);
+      if (*information_to_change < 0 || *information_to_change > 5)
+        printf("INVALID INPUT! TRY AGAIN!\n");
+  } while (*information_to_change < 0 || *information_to_change > 5);
 }
 
 void delete_employee(employee_s employees[], int *num_of_employees){
@@ -201,7 +215,7 @@ void scan_number_of_positions(employee_s employees[], int current_employee) {
  *integer is too small or too large, the for loop breaks and the while loop
  *starts over*/
 void scan_positions(employee_s employees[], int current_employee,
-                    char positions_str_arr[MAX_POSITIONS][20]) {
+                    char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   int i, j, has_duplicates_bool, number_of_scanned_numbers;
   char throwaway_string[50];
   int temp_array[MAX_POSITIONS];
@@ -263,7 +277,7 @@ void scan_positions(employee_s employees[], int current_employee,
 /*This function prints the employee. The printf functions can be written into
  * one, but this is more readable*/
 void print_employee_after_adding_or_editing(employee_s employees[], int current_employee,
-                                 char positions_str_arr[MAX_POSITIONS][20], char *string_add_or_edit) /*Dog skal max_positions ikke ændres her*/ {
+                                 char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], char *string_add_or_edit) /*Dog skal max_positions ikke ændres her*/ {
   int i;
 
   printf("\nEMPLOYEE %s WAS SUCCESFULLY %s.\n",
@@ -305,21 +319,6 @@ void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employ
   *current_employee = i;
 }
 
-void choose_employee_information_to_change(int *information_to_change){
-  do {
-    printf("ENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT TO CHANGE:\n"
-           "0 = NAME\n"
-           "1 = PHONE NUMBER\n"
-           "2 = YOUTH WORKER\n"
-           "3 = WEEKDAY AVAILABILITY\n"
-           "4 = POSITIONS\n"
-           "5 = CHANGE NOTHING\n");
-
-    scanf("%d", information_to_change);
-      if (*information_to_change < 0 || *information_to_change > 5)
-        printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (*information_to_change < 0 || *information_to_change > 5);
-}
 
 
 /*This function returns a boolean value*/
