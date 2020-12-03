@@ -133,21 +133,21 @@ void delete_employee(employee_s employees[], int *num_of_employees){
 }
 
 void scan_name(employee_s employees[], int current_employee) {
-  char throwaway_string[50]; /*throwaway_string is used to prevent
+  char throwaway_string[MAX_STRING_LENGTH]; /*throwaway_string is used to prevent
                                 scanf-overflow*/
   printf("FULL NAME: ");
   scanf(" %[a-zA-Z ]", employees[current_employee].name);
-  fgets(throwaway_string, 50, stdin);
+  fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
 }
 
 /*This function scans after a phone number. If the number is too long or too
  * short the do-while loop repeats*/
 void scan_phone_number(employee_s employees[], int current_employee) {
-  char throwaway_string[50];
+  char throwaway_string[MAX_STRING_LENGTH];
   do {
     printf("PHONE NUMBER: ");
     scanf(" %[0-9]", employees[current_employee].phone_number);
-    fgets(throwaway_string, 50, stdin);
+    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
     if (strlen(employees[current_employee].phone_number) != 8)
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (strlen(employees[current_employee].phone_number) != 8);
@@ -161,14 +161,14 @@ void scan_phone_number(employee_s employees[], int current_employee) {
 void scan_youth_worker_or_availability(employee_s employees[],
                                        int current_employee,
                                        char *string_youth_or_availability) {
-  char temp_string[10], throwaway_string[50];
+  char temp_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
   do {
     printf("%s (YES/NO) ",
            !strcmp(string_youth_or_availability, "youth")
                ? "IS EMPLOYEE A YOUTH WORKER?"
                : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     scanf(" %s", temp_string);
-    fgets(throwaway_string, 50, stdin);
+    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
     strcpy(temp_string, capitalize_string(temp_string));
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
@@ -194,11 +194,11 @@ void scan_youth_worker_or_availability(employee_s employees[],
 /*This function scans after the number of positions the employee has and only
  * accepts values larger than 0 and less than MAX_POSITIONS*/
 void scan_number_of_positions(employee_s employees[], int current_employee) {
-  char throwaway_string[50];
+  char throwaway_string[MAX_STRING_LENGTH];
   do {
     printf("NUMBER OF POSITIONS: ");
     scanf(" %d", &employees[current_employee].number_of_positions);
-    fgets(throwaway_string, 50, stdin);
+    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
     if (employees[current_employee].number_of_positions > MAX_POSITIONS ||  /*MAX_POSITIONS SKAL ÆNDRES TIL EN VARIABEL num_of_positions alle steder i filen*/
         employees[current_employee].number_of_positions <= 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
@@ -214,7 +214,7 @@ void scan_number_of_positions(employee_s employees[], int current_employee) {
 void scan_positions(employee_s employees[], int current_employee,
                     char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   int i, j, has_duplicates_bool, number_of_scanned_numbers;
-  char throwaway_string[50];
+  char throwaway_string[MAX_STRING_LENGTH];
   int temp_array[MAX_POSITIONS];
 
   do {
@@ -233,7 +233,7 @@ void scan_positions(employee_s employees[], int current_employee,
         break;
       }
     }
-    fgets(throwaway_string, 50, stdin);
+    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
 
     /*This for-loop checks if there are duplicate values in the array of
      *positions. The outer for-loop counts the value that is being checked while
@@ -297,11 +297,11 @@ void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employ
                              int *current_employee, char *string_edit_or_delete) {
 
   int i, found_employee_bool;
-  char temp_name_string[50], throwaway_string[50];
+  char temp_name_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
   do {
     printf("EMPLOYEE TO %s (FULL NAME): ", !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
     scanf("%[a-zA-Z ]", temp_name_string);
-    fgets(throwaway_string, 50, stdin);
+    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
     found_employee_bool = 0;
     for (i = 0; i <= num_of_employees; i++) {
       if (!strcmp(capitalize_string(temp_name_string), capitalize_string(employees[i].name))) {

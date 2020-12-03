@@ -1,6 +1,7 @@
 #include "employee.h"
 #include <stdio.h>
 #include <string.h>
+#include "schedule.h"
 
 /* Function prototypes */
 int parse_employee_data(employee_s employees[]);
@@ -12,7 +13,7 @@ void print_employee(const employee_s employees[], int num_of_employees);
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
   int num_of_employees;
-  char positions_str_arr[MAX_POSITIONS][20] = {
+  char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH] = {
       "pos0", "pos1", "pos2", "pos3",
       "pos4", "pos5"}; /*This array of strings is a placeholder for an array
                           that is extracted from a csv-file*/
@@ -25,6 +26,8 @@ int main(int argc, char const *argv[]) {
   /*edit_employee(employees, num_of_employees, positions_str_arr);*/
 
   delete_employee(employees, &num_of_employees);
+
+  schedule_function();
 
   return 0;
 }
