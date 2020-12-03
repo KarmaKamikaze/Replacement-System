@@ -2,16 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_POSITIONS 100
-#define MAX_LINE_LENGTH 500
-#define MAX_STRING_LENGTH 100
-#define MAX_PHONE 9
-
 /* Function prototypes */
 int parse_employee_data(employee_s employees[]);
 int count_elements(FILE *fp);
 void store_employee_data(const employee_s employees[], int num_of_employees);
 void print_employee(const employee_s employees[], int num_of_employees);
+
 
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
@@ -25,6 +21,8 @@ int main(int argc, char const *argv[]) {
   print_employee(employees, num_of_employees);
 
   add_new_employee(employees, &num_of_employees, positions_str_arr);
+
+  edit_employee(employees, &num_of_employees, positions_str_arr);
 
   return 0;
 }

@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_EMPLOYEES 40
 #define MAX_POSITIONS 100
 #define MAX_LINE_LENGTH 500
 #define MAX_STRING_LENGTH 100
@@ -11,3 +15,8 @@ typedef struct employee_s {
   int number_of_positions; /* Used internally */
   char positions[MAX_POSITIONS][MAX_STRING_LENGTH];
 } employee_s;
+
+/* Function prototypes */
+int parse_employee_data(employee_s employees[]);
+int count_elements(FILE *fp);
+void print_employee(const employee_s employees[], int num_of_employees);
