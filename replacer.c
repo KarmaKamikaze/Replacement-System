@@ -22,7 +22,9 @@ int main(int argc, char const *argv[]) {
 
   add_new_employee(employees, &num_of_employees, positions_str_arr);
 
-  edit_employee(employees, &num_of_employees, positions_str_arr);
+  /*edit_employee(employees, num_of_employees, positions_str_arr);*/
+
+  delete_employee(employees, &num_of_employees);
 
   return 0;
 }
