@@ -13,13 +13,11 @@ void scan_youth_worker_or_availability(employee_s employees[], int current_emplo
 void scan_number_of_positions(employee_s employees[], int current_employee);
 void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]);
 void print_employee_after_adding_or_editing(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], char *string_add_or_edit);
-
 void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employees, int *current_employee, char *string_edit_or_delete);
 int finished_editing_or_delete_prompt(char *string_edit_or_delete);
-
 char *capitalize_string(char *str);
 
-
+/*This function adds a new employee to the employees array.*/
 void add_new_employee(employee_s employees[], int *num_of_employees,
                       char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
 
@@ -79,7 +77,6 @@ void edit_employee(employee_s employees[], int num_of_employees, char positions_
   } while (information_to_change != 5 && !finished_editing_or_delete_prompt("edit"));
   print_employee_after_adding_or_editing(employees, current_employee, positions_str_arr, "edit");
 }
-
 
 void choose_employee_information_to_change(int *information_to_change){
   do {

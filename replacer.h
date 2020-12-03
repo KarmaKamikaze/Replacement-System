@@ -20,4 +20,3 @@ typedef struct employee_s {
 int parse_employee_data(employee_s employees[]);
 int count_elements(FILE *fp);
 void print_employee(const employee_s employees[], int num_of_employees);
-

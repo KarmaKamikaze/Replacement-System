@@ -5,6 +5,7 @@
 /* Function prototypes */
 int parse_employee_data(employee_s employees[]);
 int count_elements(FILE *fp);
+void store_employee_data(const employee_s employees[], int num_of_employees);
 void print_employee(const employee_s employees[], int num_of_employees);
 
 
@@ -58,10 +59,9 @@ int parse_employee_data(employee_s employees[]) {
   fseek(fp, 0, SEEK_SET);
   for (i = 0; i < num_of_elements; i++) {
     fgets(input_string, MAX_LINE_LENGTH, fp);
-    sscanf(input_string, "%[^,],%d,%d,%8[^,],%d,%[^\n]", employees[i].name,
+    sscanf(input_string, "%[^,],%d,%d,%8[^,],%*d,%[^\n]", employees[i].name,
            &employees[i].youth_worker, &employees[i].weekday_availability,
-           employees[i].phone_number, &employees[i].number_of_positions,
-           temp_positions);
+           employees[i].phone_number, temp_positions);
     employees[i].name[MAX_STRING_LENGTH - 1] = '\0';
     employees[i].phone_number[MAX_PHONE - 1] = '\0';
 
@@ -74,6 +74,7 @@ int parse_employee_data(employee_s employees[]) {
       token = strtok(NULL, ",");
       j++;
     }
+    employees[i].number_of_positions = j;
   }
   fclose(fp);
   return num_of_elements;
@@ -97,6 +98,33 @@ int count_elements(FILE *fp) {
     }
   }
   return elements;
+}
+
+/**
+ * @brief This function stored the array of employee structs to a file, after
+ * the program has completed all other tasks. This is done to ensure that all
+ * changes are stored for the next time the program is launched.
+ *
+ * @param employees An array of employee structs containing the information
+ * about each worker.
+ * @param num_of_employees The number of current employees in the system.
+ */
+void store_employee_data(const employee_s employees[], int num_of_employees) {
+  FILE *fp;
+  int i, j; /* Counters */
+
+  fp = fopen("employee.csv", "w");
+
+  for (i = 0; i < num_of_employees; i++) {
+    fprintf(fp, "%s,%d,%d,%s,%d", employees[i].name, employees[i].youth_worker,
+            employees[i].weekday_availability, employees[i].phone_number,
+            employees[i].number_of_positions);
+    for (j = 0; j < employees[i].number_of_positions; j++) {
+      fprintf(fp, ",%s", employees[i].positions[j]);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
 }
 
 /**
