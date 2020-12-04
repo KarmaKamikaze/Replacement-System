@@ -6,6 +6,7 @@
 /* Function prototypes */
 int count_elements(FILE *fp);
 char *capitalize_string(char *str);
+int display_screen(char *print_list[]);
 
 /**
  * @brief This function counts the elements in an employee file.
@@ -38,4 +39,31 @@ char *capitalize_string(char *str) {
   for (i = 0; i < strlen(str); i++)
     capitalized_string[i] = toupper(str[i]);
   return capitalized_string;
+}
+
+int display_screen(char *print_list[]) {
+  int i, ch, menu_choice;
+
+  system("clear");
+  /* What isn't pretty in the code will have to be pretty elsewhere */
+  printf("+--------------------------------------------------------------------"
+         "----------+\n"
+         "| ############################ REPLACEMENT SYSTEM "
+         "############################ |\n"
+         "+--------------------------------------------------------------------"
+         "----------+\n"
+         "| %-76s |\n",
+         "");
+  for (i = 0; i <= sizeof(*print_list); i++) {
+    printf("| %-76s |\n", print_list[i]);
+  }
+  printf("| %-76s |\n"
+         "+--------------------------------------------------------------------"
+         "----------+\n\n"
+         "Choice: ",
+         "");
+  scanf(" %d", &menu_choice);
+  while ((ch = getchar()) != '\n' && ch != EOF)
+    continue;
+  return menu_choice;
 }
