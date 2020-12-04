@@ -1,28 +1,28 @@
-1,Mandag,01,12,07.00,16.00,Tobias,Monkey
-1,Mandag,01,12,12.00,18.00,Sarmi,Cheemsgun
-1,Mandag,01,12,16.00,24.00,Simon,Sekretær
-1,Mandag,01,12,16.00,24.00,Casper,Froggoman
-2,Tirsdag,02,12,00.00,08.00,Tobias,Arbejde_med_pointere
-2,Tirsdag,02,12,08.00,16.00,Mads,MC
-2,Tirsdag,02,12,14.00,16.00,Casper,Froggoman
-2,Tirsdag,02,12,22.00,24.00,Tobias,Arbejde_med_pointere
-3,Onsdag,03,12,00.30,02.00,Tobias,Arbejde_med_pointere
-3,Onsdag,03,12,10.00,18.00,Karma,cleaning
-3,Onsdag,03,12,06.30,16.00,Simon,Simping
-3,Onsdag,03,12,08.00,16.00,Lasse,quality coding
-4,Torsdag,04,12,08.15,16.00,Tobias,Arbejde_med_pointere
-4,Torsdag,04,12,08.30,16.00,Sarmi,Playing with the other Simon
-4,Torsdag,04,12,15.00,16.00,Lasse,Lukkeansvarlig
-4,Torsdag,04,12,03.00,16.00,Simon,�bne ansvarlig
-5,Fredag,05,12,10.30,16.30,Tobias,Arbejde_med_pointere
-5,Fredag,05,12,12.00,16.00,Sarmi,chilling w Linguini
-5,Fredag,05,12,08.15,24.00,Casper,Flooshed
-5,Fredag,05,12,08.00,16.00,Lasse,Rammer fitten
-6,L�rdag,06,12,08.00,14.00,Tobias,Arbejde_med_pointere
-6,L�rdag,06,12,08.00,16.00,Lasse,rammer forten
-6,L�rdag,06,12,08.00,16.45,Sarmi,We like fortnite
-6,L�rdag,06,12,08.00,16.00,Nicolai,Whipping Lemmings
-7,S�ndag,07,12,02.00,16.00,Sarmi,Torvholder
-7,S�ndag,07,12,08.00,12.00,Tobias,Arbejde_med_pointere
-7,S�ndag,07,12,10.00,22.00,Simon,Default dancing
-7,S�ndag,07,12,08.00,16.45,Mads,Jhin ADC
+Mandag,1,12,1.00,16.00,Tobias,Monkey,0
+Mandag,1,12,12.00,18.00,Sarmi,Cheemsgun,1
+Mandag,1,12,16.00,24.00,Simon,Sekretær,0
+Mandag,1,12,16.00,24.00,Casper,Froggoman,0
+Tirsdag,2,12,0.00,8.00,Tobias,Arbejde_med_pointere,0
+Tirsdag,2,12,8.00,16.00,Mads,MC,0
+Tirsdag,2,12,14.00,16.00,Casper,Froggoman,0
+Tirsdag,2,12,22.00,24.00,Tobias,Arbejde_med_pointere,0
+Onsdag,3,12,0.30,2.00,Tobias,Arbejde_med_pointere,0
+Onsdag,3,12,10.00,18.00,Karma,cleaning,0
+Onsdag,3,12,6.30,16.00,Simon,Simping,1
+Onsdag,3,12,8.00,16.00,Lasse,quality coding,0
+Torsdag,4,12,8.15,16.00,Tobias,Arbejde_med_pointere,0
+Torsdag,4,12,8.30,16.00,Sarmi,Playing with the other Simon,1
+Torsdag,4,12,15.00,16.00,Lasse,Lukkeansvarlig,0
+Torsdag,4,12,3.00,16.00,Simon,åbne ansvarlig,0
+Fredag,5,12,10.30,16.30,Tobias,Arbejde_med_pointere,0
+Fredag,5,12,12.00,16.00,Sarmi,chilling w Linguini,1
+Fredag,5,12,8.15,24.00,Casper,Flooshed,0
+Fredag,5,12,8.00,16.00,Lasse,Rammer fitten,0
+L?rdag,6,12,8.00,14.00,Tobias,Arbejde_med_pointere,0
+L?rdag,6,12,8.00,16.00,Lasse,rammer forten,0
+L?rdag,6,12,8.00,16.45,Sarmi,We like fortnite,1
+L?rdag,6,12,8.00,16.00,Nicolai,Whipping Lemmings,0
+S?ndag,7,12,2.00,16.00,Sarmi,Torvholder,1
+S?ndag,7,12,8.00,12.00,Tobias,Arbejde_med_pointere,0
+S?ndag,7,12,10.00,22.00,Simon,Default dancing,0
+S?ndag,7,12,8.00,16.45,Mads,Jhin ADC,0

@@ -1,25 +1,25 @@
-#include <stdio.h>
+/* #include <stdio.h>
+#include "replacer.h"
 
-/* ~~ SYMBOLIC CONSTANTS ~~ */
 #define MAX_WEEK_DAY_NAME 10
 #define DAYS_IN_SCHEDULE  120
 #define MAX_LINE_LENGTH 500
 #define MAX_STRING_LENGTH 100
 
-/* ~~ STRUCTS ~~ */
 typedef struct schedule_s {
-  int day_of_year; /* Used to track which day it is. */
   char weekday[MAX_WEEK_DAY_NAME];
   int day;
   int month;
-  double shift_start; /* 0100, 1630, etc. */
+  double shift_start; 
   double shift_end;
   char employee_name[MAX_STRING_LENGTH];
   char shift_position[MAX_STRING_LENGTH];
+  int youth_worker;        
 
 } schedule_s;
 
-/* ~~ PROTOTYPES ~~ */
-void schedule_function (void);
+void schedule_function (employee_s employees[], int num_of_employees);
 void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shifts);
-void print_schedule (schedule_s schedule[], int shifts);
+void edit_schedule(schedule_s schedule[], FILE *schedule_fp, int number_of_shifts, employee_s employees[], int num_of_employees);
+void change_schedule_file(schedule_s schedule[], FILE *schedule_fp, int number_of_shifts, int i, int j);
+ */
