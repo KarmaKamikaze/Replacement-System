@@ -1,8 +1,8 @@
 #include "employee.h"
-#include <stdio.h>
-#include <string.h>
 #include "schedule.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 
 /* Function prototypes */
 int parse_employee_data(employee_s employees[]);
@@ -10,30 +10,33 @@ int count_elements(FILE *fp);
 void store_employee_data(const employee_s employees[], int num_of_employees);
 void print_employee(const employee_s employees[], int num_of_employees);
 
-void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], int num_of_total_positions);
+void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                     int num_of_total_positions);
 int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]);
-void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], int *num_of_total_positions);
+void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                  int *num_of_total_positions);
+void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                     int *num_of_total_positions);
 
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
   int num_of_employees, num_of_total_positions;
-  char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH] = {
-      "pos0", "pos1", "pos2", "pos3",
-      "pos4", "pos5"}; /*This array of strings is a placeholder for an array
-                          that is extracted from a csv-file*/
+  char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH];
   num_of_total_positions = parse_positions(positions_str_arr);
 
   new_position(positions_str_arr, &num_of_total_positions);
+  delete_position(positions_str_arr, &num_of_total_positions);
 
   store_positions(positions_str_arr, num_of_total_positions);
-
 
   num_of_employees = parse_employee_data(employees);
   print_employee(employees, num_of_employees);
 
-  add_new_employee(employees, &num_of_employees, positions_str_arr);
+  add_new_employee(employees, &num_of_employees, positions_str_arr,
+                   num_of_total_positions);
 
-  edit_employee(employees, num_of_employees, positions_str_arr);
+  edit_employee(employees, num_of_employees, positions_str_arr,
+                num_of_total_positions);
 
   delete_employee(employees, &num_of_employees);
 
@@ -163,8 +166,7 @@ void print_employee(const employee_s employees[], int num_of_employees) {
   }
 }
 
-
-int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]){
+int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   FILE *fp;
   int i, num_of_total_positions;
   char input_string[MAX_STRING_LENGTH];
@@ -183,41 +185,47 @@ int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]){
   fseek(fp, 0, SEEK_SET);
 
   for (i = 0; i < num_of_total_positions; i++) {
-    fgets(input_string, MAX_LINE_LENGTH, fp);
+    fgets(input_string, MAX_STRING_LENGTH, fp);
     strcpy(positions_str_arr[i], input_string);
   }
-  
+
   fclose(fp);
 
   return num_of_total_positions;
 }
 
-
-void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], int num_of_total_positions){
+void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                     int num_of_total_positions) {
   FILE *fp;
   int i;
 
   fp = fopen("positions.txt", "w");
 
-  for (i = 0; i < num_of_total_positions; i++) 
+  for (i = 0; i < num_of_total_positions; i++)
     fprintf(fp, "%s", positions_str_arr[i]);
-  fprintf(fp, "\n");
+
+  /* Check if last positions final character is a newline. If not, print a
+   * newline. */
+  if (positions_str_arr[num_of_total_positions - 1]
+                       [strlen(positions_str_arr[num_of_total_positions - 1]) -
+                        1] != '\n')
+    fprintf(fp, "\n");
   fclose(fp);
 }
 
-
-void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], int *num_of_total_positions){
+void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                  int *num_of_total_positions) {
   char temp_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
   bool duplicate_check;
   int i;
 
   printf("ENTER NEW POSITION: ");
-  scanf("%[a-zA-Z0-9 ]", temp_string);
+  scanf("%[^\n]", temp_string);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
   strcpy(temp_string, capitalize_string(temp_string));
 
-  for (i = 0; i < *num_of_total_positions; i++){
-    if (!strcmp(positions_str_arr[i], temp_string)){
+  for (i = 0; i < *num_of_total_positions; i++) {
+    if (!strncmp(positions_str_arr[i], temp_string, strlen(temp_string) - 2)) {
       duplicate_check = true;
       printf("THIS POSITION ALREADY EXISTS!\n");
       break;
@@ -225,29 +233,32 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], int 
   }
   if (duplicate_check == false) {
     strcpy(positions_str_arr[*num_of_total_positions], temp_string);
-    printf("POSITION %s HAS BEEN ADDED\n", positions_str_arr[*num_of_total_positions]);
+    printf("POSITION %s HAS BEEN ADDED\n",
+           positions_str_arr[*num_of_total_positions]);
+    (*num_of_total_positions)++;
   }
-  (*num_of_total_positions)++;
 }
 
-void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], int *num_of_total_positions){
+void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                     int *num_of_total_positions) {
   int position_value;
   char throwaway_string[MAX_STRING_LENGTH];
-  bool position_exists;
   int i;
 
   printf("\nEXISTING POSITIONS:\n");
   for (i = 0; i < *num_of_total_positions; i++)
-    printf("%d = %s\n", i+1, positions_str_arr[i]);
+    printf("%d = %s", i + 1, positions_str_arr[i]);
 
   printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE: ");
   scanf("%d", &position_value);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
 
-
-
+  if (position_value >= 1 && position_value <= *num_of_total_positions) {
+    for (i = position_value - 1; i < *num_of_total_positions; i++) {
+      strcpy(positions_str_arr[i], positions_str_arr[i + 1]);
+    }
+    (*num_of_total_positions)--;
+  } else {
+    printf("THE CHOSEN POSITION DOES NOT EXIST!\n");
+  }
 }
-
-
-
-
