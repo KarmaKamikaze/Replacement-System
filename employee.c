@@ -1,5 +1,5 @@
-#include "replacer.h"
-#include <ctype.h>
+#include "employee.h"
+#include "utility.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -31,7 +31,9 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
                                        char *string_edit_or_delete);
 int finished_editing_or_delete_prompt(char *string_edit_or_delete);
 int confirmation_prompt(char *string_add_edit_or_delete);
-char *capitalize_string(char *str);
+int parse_employee_data(employee_s employees[]);
+void store_employee_data(const employee_s employees[], int num_of_employees);
+void print_employees(const employee_s employees[], int num_of_employees);
 
 /*This function adds a new employee to the employees array.*/
 void add_new_employee(employee_s employees[], int *num_of_employees,
@@ -402,15 +404,103 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
   return !strcmp(temp_yes_no_string, "YES");
 }
 
-char *capitalize_string(char *str) {
-  int i;
-  char *capitalized_string = (char *)calloc(strlen(str), sizeof(char));
-  if (capitalized_string == NULL) {
-    printf("ERROR ALLOCATING MEMORY!\n");
-    exit(EXIT_FAILURE);
-  }
+/**
+ * @brief This function parses the information, stored in a file, into the
+ * employee struct array, which it then returns together with the amount of
+ * employees.
+ *
+ * @param employees Output parameter. An employee struct array.
+ * @return int The amount of employees parsed from file to array.
+ */
+int parse_employee_data(employee_s employees[]) {
+  FILE *fp;
+  int i, j; /* Counters */
+  int num_of_elements;
+  char temp_positions[MAX_POSITIONS], input_string[MAX_LINE_LENGTH];
+  char *token;
+  /* Creates a new file if it does not exist.*/
+  do {
+    fp = fopen("employee.csv", "r");
+    if (fp == NULL) {
+      printf("File employee.csv was not found. Creating new file.");
+      fp = fopen("employee.csv", "w");
+      fclose(fp);
+    }
+  } while (fp == NULL);
 
-  for (i = 0; i < strlen(str); i++)
-    capitalized_string[i] = toupper(str[i]);
-  return capitalized_string;
+  num_of_elements = count_elements(fp);
+
+  /* Makes sure we ALWAYS read from the start of our file. */
+  fseek(fp, 0, SEEK_SET);
+  for (i = 0; i < num_of_elements; i++) {
+    fgets(input_string, MAX_LINE_LENGTH, fp);
+    sscanf(input_string, "%[^,],%d,%d,%8[^,],%*d,%[^\n]", employees[i].name,
+           &employees[i].youth_worker, &employees[i].weekday_availability,
+           employees[i].phone_number, temp_positions);
+    employees[i].name[MAX_STRING_LENGTH - 1] = '\0';
+    employees[i].phone_number[MAX_PHONE - 1] = '\0';
+
+    /* Get the first token */
+    token = strtok(temp_positions, ",");
+    /* Get remaining tokens */
+    j = 0;
+    while (token != NULL) {
+      strcpy(employees[i].positions[j], token);
+      token = strtok(NULL, ",");
+      j++;
+    }
+    employees[i].number_of_positions = j;
+  }
+  fclose(fp);
+  return num_of_elements;
+}
+
+/**
+ * @brief This function stored the array of employee structs to a file, after
+ * the program has completed all other tasks. This is done to ensure that all
+ * changes are stored for the next time the program is launched.
+ *
+ * @param employees An array of employee structs containing the information
+ * about each worker.
+ * @param num_of_employees The number of current employees in the system.
+ */
+void store_employee_data(const employee_s employees[], int num_of_employees) {
+  FILE *fp;
+  int i, j; /* Counters */
+
+  fp = fopen("employee.csv", "w");
+
+  for (i = 0; i < num_of_employees; i++) {
+    fprintf(fp, "%s,%d,%d,%s,%d", employees[i].name, employees[i].youth_worker,
+            employees[i].weekday_availability, employees[i].phone_number,
+            employees[i].number_of_positions);
+    for (j = 0; j < employees[i].number_of_positions; j++) {
+      fprintf(fp, ",%s", employees[i].positions[j]);
+    }
+    fprintf(fp, "\n");
+  }
+  fclose(fp);
+}
+
+/**
+ * @brief This function prints the employee struct array to show that it has
+ * been filled correctly.
+ *
+ * @param employees An employee struct array witch is prefilled.
+ * @param num_of_employees The number of employees in the struct array.
+ */
+void print_employees(const employee_s employees[], int num_of_employees) {
+  int i, j;
+
+  for (i = 0; i < num_of_employees; i++) {
+    printf("%s %d %d %s %d", employees[i].name, employees[i].youth_worker,
+           employees[i].weekday_availability, employees[i].phone_number,
+           employees[i].number_of_positions);
+    j = 0;
+    while (employees[i].positions[j][0] != '\0') {
+      printf(" %s", employees[i].positions[j]);
+      j++;
+    }
+    printf("\n");
+  }
 }
