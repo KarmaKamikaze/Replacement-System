@@ -9,7 +9,6 @@ int count_elements(FILE *fp);
 void store_employee_data(const employee_s employees[], int num_of_employees);
 void print_employee(const employee_s employees[], int num_of_employees);
 
-
 int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
   int num_of_employees;
@@ -23,11 +22,11 @@ int main(int argc, char const *argv[]) {
 
   add_new_employee(employees, &num_of_employees, positions_str_arr);
 
-  /*edit_employee(employees, num_of_employees, positions_str_arr);*/
+  edit_employee(employees, num_of_employees, positions_str_arr);
 
   delete_employee(employees, &num_of_employees);
 
-  schedule_function();
+  schedule_function(/* employees, num_of_employees */);
 
   return 0;
 }
