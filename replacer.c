@@ -24,7 +24,7 @@ int main(int argc, char const *argv[]) {
 
   delete_employee(employees, &num_of_employees);
 
-  schedule_function(/* employees, num_of_employees */);
+  schedule_function(employees, num_of_employees);
 
   return 0;
 }

@@ -1,5 +1,8 @@
 #include "utility.h"
 
+#ifndef EMPLOYEE_H
+#define EMPLOYEE_H
+
 #define MAX_EMPLOYEES 40
 #define MAX_POSITIONS 100
 #define MAX_LINE_LENGTH 500
@@ -26,3 +29,5 @@ void delete_employee(employee_s employees[], int *num_of_employees);
 int parse_employee_data(employee_s employees[]);
 void store_employee_data(const employee_s employees[], int num_of_employees);
 void print_employees(const employee_s employees[], int num_of_employees);
+
+#endif
