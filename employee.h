@@ -1,17 +1,28 @@
-#include "replacer.h"
+#include "utility.h"
+
+#define MAX_EMPLOYEES 40
+#define MAX_POSITIONS 100
+#define MAX_LINE_LENGTH 500
+#define MAX_STRING_LENGTH 100
+#define MAX_PHONE 9
+
+typedef struct employee_s {
+  char name[MAX_STRING_LENGTH];
+  int youth_worker;         /* Boolean */
+  int weekday_availability; /* Boolean */
+  char phone_number[MAX_PHONE];
+  int number_of_positions; /* Used internally */
+  char positions[MAX_POSITIONS][MAX_STRING_LENGTH];
+} employee_s;
 
 /* Function prototypes */
-void add_new_employee(employee_s employees[], int *num_of_employees, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]);
-void edit_employee(employee_s employees[], int num_of_employees, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]); 
-void choose_employee_information_to_change(int *information_to_change);
+void add_new_employee(employee_s employees[], int *num_of_employees,
+                      char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                      int num_of_total_positions);
+void edit_employee(employee_s employees[], int num_of_employees,
+                   char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
+                   int num_of_total_positions);
 void delete_employee(employee_s employees[], int *num_of_employees);
-void scan_name(employee_s employees[], int current_employee);
-void scan_phone_number(employee_s employees[], int current_employee);
-void scan_youth_worker_or_availability(employee_s employees[], int current_employee, char *string_youth_or_availability);
-void scan_number_of_positions(employee_s employees[], int current_employee);
-void scan_positions(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]);
-void print_employee_after_adding_or_editing(employee_s employees[], int current_employee, char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH], char *string_add_or_edit);
-void scan_name_edit_or_delete_employee(employee_s employees[], int num_of_employees, int *current_employee, char *string_edit_or_delete);
-int finished_editing_or_delete_prompt(char *string_edit_or_delete);
-int confirmation_prompt(char* string_add_edit_or_delete);
-char *capitalize_string(char *str);
+int parse_employee_data(employee_s employees[]);
+void store_employee_data(const employee_s employees[], int num_of_employees);
+void print_employees(const employee_s employees[], int num_of_employees);
