@@ -8,7 +8,6 @@
 
 /* ~~ STRUCTS ~~ */
 typedef struct schedule_s {
-  int day_of_year; /* Used to track which day it is. */
   char weekday[MAX_WEEK_DAY_NAME];
   int day;
   int month;
@@ -22,4 +21,6 @@ typedef struct schedule_s {
 /* ~~ PROTOTYPES ~~ */
 void schedule_function (void);
 void fill_schedule_with_data (schedule_s schedule[], FILE *schedule_fp, int shifts);
-void print_schedule (schedule_s schedule[], int shifts);
+void edit_schedule(schedule_s schedule[], FILE *schedule_fp, int number_of_shifts);
+/* void change_schedule_file(schedule_s schedule[], FILE *schedule_fp, int number_of_shifts, int i, int j);
+ */
