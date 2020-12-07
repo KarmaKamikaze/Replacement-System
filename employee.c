@@ -66,12 +66,13 @@ void add_new_employee(employee_s employees[], int *num_of_employees,
     scan_youth_worker_or_availability(employees, *num_of_employees,
                                       "availability");
 
+  
     scan_number_of_positions(employees, *num_of_employees,
                              num_of_total_positions);
 
     scan_positions(employees, *num_of_employees, positions_str_arr,
                    num_of_total_positions);
-
+    
     print_employee_after_adding_or_editing(employees, *num_of_employees,
                                            positions_str_arr, "add");
 
@@ -218,10 +219,11 @@ void scan_name(employee_s employees[], int current_employee) {
   printf("FULL NAME: ");
   scanf(" %[a-zA-Z ]", employees[current_employee].name);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+  capitalize_string(employees[current_employee].name);
 }
 
 /**
- * @brief /*This function scans after a phone number. If the number is too long or too
+ * @brief This function scans after a phone number. If the number is too long or too
  * short the do-while loop repeats
  * 
  * @param employees Output parameter. An array of structs containing data about each employee.
@@ -252,6 +254,7 @@ void scan_youth_worker_or_availability(employee_s employees[],
                                        int current_employee,
                                        char *string_youth_or_availability) {
   char temp_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
+
   do {
     printf("%s (YES/NO) ",
            !strcmp(string_youth_or_availability, "youth")
@@ -259,7 +262,7 @@ void scan_youth_worker_or_availability(employee_s employees[],
                : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     scanf(" %s", temp_string);
     fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
-    strcpy(temp_string, capitalize_string(temp_string));
+    capitalize_string(temp_string);
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
@@ -294,17 +297,19 @@ void scan_youth_worker_or_availability(employee_s employees[],
 void scan_number_of_positions(employee_s employees[], int current_employee,
                               int num_of_total_positions) {
   char throwaway_string[MAX_STRING_LENGTH];
-  do {
-    printf("NUMBER OF POSITIONS: ");
-    scanf(" %d", &employees[current_employee].number_of_positions);
-    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
-    if (employees[current_employee].number_of_positions >
+  if (num_of_total_positions != 0){
+    do {
+      printf("NUMBER OF POSITIONS: ");
+      scanf(" %d", &employees[current_employee].number_of_positions);
+      fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+      if (employees[current_employee].number_of_positions >
+              num_of_total_positions ||
+          employees[current_employee].number_of_positions <= 0)
+        printf("INVALID INPUT! TRY AGAIN!\n");
+    } while (employees[current_employee].number_of_positions >
             num_of_total_positions ||
-        employees[current_employee].number_of_positions <= 0)
-      printf("INVALID INPUT! TRY AGAIN!\n");
-  } while (employees[current_employee].number_of_positions >
-               num_of_total_positions ||
-           employees[current_employee].number_of_positions <= 0);
+            employees[current_employee].number_of_positions <= 0);
+  }
 }
 
 
@@ -329,63 +334,66 @@ void scan_positions(employee_s employees[], int current_employee,
   char throwaway_string[MAX_STRING_LENGTH];
   int temp_array[MAX_POSITIONS];
 
-  do {
-    printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
-    for (i = 0; i <= num_of_total_positions - 1; i++)
-      printf("%d = %s", i + 1, positions_str_arr[i]);
-    printf("\n");
-    number_of_scanned_numbers = 0;
-    for (i = 0; i < employees[current_employee].number_of_positions; i++) {
-      number_of_scanned_numbers += scanf("%d,", &temp_array[i]);
-      temp_array[i]--;
-      /*scanf returns the number of items scanned. number_of_scanned_numbers is
-       * used to check if all positions are scanned in the while-loop*/
+  if (num_of_total_positions != 0){
+    do {
+      printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
+      for (i = 0; i <= num_of_total_positions - 1; i++)
+        printf("%d = %s", i + 1, positions_str_arr[i]);
+      printf("\n");
+      number_of_scanned_numbers = 0;
+      for (i = 0; i < employees[current_employee].number_of_positions; i++) {
+        number_of_scanned_numbers += scanf("%d,", &temp_array[i]);
+        temp_array[i]--;
+        /*scanf returns the number of items scanned. number_of_scanned_numbers is
+        * used to check if all positions are scanned in the while-loop*/
 
-      if (temp_array[i] < 0 || temp_array[i] > num_of_total_positions) {
-        printf("INVALID INPUT! TRY AGAIN!\n");
-        break;
-      }
-    }
-    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
-
-    /*This for-loop checks if there are duplicate values in the array of
-     *positions. The outer for-loop counts the value that is being checked while
-     *the inner for-loop checks if the other values in the array is equal to i
-     *(the value the outer for-loop counts) Note the for-loops condition. The
-     *outer for-loop doesn't count the last value, since it has been checked
-     *earlier iterations. The inner for-loop however checks the last value,
-     *because the second to last value has not been checked with the last
-     *value*/
-    has_duplicates_bool = 0;
-    if (employees[current_employee].number_of_positions != 1) {
-      for (i = 0; i < employees[current_employee].number_of_positions - 1;
-           i++) {
-        for (j = i + 1;
-             j <= employees[current_employee].number_of_positions - 1; j++) {
-          if (temp_array[i] == temp_array[j]) {
-            has_duplicates_bool = 1;
-            break;
-          }
-        }
-        if (has_duplicates_bool) {
+        if (temp_array[i] < 0 || temp_array[i] > num_of_total_positions) {
           printf("INVALID INPUT! TRY AGAIN!\n");
           break;
         }
       }
-    }
-  } while (temp_array[i - 1] < 0 ||
-           temp_array[i - 1] > num_of_total_positions ||
-           number_of_scanned_numbers !=
-               employees[current_employee].number_of_positions ||
-           has_duplicates_bool);
-  /*Here 1 is subtracted from i, since the for-loop increments i before it
-   * breaks, which means i is too large*/
+      fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
 
-  for (i = 0; i < employees[current_employee].number_of_positions; i++)
-    strcpy(employees[current_employee].positions[i],
-           positions_str_arr[temp_array[i]]);
+      /*This for-loop checks if there are duplicate values in the array of
+      *positions. The outer for-loop counts the value that is being checked while
+      *the inner for-loop checks if the other values in the array is equal to i
+      *(the value the outer for-loop counts) Note the for-loops condition. The
+      *outer for-loop doesn't count the last value, since it has been checked
+      *earlier iterations. The inner for-loop however checks the last value,
+      *because the second to last value has not been checked with the last
+      *value*/
+      has_duplicates_bool = 0;
+      if (employees[current_employee].number_of_positions != 1) {
+        for (i = 0; i < employees[current_employee].number_of_positions - 1;
+            i++) {
+          for (j = i + 1;
+              j <= employees[current_employee].number_of_positions - 1; j++) {
+            if (temp_array[i] == temp_array[j]) {
+              has_duplicates_bool = 1;
+              break;
+            }
+          }
+          if (has_duplicates_bool) {
+            printf("INVALID INPUT! TRY AGAIN!\n");
+            break;
+          }
+        }
+      }
+    } while (temp_array[i - 1] < 0 ||
+            temp_array[i - 1] > num_of_total_positions ||
+            number_of_scanned_numbers !=
+                employees[current_employee].number_of_positions ||
+            has_duplicates_bool);
+    /*Here 1 is subtracted from i, since the for-loop increments i before it
+    * breaks, which means i is too large*/
+
+    for (i = 0; i < employees[current_employee].number_of_positions; i++)
+      strcpy(employees[current_employee].positions[i],
+            positions_str_arr[temp_array[i]]);
+  }
+  else
+    printf("NO AVAILABLE POSITIONS TO CHOOSE! ADD NEW POSITIONS!\n");
 }
-
 
 /**
  * @brief This function prints the employee. 
@@ -431,7 +439,6 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
                                        int num_of_employees,
                                        int *current_employee,
                                        char *string_edit_or_delete) {
-
   int i, found_employee_bool;
   char temp_name_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
   do {
@@ -439,10 +446,10 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
            !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
     scanf("%[a-zA-Z ]", temp_name_string);
     fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+    capitalize_string(temp_name_string);
     found_employee_bool = 0;
     for (i = 0; i <= num_of_employees; i++) {
-      if (!strcmp(capitalize_string(temp_name_string),
-                  capitalize_string(employees[i].name))) {
+      if (!strcmp(temp_name_string, employees[i].name)) {
         found_employee_bool = 1;
         break;
       }
@@ -468,7 +475,7 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
                                ? "FINISHED EDITING EMPLOYEE?"
                                : "ARE YOU SURE YOU WANT TO DELETE EMPLOYEE?");
     scanf(" %s", temp_string);
-    strcpy(temp_string, capitalize_string(temp_string));
+    capitalize_string(temp_string);
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0)
       printf("INVALID INPUT! TRY AGAIN!\n");
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
@@ -491,7 +498,7 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
                                                         : "DELETE");
     scanf("%s", temp_yes_no_string);
     fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
-    strcpy(temp_yes_no_string, capitalize_string(temp_yes_no_string));
+    capitalize_string(temp_yes_no_string);
     if (strcmp(temp_yes_no_string, "YES") != 0 &&
         strcmp(temp_yes_no_string, "NO") != 0)
       printf("INVALID INPUT! TRY AGAIN!\n");

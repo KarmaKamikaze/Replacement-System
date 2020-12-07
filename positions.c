@@ -99,7 +99,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   printf("ENTER NEW POSITION: ");
   scanf("%[^\n]", temp_string);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
-  strcpy(temp_string, capitalize_string(temp_string));
+  capitalize_string(temp_string);
 
   for (i = 0; i < *num_of_total_positions; i++) {
     /* Because the existing positions end with a newline, but temp_string does

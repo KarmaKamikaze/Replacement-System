@@ -113,10 +113,11 @@ int check_if_employee_exists(employee_s employees[], int num_of_employees,
   int i, found_employee_bool = 0;
   char ch;
   while ((ch = getchar()) != '\n' && ch != EOF)
-    ;
+    continue;
+  capitalize_string(scanned_employee_name);
   for (i = 0; i <= num_of_employees; i++) {
-    if (!strcmp(capitalize_string(scanned_employee_name),
-                capitalize_string(employees[i].name))) {
+    if (!strcmp(scanned_employee_name,
+                employees[i].name)) {
       found_employee_bool = 1;
       break;
     }
