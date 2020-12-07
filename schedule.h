@@ -8,6 +8,7 @@
 #define DAYS_IN_SCHEDULE 120
 #define MAX_LINE_LENGTH 500
 #define MAX_STRING_LENGTH 100
+#define DAYS_A_YEAR 365
 
 typedef struct schedule_s {
   char weekday[MAX_WEEK_DAY_NAME];
@@ -21,13 +22,6 @@ typedef struct schedule_s {
 
 } schedule_s;
 
-void schedule_function(employee_s employees[], int num_of_employees);
-void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
-                             int shifts);
-void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
-                   int number_of_shifts, employee_s employees[],
-                   int num_of_employees);
-void change_schedule_file(schedule_s schedule[], FILE *schedule_fp,
-                          int number_of_shifts, int i, int j);
+void find_replacement(employee_s employees[], int num_of_employees);
 
 #endif

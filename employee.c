@@ -35,14 +35,14 @@ int parse_employee_data(employee_s employees[]);
 void store_employee_data(const employee_s employees[], int num_of_employees);
 void print_employees(const employee_s employees[], int num_of_employees);
 
-
-
-
 /**
  * @brief This function adds a new employee to the employees array
- * 
- * @param employees Output parameter. An array of structs containing data about each employee.
- * @param num_of_employees Output parameter. The number of employees. Used as the index specifier in the employees array. Is incremented if an employee is added. 
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param num_of_employees Output parameter. The number of employees. Used as
+ * the index specifier in the employees array. Is incremented if an employee is
+ * added.
  * @param positions_str_arr A string array containing the existing positions
  * that we wish to store in a file.
  * @param num_of_total_positions The number of strings, containing positions, in
@@ -66,13 +66,12 @@ void add_new_employee(employee_s employees[], int *num_of_employees,
     scan_youth_worker_or_availability(employees, *num_of_employees,
                                       "availability");
 
-  
     scan_number_of_positions(employees, *num_of_employees,
                              num_of_total_positions);
 
     scan_positions(employees, *num_of_employees, positions_str_arr,
                    num_of_total_positions);
-    
+
     print_employee_after_adding_or_editing(employees, *num_of_employees,
                                            positions_str_arr, "add");
 
@@ -84,10 +83,12 @@ void add_new_employee(employee_s employees[], int *num_of_employees,
 }
 
 /**
- * @brief This function edits an employee's information. 
- * 
- * @param employees Output parameter. An array of structs containing data about each employee.
- * @param num_of_employees The number of employees. Used as the size of the employees array.
+ * @brief This function edits an employee's information.
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param num_of_employees The number of employees. Used as the size of the
+ * employees array.
  * @param positions_str_arr A string array containing the existing positions
  * that we wish to store in a file.
  * @param num_of_total_positions The number of strings, containing positions, in
@@ -136,9 +137,11 @@ void edit_employee(employee_s employees[], int num_of_employees,
 }
 
 /**
- * @brief This function lets the user decide what information of the employee they want to change.
- * 
- * @param information_to_change Output parameter. An integer that corresponds to the different information that can be changed. 
+ * @brief This function lets the user decide what information of the employee
+ * they want to change.
+ *
+ * @param information_to_change Output parameter. An integer that corresponds to
+ * the different information that can be changed.
  */
 void choose_employee_information_to_change(int *information_to_change) {
   do {
@@ -158,10 +161,12 @@ void choose_employee_information_to_change(int *information_to_change) {
 }
 
 /**
- * @brief This function lets the user delete an employee. 
- * 
- * @param employees Output parameter. An array of structs containing data about each employee.
- * @param num_of_employees Output parameter. The number of employees. Used as the size of the employees array. Is decremented if an employee is deleted.
+ * @brief This function lets the user delete an employee.
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param num_of_employees Output parameter. The number of employees. Used as
+ * the size of the employees array. Is decremented if an employee is deleted.
  */
 void delete_employee(employee_s employees[], int *num_of_employees) {
   int current_employee, i, j;
@@ -208,10 +213,13 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
 }
 
 /**
- * @brief This function scans after a name. It is only used in the add_employees function
- * 
- * @param employees Output parameter. An array of structs containing data about each employee.
- * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
+ * @brief This function scans after a name. It is only used in the add_employees
+ * function
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param current_employee Integer corresponding to the index of the employee
+ * currently being added, edited or deleted.
  */
 void scan_name(employee_s employees[], int current_employee) {
   char throwaway_string[MAX_STRING_LENGTH]; /*throwaway_string is used to
@@ -223,11 +231,13 @@ void scan_name(employee_s employees[], int current_employee) {
 }
 
 /**
- * @brief This function scans after a phone number. If the number is too long or too
- * short the do-while loop repeats
- * 
- * @param employees Output parameter. An array of structs containing data about each employee.
- * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
+ * @brief This function scans after a phone number. If the number is too long or
+ * too short the do-while loop repeats
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param current_employee Integer corresponding to the index of the employee
+ * currently being added, edited or deleted.
  */
 void scan_phone_number(employee_s employees[], int current_employee) {
   char throwaway_string[MAX_STRING_LENGTH];
@@ -240,15 +250,16 @@ void scan_phone_number(employee_s employees[], int current_employee) {
   } while (strlen(employees[current_employee].phone_number) != 8);
 }
 
-
 /**
- * @brief This function asks a yes/no question. Case insensitive. After the do-while loop, the answer is converted into a
- * boolean integer.
- * 
- * @param employees Output parameter. An array of structs containing data about each employee.
- * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
- * @param string_youth_or_availability A string which is inserted when the function is called and this is used to determine
- * which question is asked.
+ * @brief This function asks a yes/no question. Case insensitive. After the
+ * do-while loop, the answer is converted into a boolean integer.
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param current_employee Integer corresponding to the index of the employee
+ * currently being added, edited or deleted.
+ * @param string_youth_or_availability A string which is inserted when the
+ * function is called and this is used to determine which question is asked.
  */
 void scan_youth_worker_or_availability(employee_s employees[],
                                        int current_employee,
@@ -284,20 +295,21 @@ void scan_youth_worker_or_availability(employee_s employees[],
   }
 }
 
-
 /**
- * @brief This function scans after the number of positions the employee has and only
- * accepts values larger than 0 and less than num_of_total_positions
- * 
- * @param employees Output parameter. An array of structs containing data about each employee. 
- * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
+ * @brief This function scans after the number of positions the employee has and
+ * only accepts values larger than 0 and less than num_of_total_positions
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param current_employee Integer corresponding to the index of the employee
+ * currently being added, edited or deleted.
  * @param num_of_total_positions The number of strings, containing positions, in
  * the position string array.
  */
 void scan_number_of_positions(employee_s employees[], int current_employee,
                               int num_of_total_positions) {
   char throwaway_string[MAX_STRING_LENGTH];
-  if (num_of_total_positions != 0){
+  if (num_of_total_positions != 0) {
     do {
       printf("NUMBER OF POSITIONS: ");
       scanf(" %d", &employees[current_employee].number_of_positions);
@@ -307,11 +319,10 @@ void scan_number_of_positions(employee_s employees[], int current_employee,
           employees[current_employee].number_of_positions <= 0)
         printf("INVALID INPUT! TRY AGAIN!\n");
     } while (employees[current_employee].number_of_positions >
-            num_of_total_positions ||
-            employees[current_employee].number_of_positions <= 0);
+                 num_of_total_positions ||
+             employees[current_employee].number_of_positions <= 0);
   }
 }
-
 
 /**
  * @brief This function prints the choosable positions and scans after them. The
@@ -319,9 +330,11 @@ void scan_number_of_positions(employee_s employees[], int current_employee,
  * for the integers in a for-loop, performing scanf overflow. As soon as an
  * integer is too small or too large, the for loop breaks and the do-while loop
  * starts over.
- * 
- * @param employees Output parameter. An array of structs containing data about each employee. 
- * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
+ *
+ * @param employees Output parameter. An array of structs containing data about
+ * each employee.
+ * @param current_employee Integer corresponding to the index of the employee
+ * currently being added, edited or deleted.
  * @param positions_str_arr A string array containing the existing positions
  * that we wish to store in a file.
  * @param num_of_total_positions The number of strings, containing positions, in
@@ -334,7 +347,7 @@ void scan_positions(employee_s employees[], int current_employee,
   char throwaway_string[MAX_STRING_LENGTH];
   int temp_array[MAX_POSITIONS];
 
-  if (num_of_total_positions != 0){
+  if (num_of_total_positions != 0) {
     do {
       printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
       for (i = 0; i <= num_of_total_positions - 1; i++)
@@ -344,8 +357,8 @@ void scan_positions(employee_s employees[], int current_employee,
       for (i = 0; i < employees[current_employee].number_of_positions; i++) {
         number_of_scanned_numbers += scanf("%d,", &temp_array[i]);
         temp_array[i]--;
-        /*scanf returns the number of items scanned. number_of_scanned_numbers is
-        * used to check if all positions are scanned in the while-loop*/
+        /*scanf returns the number of items scanned. number_of_scanned_numbers
+         * is used to check if all positions are scanned in the while-loop*/
 
         if (temp_array[i] < 0 || temp_array[i] > num_of_total_positions) {
           printf("INVALID INPUT! TRY AGAIN!\n");
@@ -355,19 +368,19 @@ void scan_positions(employee_s employees[], int current_employee,
       fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
 
       /*This for-loop checks if there are duplicate values in the array of
-      *positions. The outer for-loop counts the value that is being checked while
-      *the inner for-loop checks if the other values in the array is equal to i
-      *(the value the outer for-loop counts) Note the for-loops condition. The
-      *outer for-loop doesn't count the last value, since it has been checked
-      *earlier iterations. The inner for-loop however checks the last value,
-      *because the second to last value has not been checked with the last
-      *value*/
+       *positions. The outer for-loop counts the value that is being checked
+       *while the inner for-loop checks if the other values in the array is
+       *equal to i (the value the outer for-loop counts) Note the for-loops
+       *condition. The outer for-loop doesn't count the last value, since it has
+       *been checked earlier iterations. The inner for-loop however checks the
+       *last value, because the second to last value has not been checked with
+       *the last value*/
       has_duplicates_bool = 0;
       if (employees[current_employee].number_of_positions != 1) {
         for (i = 0; i < employees[current_employee].number_of_positions - 1;
-            i++) {
+             i++) {
           for (j = i + 1;
-              j <= employees[current_employee].number_of_positions - 1; j++) {
+               j <= employees[current_employee].number_of_positions - 1; j++) {
             if (temp_array[i] == temp_array[j]) {
               has_duplicates_bool = 1;
               break;
@@ -380,30 +393,31 @@ void scan_positions(employee_s employees[], int current_employee,
         }
       }
     } while (temp_array[i - 1] < 0 ||
-            temp_array[i - 1] > num_of_total_positions ||
-            number_of_scanned_numbers !=
-                employees[current_employee].number_of_positions ||
-            has_duplicates_bool);
+             temp_array[i - 1] > num_of_total_positions ||
+             number_of_scanned_numbers !=
+                 employees[current_employee].number_of_positions ||
+             has_duplicates_bool);
     /*Here 1 is subtracted from i, since the for-loop increments i before it
-    * breaks, which means i is too large*/
+     * breaks, which means i is too large*/
 
     for (i = 0; i < employees[current_employee].number_of_positions; i++)
       strcpy(employees[current_employee].positions[i],
-            positions_str_arr[temp_array[i]]);
-  }
-  else
+             positions_str_arr[temp_array[i]]);
+  } else
     printf("NO AVAILABLE POSITIONS TO CHOOSE! ADD NEW POSITIONS!\n");
 }
 
 /**
- * @brief This function prints the employee. 
- * 
- * @param employees An array of structs containing data about each employee. 
- * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
+ * @brief This function prints the employee.
+ *
+ * @param employees An array of structs containing data about each employee.
+ * @param current_employee Integer corresponding to the index of the employee
+ * currently being added, edited or deleted.
  * @param positions_str_arr A string array containing the existing positions
  * that we wish to store in a file.
- * @param string_add_or_edit A string which is inserted when the function is called. Used to determine
- * which function has been executed through a printf function.
+ * @param string_add_or_edit A string which is inserted when the function is
+ * called. Used to determine which function has been executed through a printf
+ * function.
  */
 void print_employee_after_adding_or_editing(
     employee_s employees[], int current_employee,
@@ -428,12 +442,17 @@ void print_employee_after_adding_or_editing(
 }
 
 /**
- * @brief This function scans after a name and checks if the name is in the employees array. 
- * 
- * @param employees An array of structs containing data about each employee. 
- * @param num_of_employees The number of employees. Used as the size of the employees array. 
- * @param current_employee Output parameter. Integer corresponding to the index of the employee currently being added, edited or deleted.
- * @param string_edit_or_delete A string which is inserted when the function is called. Used to determine which function to execute through a printf function.
+ * @brief This function scans after a name and checks if the name is in the
+ * employees array.
+ *
+ * @param employees An array of structs containing data about each employee.
+ * @param num_of_employees The number of employees. Used as the size of the
+ * employees array.
+ * @param current_employee Output parameter. Integer corresponding to the index
+ * of the employee currently being added, edited or deleted.
+ * @param string_edit_or_delete A string which is inserted when the function is
+ * called. Used to determine which function to execute through a printf
+ * function.
  */
 void scan_name_edit_or_delete_employee(employee_s employees[],
                                        int num_of_employees,
@@ -461,11 +480,11 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
   *current_employee = i;
 }
 
-
 /**
  * @brief This function is used as a prompt and scans after a yes/no answer.
- * 
- * @param string_edit_or_delete Used to determine which function has been executed through a printf function.  
+ *
+ * @param string_edit_or_delete Used to determine which function has been
+ * executed through a printf function.
  * @return A boolean integer.
  */
 int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
@@ -484,9 +503,10 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
 
 /**
  * @brief This function is used as a prompt and scans after a yes/no answer.
- * 
- * @param string_add_edit_or_delete Used to determine which function has been executed through a printf function.  
- * @return A boolean integer 
+ *
+ * @param string_add_edit_or_delete Used to determine which function has been
+ * executed through a printf function.
+ * @return A boolean integer
  */
 int confirmation_prompt(char *string_add_edit_or_delete) {
   char temp_yes_no_string[MAX_STRING_LENGTH],
