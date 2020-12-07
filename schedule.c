@@ -178,14 +178,18 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
  */
 int check_if_employee_exists(employee_s employees[], int num_of_employees,
                              char scanned_employee_name[]) {
-  int i;
+
+
+  int i, found_employee_bool = 0;
   if (!strcmp(scanned_employee_name, "change")) {
     return true;
   }
+  capitalize_string(scanned_employee_name);
   for (i = 0; i <= num_of_employees; i++) {
-    if (!strcmp(capitalize_string(scanned_employee_name),
-                capitalize_string(employees[i].name))) {
-      return true;
+    if (!strcmp(scanned_employee_name,
+                employees[i].name)) {
+      found_employee_bool = 1;
+      break;
     }
   }
   printf("EMPLOYEE NOT FOUND.\n");
