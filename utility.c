@@ -41,6 +41,16 @@ char *capitalize_string(char *str) {
   return capitalized_string;
 }
 
+/**
+ * @brief This function takes an array of strings and displays them in a
+ * "window". It will make the dialog, that the user will act upon, look more
+ * manageable. The output parameter is an integer, representing the user's
+ * choice.
+ *
+ * @param print_list The array of strings that will be displayed in the
+ * "window".
+ * @return int An integer, representing the user choice, based on the dialog.
+ */
 int display_screen(char *print_list[]) {
   int i, ch, menu_choice;
 

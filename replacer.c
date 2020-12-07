@@ -36,6 +36,19 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 
+/**
+ * @brief A selective control structure that takes a user input choice of which
+ * action they wish to take when the program loads. The choice determins the
+ * function that will be run in the switch.
+ *
+ * @param user_choice A choice made by the user, represented by an integer.
+ * @param employees An array of employee structs, which will be passed through
+ * to the underlying functions.
+ * @param positions_str_arr A string array of the currently initialized
+ * positions.
+ * @param num_of_employees The number of existing employees.
+ * @param num_of_total_positions The total number of initialized positions.
+ */
 void menu_options(int user_choice, employee_s employees[],
                   char positions_str_arr[][MAX_STRING_LENGTH],
                   int *num_of_employees, int *num_of_total_positions) {
