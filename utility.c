@@ -30,29 +30,25 @@ int count_elements(FILE *fp) {
   return elements;
 }
 
-
 void capitalize_string(char *str) {
   int i;
   for (i = 0; i < strlen(str); i++)
     str[i] = toupper(str[i]);
 }
 
-
-void str_mem_alloc_check(char *dynamic_array){
+void str_mem_alloc_check(char *dynamic_array) {
   if (dynamic_array == NULL) {
     printf("ERROR ALLOCATING MEMORY!\n");
     exit(EXIT_FAILURE);
   }
 }
 
-
-void file_open_check(FILE *file_pointer){
+void file_open_check(FILE *file_pointer) {
   if (file_pointer == NULL) {
     printf("ERROR OPENING FILE!\n");
     exit(EXIT_FAILURE);
   }
 }
-
 
 /**
  * @brief This function takes an array of strings and displays them in a
