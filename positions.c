@@ -73,7 +73,7 @@ void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
    * newline. */
   if (positions_str_arr[num_of_total_positions - 1]
                        [strlen(positions_str_arr[num_of_total_positions - 1]) -
-                        1] != '\n')
+                        1] != '\n' && num_of_total_positions != 0)
     fprintf(fp, "\n");
   fclose(fp);
 }
@@ -146,11 +146,15 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
     printf("POSITION DELETED: %s", positions_str_arr[position_value-1]);
-    for (i = position_value - 1; i < *num_of_total_positions; i++)
-      strcpy(positions_str_arr[i], positions_str_arr[i + 1]);
+    if (*num_of_total_positions == 1) {
+      remove("positions.txt");
+    }
+    else { 
+      for (i = position_value - 1; i < *num_of_total_positions; i++)
+        strcpy(positions_str_arr[i], positions_str_arr[i + 1]);
+    }
     (*num_of_total_positions)--;
-    
-  } else {
+  } 
+  else
     printf("THE CHOSEN POSITION DOES NOT EXIST!\n");
-  }
 }
