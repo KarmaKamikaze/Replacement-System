@@ -52,23 +52,24 @@ char *capitalize_string(char *str) {
  * @return int An integer, representing the user choice, based on the dialog.
  */
 int display_screen(char *print_list[]) {
-  int i, ch, menu_choice, total, column, row;
+  int i, ch, menu_choice, size;
 
+/* Since some datatypes vary in size on different systems, we compute the size
+ * of the string array. On windows, the size of a string array is doubled */
 #ifdef _WIN32
   system("cls");
+  size = 2 * sizeof(*print_list);
 
 #elif __APPLE__
   system("clear");
+  size = sizeof(*print_list);
 
 #elif __linux__
   system("clear");
+  size = sizeof(*print_list);
 
 #endif
-  /* Since some datatypes vary in size on different systems, we compute the size
-   * of the string array */
-  total = sizeof(*print_list);
-  column = sizeof(**print_list);
-  row = total / column;
+
   /* What isn't pretty in the code will have to be pretty elsewhere */
   printf("+--------------------------------------------------------------------"
          "----------+\n"
@@ -78,7 +79,7 @@ int display_screen(char *print_list[]) {
          "----------+\n"
          "| %-76s |\n",
          "");
-  for (i = 0; i <= row; i++) {
+  for (i = 0; i <= size; i++) {
     printf("| %-76s |\n", print_list[i]);
   }
   printf("| %-76s |\n"
