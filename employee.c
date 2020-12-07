@@ -388,8 +388,7 @@ void scan_positions(employee_s employees[], int current_employee,
 
 
 /**
- * @brief This function prints the employee. The printf functions can be written into
- * one, but this is more readable
+ * @brief This function prints the employee. 
  * 
  * @param employees An array of structs containing data about each employee. 
  * @param current_employee Integer corresponding to the index of the employee currently being added, edited or deleted.
