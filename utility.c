@@ -54,7 +54,16 @@ char *capitalize_string(char *str) {
 int display_screen(char *print_list[]) {
   int i, ch, menu_choice;
 
+#ifdef _WIN32
+  system("cls");
+
+#elif __APPLE__
   system("clear");
+
+#elif __linux__
+  system("clear");
+
+#endif
   /* What isn't pretty in the code will have to be pretty elsewhere */
   printf("+--------------------------------------------------------------------"
          "----------+\n"
