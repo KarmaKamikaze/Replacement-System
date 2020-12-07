@@ -73,7 +73,7 @@ void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
    * newline. */
   if (positions_str_arr[num_of_total_positions - 1]
                        [strlen(positions_str_arr[num_of_total_positions - 1]) -
-                        1] != '\n')
+                        1] != '\n' && num_of_total_positions != 0)
     fprintf(fp, "\n");
   fclose(fp);
 }
@@ -104,7 +104,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   for (i = 0; i < *num_of_total_positions; i++) {
     /* Because the existing positions end with a newline, but temp_string does
      * not, we use strncmp to only compare the relevant characters. */
-    if (!strncmp(positions_str_arr[i], temp_string, strlen(temp_string) - 2)) {
+    if (!strncmp(positions_str_arr[i], temp_string, strlen(positions_str_arr[i]) > strlen(temp_string) ? strlen(positions_str_arr[i])-1 : strlen(temp_string))) {
       duplicate_check = true;
       printf("THIS POSITION ALREADY EXISTS!\n");
       break;
@@ -133,7 +133,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
  */
 void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                      int *num_of_total_positions) {
-  int position_value;
+  int position_value = 0; /*Initialised to 0 to avoid bugs when user inputs letters instead of numbers*/
   char throwaway_string[MAX_STRING_LENGTH];
   int i;
 
@@ -144,13 +144,17 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE: ");
   scanf("%d", &position_value);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
-
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
-    for (i = position_value - 1; i < *num_of_total_positions; i++) {
-      strcpy(positions_str_arr[i], positions_str_arr[i + 1]);
+    printf("POSITION DELETED: %s", positions_str_arr[position_value-1]);
+    if (*num_of_total_positions == 1) {
+      remove("positions.txt");
+    }
+    else { 
+      for (i = position_value - 1; i < *num_of_total_positions; i++)
+        strcpy(positions_str_arr[i], positions_str_arr[i + 1]);
     }
     (*num_of_total_positions)--;
-  } else {
+  } 
+  else
     printf("THE CHOSEN POSITION DOES NOT EXIST!\n");
-  }
 }
