@@ -6,7 +6,7 @@
 /* Function prototypes */
 int count_elements(FILE *fp);
 char *capitalize_string(char *str);
-int display_screen(char *print_list[]);
+int display_screen(char *print_list[], int size);
 
 /**
  * @brief This function counts the elements in an employee file.
@@ -51,7 +51,7 @@ char *capitalize_string(char *str) {
  * "window".
  * @return int An integer, representing the user choice, based on the dialog.
  */
-int display_screen(char *print_list[]) {
+int display_screen(char *print_list[], int size) {
   int i, ch, menu_choice;
 
 #ifdef _WIN32
@@ -64,6 +64,7 @@ int display_screen(char *print_list[]) {
   system("clear");
 
 #endif
+
   /* What isn't pretty in the code will have to be pretty elsewhere */
   printf("+--------------------------------------------------------------------"
          "----------+\n"
@@ -73,7 +74,7 @@ int display_screen(char *print_list[]) {
          "----------+\n"
          "| %-76s |\n",
          "");
-  for (i = 0; i <= sizeof(*print_list); i++) {
+  for (i = 0; i < size; i++) {
     printf("| %-76s |\n", print_list[i]);
   }
   printf("| %-76s |\n"

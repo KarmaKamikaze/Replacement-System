@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
   employee_s employees[MAX_POSITIONS];
   int num_of_employees, num_of_total_positions;
   char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH];
-  char *menu_prompts[MAX_STRING_LENGTH] = {
+  char *menu_prompts[] = {
       "Please choose the option below that you wish to execute.",
       "",
       "1. Replacement of employee.",
@@ -27,8 +27,10 @@ int main(int argc, char const *argv[]) {
   num_of_employees = parse_employee_data(employees);
   num_of_total_positions = parse_positions(positions_str_arr);
 
-  menu_options(display_screen(menu_prompts), employees, positions_str_arr,
-               &num_of_employees, &num_of_total_positions);
+  menu_options(display_screen(menu_prompts,
+                              sizeof(menu_prompts) / sizeof(menu_prompts[0])),
+               employees, positions_str_arr, &num_of_employees,
+               &num_of_total_positions);
 
   store_employee_data(employees, num_of_employees);
   store_positions(positions_str_arr, num_of_total_positions);
