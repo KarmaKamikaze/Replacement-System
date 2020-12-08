@@ -5,7 +5,9 @@
 
 /* Function prototypes */
 int count_elements(FILE *fp);
-char *capitalize_string(char *str);
+void capitalize_string(char *str);
+void str_mem_alloc_check(char *dynamic_array);
+void file_open_check(FILE *file_pointer);
 int display_screen(char *print_list[], int size);
 
 #endif

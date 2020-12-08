@@ -57,7 +57,7 @@ void menu_options(int user_choice, employee_s employees[],
 
   switch (user_choice) {
   case 1:
-    schedule_function(employees, *num_of_employees);
+    find_replacement(employees, *num_of_employees);
     break;
 
   case 2:
