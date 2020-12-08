@@ -241,10 +241,8 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
 
 /*void print_schedule(schedule_s schedule[], int number_of_shifts) {
   int i, j, start_day, start_month, days_forward;
-
   printf("Enter the start date and end date you wish to see (dd/mm days):\n");
   scanf("%d/%d %d", &start_day, &start_month, &days_forward);
-
   for (i = 0; i < 100; i++) {
     if (start_day == schedule[i].day && start_month == schedule[i].month) {
       printf("%d %-9s %.2d/%.2d %.4d-%.4d %-10s %s \n", schedule[i].weekday,
