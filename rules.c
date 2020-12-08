@@ -6,12 +6,12 @@
 #include <stdbool.h>
 #include <string.h>
 
-
 int check_for_rules(employee_s employee, schedule_s schedule[], int shift, int day, int month);
 int check_what_shift_employee_has_this_day (employee_s employee, schedule_s schedule[], int shift,  int day, int month, int days_from_shift);
 int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift, int day, int month);
 int check_for_48_hour_rule(employee_s employee);
 int check_for_weekly_day_off(employee_s employee);
+int check_for_qualifications(employee_s employee, schedule_s schedule);
 
 /**
  * @brief Checks if employee does not breach any rules or legislature if they were to cover the shift.
@@ -31,12 +31,12 @@ int check_for_rules(employee_s employee, schedule_s schedule[], int shift, int d
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and weekly day off.
   * If not breaching, prints employee and phone number*/
   if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
-/*     printf("passed truth check\n");
-*/  printf("%-20s%s\n", employee.name, employee.phone_number);
+    printf("%-20s%s\n", employee.name, employee.phone_number);
     return true;
   }
   return false;
 }
+
 
 /**
  * @brief Checks if employee has shift on the specified days since the absentee's shift.
@@ -84,10 +84,8 @@ int check_what_shift_employee_has_this_day (employee_s employee, schedule_s sche
  */
 int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift, int day, int month){
   int found_shift;
-
   double absentee_shift_start = schedule[shift].shift_start,
          absentee_shift_end = schedule[shift].shift_end;
-  
   /*If shift was found day before shift,
   * checks whether employee has at least 11 hour rest between that ending,
   * and shift on specified day starting*/
@@ -123,11 +121,19 @@ int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift
 }
 
 int check_for_48_hour_rule(employee_s employee){
-
   return true;
 }
 
 int check_for_weekly_day_off(employee_s employee){
-
   return true;
+}
+
+
+int check_for_qualifications(employee_s employee, schedule_s schedule){
+  int i;
+  for (i = 0; i <= employee.number_of_positions; i++){
+    if (schedule.shift_position == employee.positions[i])
+      return true;
+  }
+  return false;
 }
