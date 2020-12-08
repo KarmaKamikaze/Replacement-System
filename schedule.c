@@ -32,7 +32,6 @@ void find_replacement(employee_s employees[], int num_of_employees) {
 /*   printf("1yass\n");
  */
   FILE *schedule_fp = fopen("schedule.csv", "r");
-
   file_open_check(schedule_fp);
   
   number_of_shifts = count_elements(schedule_fp);
