@@ -26,16 +26,17 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
  * @param num_of_employees number of employees in employees.csv file.
  */
 void find_replacement(employee_s employees[], int num_of_employees) {
-  schedule_s schedule[DAYS_IN_SCHEDULE];
+  schedule_s schedule[SHIFTS_IN_SCHEDULE];
   int number_of_shifts;
   FILE *schedule_fp = fopen("schedule.csv", "r");
   if (schedule_fp == NULL) {
     perror("Error");
     exit(EXIT_FAILURE);
   }
+  
   number_of_shifts = count_elements(schedule_fp);
+  
   fill_schedule_with_data(schedule, schedule_fp, number_of_shifts);
-
   fclose(schedule_fp);
 
   edit_schedule(schedule, schedule_fp, number_of_shifts, employees,
@@ -240,10 +241,8 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
 
 /*void print_schedule(schedule_s schedule[], int number_of_shifts) {
   int i, j, start_day, start_month, days_forward;
-
   printf("Enter the start date and end date you wish to see (dd/mm days):\n");
   scanf("%d/%d %d", &start_day, &start_month, &days_forward);
-
   for (i = 0; i < 100; i++) {
     if (start_day == schedule[i].day && start_month == schedule[i].month) {
       printf("%d %-9s %.2d/%.2d %.4d-%.4d %-10s %s \n", schedule[i].weekday,

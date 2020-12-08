@@ -1,13 +1,13 @@
 #include "employee.h"
 #include <stdio.h>
+#include "utility.h"
+
 
 #ifndef SCHEDULE_H
 #define SCHEDULE_H
 
 #define MAX_WEEK_DAY_NAME 10
-#define DAYS_IN_SCHEDULE 120
-#define MAX_LINE_LENGTH 500
-#define MAX_STRING_LENGTH 100
+#define SHIFTS_IN_SCHEDULE 1500
 #define DAYS_A_YEAR 365
 
 typedef struct schedule_s {
