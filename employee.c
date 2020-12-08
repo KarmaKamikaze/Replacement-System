@@ -351,7 +351,7 @@ void scan_positions(employee_s employees[], int current_employee,
     do {
       printf("ENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
       for (i = 0; i <= num_of_total_positions - 1; i++)
-        printf("%d = %s", i + 1, positions_str_arr[i]);
+        printf("%d = %s\n", i + 1, positions_str_arr[i]);
       printf("\n");
       number_of_scanned_numbers = 0;
       for (i = 0; i < employees[current_employee].number_of_positions; i++) {
@@ -437,7 +437,7 @@ void print_employee_after_adding_or_editing(
          employees[current_employee].number_of_positions);
   printf("CHOSEN POSITIONS:\n");
   for (i = 0; i < employees[current_employee].number_of_positions; i++)
-    printf("%s", employees[current_employee].positions[i]);
+    printf("%s\n", employees[current_employee].positions[i]);
   printf("\n");
 }
 
