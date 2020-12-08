@@ -70,13 +70,6 @@ void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   for (i = 0; i < num_of_total_positions; i++)
     fprintf(fp, "%s\n", positions_str_arr[i]);
 
-  /* Check if last positions final character is a newline. If not, print a
-   * newline. Also checks if there are any positions.
-  if (positions_str_arr[num_of_total_positions - 1]
-                       [strlen(positions_str_arr[num_of_total_positions - 1]) -
-                        1] != '\n' &&
-      num_of_total_positions != 0)
-    fprintf(fp, "\n");*/
   fclose(fp);
 }
 

@@ -404,7 +404,7 @@ void scan_positions(employee_s employees[], int current_employee,
       strcpy(employees[current_employee].positions[i],
              positions_str_arr[temp_array[i]]);
   } else
-    printf("NO AVAILABLE POSITIONS TO CHOOSE! ADD NEW POSITIONS!\n");
+    printf("NO AVAILABLE POSITIONS TO CHOOSE! PLEASE ADD NEW POSITIONS!\n");
 }
 
 /**
