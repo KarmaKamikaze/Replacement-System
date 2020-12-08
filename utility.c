@@ -38,14 +38,14 @@ void capitalize_string(char *str) {
 
 void str_mem_alloc_check(char *dynamic_array) {
   if (dynamic_array == NULL) {
-    printf("ERROR ALLOCATING MEMORY!\n");
+    perror("ERROR");
     exit(EXIT_FAILURE);
   }
 }
 
 void file_open_check(FILE *file_pointer) {
   if (file_pointer == NULL) {
-    printf("ERROR OPENING FILE!\n");
+    perror("ERROR");
     exit(EXIT_FAILURE);
   }
 }

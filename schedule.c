@@ -29,10 +29,7 @@ void find_replacement(employee_s employees[], int num_of_employees) {
   schedule_s schedule[SHIFTS_IN_SCHEDULE];
   int number_of_shifts;
   FILE *schedule_fp = fopen("schedule.csv", "r");
-  if (schedule_fp == NULL) {
-    perror("Error");
-    exit(EXIT_FAILURE);
-  }
+  file_open_check(schedule_fp);
   
   number_of_shifts = count_elements(schedule_fp);
   
@@ -181,10 +178,8 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
 
   /*Opens schedule.csv in write-mode.*/
   schedule_fp = fopen("schedule.csv", "w");
-  if (schedule_fp == NULL) {
-    perror("Error");
-    exit(EXIT_FAILURE);
-  }
+  file_open_check(schedule_fp);
+  
   /*Prints new arrays of struct into schedule.csv, closes the file and then
    * returns. This is done after all changes have been made*/
   store_schedule_file(schedule, schedule_fp, number_of_shifts);
