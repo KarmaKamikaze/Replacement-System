@@ -10,7 +10,7 @@ void capitalize_string(char *str);
 void str_mem_alloc_check(char *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
-void wait();
+void wait(unsigned int time);
 
 /**
  * @brief This function counts the elements in an employee file.
@@ -97,29 +97,33 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
 /**
  * @brief This function will pause the program for three seconds, printing
  * waiting symbols, allowing the user to read dialog.
+ *
+ * @param time The amount of time, in seconds, to wait for.
  */
-void wait() {
+void wait(unsigned int time) {
 #ifdef _WIN32
 #include <Windows.h>
+  time = time / 3;
   printf(".");
   fflush(stdout);
-  Sleep(1000);
+  Sleep(time * 1000);
   printf(".");
   fflush(stdout);
-  Sleep(1000);
+  Sleep(time * 1000);
   printf(".");
   fflush(stdout);
-  Sleep(1000);
+  Sleep(time * 1000);
 #else
 #include <unistd.h>
+  time = time / 3;
   printf(".");
   fflush(stdout);
-  sleep(1);
+  sleep(time);
   printf(".");
   fflush(stdout);
-  sleep(1);
+  sleep(time);
   printf(".");
   fflush(stdout);
-  sleep(1);
+  sleep(time);
 #endif
 }

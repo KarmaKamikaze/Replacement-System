@@ -29,7 +29,7 @@ int main(int argc, char const *argv[]) {
     num_of_total_positions = parse_positions(positions_str_arr);
 
     display_screen(menu_prompts,
-                   sizeof(menu_prompts) / sizeof(menu_prompts[0]));
+                   sizeof(menu_prompts) / sizeof(menu_prompts[0]) - 1);
     scanf(" %d", &menu_choice);
     while ((ch = getchar()) != '\n' && ch != EOF)
       continue;

@@ -26,11 +26,14 @@ int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   FILE *fp;
   int i, num_of_total_positions;
   char input_string[MAX_STRING_LENGTH];
+  char display_choice[][MAX_STRING_LENGTH] = {
+      "File positions.txt was not found. Creating new file."};
 
   do {
     fp = fopen("positions.txt", "r");
     if (fp == NULL) {
-      printf("File positions.txt was not found. Creating new file.");
+      display_screen(display_choice, 0);
+      wait(3);
       fp = fopen("positions.txt", "w");
       fclose(fp);
     }
@@ -98,8 +101,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   bool duplicate_check;
   int i;
 
-  display_screen(display_choice,
-                 sizeof(display_choice) / sizeof(display_choice[0]));
+  display_screen(display_choice, 0);
   scanf("%[^\n]", temp_string);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
   capitalize_string(temp_string);
@@ -114,7 +116,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
       duplicate_check = true;
       strcpy(*display_choice, "THIS POSITION ALREADY EXISTS!");
       display_screen(display_choice,
-                     sizeof(display_choice) / sizeof(display_choice[0]));
+                     sizeof(display_choice) / sizeof(display_choice[0]) - 1);
       break;
     }
   }
@@ -123,10 +125,10 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     sprintf(*display_choice, "POSITION %s HAS BEEN ADDED",
             positions_str_arr[*num_of_total_positions]);
     display_screen(display_choice,
-                   sizeof(display_choice) / sizeof(display_choice[0]));
+                   sizeof(display_choice) / sizeof(display_choice[0]) - 1);
     (*num_of_total_positions)++;
   }
-  wait();
+  wait(3);
 }
 
 /**
@@ -157,7 +159,6 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
      * display. We move the null character on top of the newline.
      * display_choice[i + 2] because we already initialized the array with two
      * values */
-    display_choice[i + 2][strlen(display_choice[i + 2]) - 1] = '\0';
   }
 
   sprintf(display_choice[i + 2], " ");
@@ -171,7 +172,6 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
     sprintf(display_choice[0], "POSITION DELETED: %s",
             positions_str_arr[position_value - 1]);
-    display_choice[0][strlen(display_choice[0]) - 1] = '\0';
     if (*num_of_total_positions == 1) {
       remove("positions.txt");
     } else {
@@ -183,5 +183,5 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     sprintf(display_choice[0], "THE CHOSEN POSITION DOES NOT EXIST!");
 
   display_screen(display_choice, 0);
-  wait();
+  wait(3);
 }
