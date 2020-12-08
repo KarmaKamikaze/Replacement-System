@@ -1,3 +1,8 @@
+# Files without an extension.
+*
+!/**/
+!*.*
+
 # Prerequisites
 *.d
 
@@ -37,11 +42,6 @@
 *.i*86
 *.x86_64
 *.hex
-
-# Files without an extension.
-*
-!/**/
-!*.*
 
 # Debug files
 *.dSYM/
