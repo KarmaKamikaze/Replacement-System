@@ -4,7 +4,8 @@
 #define UTILITY_H
 
 #ifndef MAX_STRING_LENGTH
-#define MAX_STRING_LENGTH 100
+#define MAX_STRING_LENGTH 200
+#define MAX_LINE_LENGTH 500
 #endif
 
 /* Function prototypes */

@@ -614,7 +614,7 @@ int parse_employee_data(employee_s employees[]) {
   FILE *fp;
   int i, j; /* Counters */
   int num_of_elements;
-  char temp_positions[MAX_POSITIONS], input_string[MAX_LINE_LENGTH];
+  char temp_positions[MAX_STRING_LENGTH], input_string[MAX_LINE_LENGTH];
   char display_choice[][MAX_STRING_LENGTH] = {
       "File positions.txt was not found. Creating new file."};
   char *token;
