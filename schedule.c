@@ -28,7 +28,7 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
  */
 void find_replacement(employee_s employees[], int num_of_employees) {
   int number_of_shifts;
-  schedule_s *schedule  = (schedule_s*)calloc(2000, sizeof(schedule_s));
+  schedule_s *schedule  = (schedule_s*)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
 /*   printf("1yass\n");
  */
   FILE *schedule_fp = fopen("schedule.csv", "r");
@@ -58,11 +58,11 @@ void find_replacement(employee_s employees[], int num_of_employees) {
 void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
                              int number_of_shifts) {
   int i;
-  char input_string[1000];
+  char input_string[MAX_LINE_LENGTH];
   fseek(schedule_fp, 0, SEEK_SET);
 
   for (i = 0; i < number_of_shifts; i++) {
-    fgets(input_string, 1000, schedule_fp);
+    fgets(input_string, MAX_LINE_LENGTH, schedule_fp);
     /*Gets the data contained in schedule.csv and fills array of structs of
      * shifts with it*/
     sscanf(input_string, "%[^,],%d,%d,%lf,%lf,%[^,],%[^,],%d\n",
@@ -71,8 +71,8 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
            schedule[i].employee_name, schedule[i].shift_position,
            &schedule[i].youth_worker);
     schedule[i].weekday[MAX_WEEK_DAY_NAME - 1] = '\0';
-    schedule[i].employee_name[20 - 1] = '\0';
-    schedule[i].shift_position[30 - 1] = '\0';
+    schedule[i].employee_name[MAX_STRING_LENGTH - 1] = '\0';
+    schedule[i].shift_position[MAX_STRING_LENGTH - 1] = '\0';
   }
 
 }
@@ -201,6 +201,7 @@ for (i = 0; i < num_of_employees; i++) {
    * returns. This is done after all changes have been made*/
   store_schedule_file(schedule, schedule_fp, number_of_shifts);
   fclose(schedule_fp);
+  free(schedule);
 }
 
 /**
