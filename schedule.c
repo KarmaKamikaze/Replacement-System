@@ -152,7 +152,9 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     /*Checks which employees do not breach legislation if they took the shift,
      * and prints them together with phone number.*/
 for (i = 0; i < num_of_employees; i++) {
-  /* if (check_for_rules(employees[i], schedule, shift, day, month)) */
+  if (check_for_rules(&employees[i], schedule, shift, day, month)) {
+
+  }
   /* possible_replacements[j]; */
   /*     j++; */
 }

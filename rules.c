@@ -6,12 +6,12 @@
 #include <stdbool.h>
 #include <string.h>
 
-int check_for_rules(employee_s employee, schedule_s schedule[], int shift, int day, int month);
-int check_what_shift_employee_has_this_day (employee_s employee, schedule_s schedule[], int shift,  int day, int month, int days_from_shift);
-int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift, int day, int month);
-int check_for_48_hour_rule(employee_s employee);
-int check_for_weekly_day_off(employee_s employee);
-int check_for_qualifications(employee_s employee, schedule_s schedule);
+int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int day, int month);
+int check_what_shift_employee_has_this_day (employee_s *employee, schedule_s schedule[], int shift,  int day, int month, int days_from_shift);
+int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[], int shift, int day, int month);
+int check_for_48_hour_rule(employee_s *employee);
+int check_for_weekly_day_off(employee_s *employee);
+int check_for_qualifications(employee_s *employee, schedule_s schedule);
 
 /**
  * @brief Checks if employee does not breach any rules or legislature if they were to cover the shift.
@@ -23,17 +23,15 @@ int check_for_qualifications(employee_s employee, schedule_s schedule);
  * @param month month of the date.
  * @return int 
  */
-int check_for_rules(employee_s employee, schedule_s schedule[], int shift, int day, int month) {
-/*if (!check_what_shift_employee_has_this_day(employee, schedule, shift, 0, day, month, "today")){
-    return false;
-  } */
-
+int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int day, int month) {
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and weekly day off.
   * If not breaching, prints employee and phone number*/
+ printf("\n%s\n", employee->name);
   if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
-    printf("%-20s%s\n", employee.name, employee.phone_number);
+    printf("%-20s%s\n", employee->name, employee->phone_number);
     return true;
   }
+
   return false;
 }
 
@@ -49,21 +47,25 @@ int check_for_rules(employee_s employee, schedule_s schedule[], int shift, int d
  * @param days_from_shift number of days from the absentee's shift to look if employee has a shift.
  * @return int. number of shifts if employee has a shift on specified day. Otherwise returns false.
  */
-int check_what_shift_employee_has_this_day (employee_s employee, schedule_s schedule[], int shift,  int day, int month, int days_from_shift) {
-  while (schedule[shift].day != day + (days_from_shift <= 0 ? days_from_shift - 1 : days_from_shift) && schedule[shift].month == month) {
-    if (days_from_shift <= 0) {
+int check_what_shift_employee_has_this_day (employee_s *employee, schedule_s schedule[], int shift,  int day, int month, int days_from_shift) {
+  /*Looks for first shift on yesterday, today or tomorrow*/
+  if ((day == 1 || day == 2) && month == 1 && (days_from_shift == - 1 || days_from_shift == 0)) {shift = 0;}
+
+  if (days_from_shift <= 0 && shift) {
+    while (schedule[shift].day != day + days_from_shift - 1 && schedule[shift].month == month){
       shift--;
     }
-    else if (days_from_shift > 0){
+    shift++;
+  }
+  else if (days_from_shift > 0 && shift){
+    while (schedule[shift].day != day + days_from_shift && schedule[shift].month == month) {
       shift++;
     }
   }
-  if (days_from_shift <= 0){
-    shift++;
-  }
-
+  /*In case of 1st of January, set shift to 0 if looking for shift yesterday and today*/
+  /*Runs through all shift on the specified day and checks if employee has a shift, then returns the shift number*/
   while (schedule[shift].day == day + days_from_shift && schedule[shift].month == month) {
-    if (!strcmp(schedule[shift].employee_name,employee.name)) {
+    if (!strcmp(schedule[shift].employee_name,employee->name)) {
       return shift;
     }
     shift++;
@@ -82,7 +84,7 @@ int check_what_shift_employee_has_this_day (employee_s employee, schedule_s sche
  * @param month month of date
  * @return int 
  */
-int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift, int day, int month){
+int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[], int shift, int day, int month){
   int found_shift;
   double absentee_shift_start = schedule[shift].shift_start,
          absentee_shift_end = schedule[shift].shift_end;
@@ -93,6 +95,7 @@ int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift
       /*Check for if previous_shift_end ends after midnight*/
       /*Does not check if it is comparing itself with the employees first shift - this might not be implemented - because prototype.*/
     if ((24 - schedule[found_shift].shift_end + absentee_shift_start) < 11) {
+      printf("shift yesterday\n");
       return false;
     }
   }
@@ -102,6 +105,7 @@ int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift
   * and shift on specified day starting*/
   if ((found_shift = check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, 1)) != SHIFT_NOT_FOUND) {
     if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < 11) {
+      printf("shift tomorrow\n");
       return false;
     }
   }
@@ -114,25 +118,26 @@ int check_for_11_hour_rule(employee_s employee, schedule_s schedule[], int shift
   }
   else {
     if ((schedule[found_shift].shift_start - absentee_shift_end) < 11 && (absentee_shift_start - schedule[found_shift].shift_end) < 11) {
+      printf("shift today\n");
       return false;
     }
   }
   return true;
 }
 
-int check_for_48_hour_rule(employee_s employee){
+int check_for_48_hour_rule(employee_s *employee){
   return true;
 }
 
-int check_for_weekly_day_off(employee_s employee){
+int check_for_weekly_day_off(employee_s *employee){
   return true;
 }
 
 
-int check_for_qualifications(employee_s employee, schedule_s schedule){
+int check_for_qualifications(employee_s *employee, schedule_s schedule){
   int i;
-  for (i = 0; i <= employee.number_of_positions; i++){
-    if (schedule.shift_position == employee.positions[i])
+  for (i = 0; i <= employee->number_of_positions; i++){
+    if (schedule.shift_position == employee->positions[i])
       return true;
   }
   return false;
