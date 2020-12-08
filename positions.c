@@ -94,10 +94,12 @@ void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
 void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                   int *num_of_total_positions) {
   char temp_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
+  char display_choice[][MAX_STRING_LENGTH] = {"ENTER NEW POSITION"};
   bool duplicate_check;
   int i;
 
-  printf("ENTER NEW POSITION: ");
+  display_screen(display_choice,
+                 sizeof(display_choice) / sizeof(display_choice[0]));
   scanf("%[^\n]", temp_string);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
   capitalize_string(temp_string);
@@ -110,16 +112,21 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                      ? strlen(positions_str_arr[i]) - 1
                      : strlen(temp_string))) {
       duplicate_check = true;
-      printf("THIS POSITION ALREADY EXISTS!\n");
+      strcpy(*display_choice, "THIS POSITION ALREADY EXISTS!");
+      display_screen(display_choice,
+                     sizeof(display_choice) / sizeof(display_choice[0]));
       break;
     }
   }
   if (duplicate_check == false) {
     strcpy(positions_str_arr[*num_of_total_positions], temp_string);
-    printf("POSITION %s HAS BEEN ADDED\n",
-           positions_str_arr[*num_of_total_positions]);
+    sprintf(*display_choice, "POSITION %s HAS BEEN ADDED",
+            positions_str_arr[*num_of_total_positions]);
+    display_screen(display_choice,
+                   sizeof(display_choice) / sizeof(display_choice[0]));
     (*num_of_total_positions)++;
   }
+  wait();
 }
 
 /**
@@ -140,17 +147,31 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   int position_value = 0; /*Initialised to 0 to avoid bugs when user inputs
                              letters instead of numbers*/
   char throwaway_string[MAX_STRING_LENGTH];
+  char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH] = {"EXISTING POSITIONS",
+                                                           " "};
   int i;
 
-  printf("\nEXISTING POSITIONS:\n");
-  for (i = 0; i < *num_of_total_positions; i++)
-    printf("%d = %s", i + 1, positions_str_arr[i]);
+  for (i = 0; i < *num_of_total_positions; i++) {
+    sprintf(display_choice[i + 2], "%d = %s", i + 1, positions_str_arr[i]);
+    /* Remove newline from positions, so it will be printed correctly in the
+     * display. We move the null character on top of the newline.
+     * display_choice[i + 2] because we already initialized the array with two
+     * values */
+    display_choice[i + 2][strlen(display_choice[i + 2]) - 1] = '\0';
+  }
 
-  printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE: ");
+  sprintf(display_choice[i + 2], " ");
+  i++;
+  sprintf(display_choice[i + 2],
+          "ENTER DIGIT CORRESPONDING TO POSITION TO DELETE");
+
+  display_screen(display_choice, i + 3); /* We added i plus 4(3) strings */
   scanf("%d", &position_value);
   fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
-    printf("POSITION DELETED: %s", positions_str_arr[position_value - 1]);
+    sprintf(display_choice[0], "POSITION DELETED: %s",
+            positions_str_arr[position_value - 1]);
+    display_choice[0][strlen(display_choice[0]) - 1] = '\0';
     if (*num_of_total_positions == 1) {
       remove("positions.txt");
     } else {
@@ -159,5 +180,8 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     }
     (*num_of_total_positions)--;
   } else
-    printf("THE CHOSEN POSITION DOES NOT EXIST!\n");
+    sprintf(display_choice[0], "THE CHOSEN POSITION DOES NOT EXIST!");
+
+  display_screen(display_choice, 0);
+  wait();
 }

@@ -1,3 +1,4 @@
+#include "utility.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +9,8 @@ int count_elements(FILE *fp);
 void capitalize_string(char *str);
 void str_mem_alloc_check(char *dynamic_array);
 void file_open_check(FILE *file_pointer);
-int display_screen(char *print_list[], int size);
+void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
+void wait();
 
 /**
  * @brief This function counts the elements in an employee file.
@@ -53,15 +55,13 @@ void file_open_check(FILE *file_pointer) {
 /**
  * @brief This function takes an array of strings and displays them in a
  * "window". It will make the dialog, that the user will act upon, look more
- * manageable. The output parameter is an integer, representing the user's
- * choice.
+ * manageable.
  *
  * @param print_list The array of strings that will be displayed in the
  * "window".
- * @return int An integer, representing the user choice, based on the dialog.
  */
-int display_screen(char *print_list[], int size) {
-  int i, ch, menu_choice;
+void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
+  int i;
 
 #ifdef _WIN32
   system("cls");
@@ -83,16 +83,43 @@ int display_screen(char *print_list[], int size) {
          "----------+\n"
          "| %-76s |\n",
          "");
-  for (i = 0; i < size; i++) {
+  for (i = 0; i <= size; i++) {
     printf("| %-76s |\n", print_list[i]);
   }
   printf("| %-76s |\n"
          "+--------------------------------------------------------------------"
          "----------+\n\n"
-         "Choice: ",
+         ">> ",
          "");
-  scanf(" %d", &menu_choice);
-  while ((ch = getchar()) != '\n' && ch != EOF)
-    continue;
-  return menu_choice;
+  fflush(stdout); /* Flush the line buffer for wait function */
+}
+
+/**
+ * @brief This function will pause the program for three seconds, printing
+ * waiting symbols, allowing the user to read dialog.
+ */
+void wait() {
+#ifdef _WIN32
+#include <Windows.h>
+  printf(".");
+  fflush(stdout);
+  Sleep(1000);
+  printf(".");
+  fflush(stdout);
+  Sleep(1000);
+  printf(".");
+  fflush(stdout);
+  Sleep(1000);
+#else
+#include <unistd.h>
+  printf(".");
+  fflush(stdout);
+  sleep(1);
+  printf(".");
+  fflush(stdout);
+  sleep(1);
+  printf(".");
+  fflush(stdout);
+  sleep(1);
+#endif
 }
