@@ -36,6 +36,7 @@ void capitalize_string(char *str) {
     str[i] = toupper(str[i]);
 }
 
+/*IF THIS FUNCTION IS NOT USED AT ALL, DELETE IT*/
 void str_mem_alloc_check(char *dynamic_array) {
   if (dynamic_array == NULL) {
     perror("ERROR");
