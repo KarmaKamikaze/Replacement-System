@@ -90,7 +90,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
   int i, j = 0, shift, ch;
   int day = 0, month = 0;
   char name_of_absent_employee[MAX_STRING_LENGTH],
-      possible_replacements[MAX_EMPLOYEES][MAX_STRING_LENGTH]; /*!!!!!!!!!!!!!!!!SKAL ÆNDRES
+      possible_replacements[MAX_EMPLOYEES][MAX_STRING_LENGTH] = {0}; /*!!!!!!!!!!!!!!!!SKAL ÆNDRES
                                                    TIL CALLOC!!!!!!!!!!!!!!!!*/
 
   do {
@@ -145,18 +145,23 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       }
       shift++;
     }
-
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!SECTION  THAT BREAKS PROGRAM!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-    
+   
     
     /*Checks which employees do not breach legislation if they took the shift,
      * and prints them together with phone number.*/
-for (i = 0; i < num_of_employees; i++) {
-  /* if (check_for_rules(employees[i], schedule, shift, day, month)) */
-  /* possible_replacements[j]; */
-  /*     j++; */
-}
+  for (i = 0; i < num_of_employees; i++) {
+    if (check_for_rules(&employees[i], schedule, shift, day, month)) {
+      strcpy(possible_replacements[j], employees[i].name);
+      j++;
+    }
+  }
+  printf("possible replacements\n");
+  j = 0;
 
+  while (possible_replacements[j][0] != '\0') {
+    printf("%-30s\n", possible_replacements[j]);
+    j++;
+  }
       
       /*To do:*/
       /*call check_for_rules to check all who is legally able to work*/
@@ -165,8 +170,6 @@ for (i = 0; i < num_of_employees; i++) {
       /*call function which contains check_for_rules, and also contains youth
        * worker check, qualificaitons check and day time check*/
  
- /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!SECTION  THAT BREAKS PROGRAM!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-
     /*Here the employer/manager calls the employee they want to cover shift.*/
 
     /*Gets user input of which employee is going to cover shift. Checks if
