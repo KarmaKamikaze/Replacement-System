@@ -3,6 +3,10 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#define MAX_LINE_LENGTH 500
+#define MAX_STRING_LENGTH 200
+
+
 /* Function prototypes */
 int count_elements(FILE *fp);
 void capitalize_string(char *str);

@@ -539,7 +539,7 @@ int parse_employee_data(employee_s employees[]) {
   FILE *fp;
   int i, j; /* Counters */
   int num_of_elements;
-  char temp_positions[MAX_POSITIONS], input_string[MAX_LINE_LENGTH];
+  char temp_positions[MAX_STRING_LENGTH], input_string[MAX_LINE_LENGTH];
   char *token;
   /* Creates a new file if it does not exist.*/
   do {
