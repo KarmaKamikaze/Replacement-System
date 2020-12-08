@@ -42,6 +42,7 @@ int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   for (i = 0; i < num_of_total_positions; i++) {
     fgets(input_string, MAX_STRING_LENGTH, fp);
     strcpy(positions_str_arr[i], input_string);
+    positions_str_arr[i][strlen(positions_str_arr[i])-1] = '\0';
   }
 
   fclose(fp);
@@ -67,15 +68,8 @@ void store_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   fp = fopen("positions.txt", "w");
 
   for (i = 0; i < num_of_total_positions; i++)
-    fprintf(fp, "%s", positions_str_arr[i]);
+    fprintf(fp, "%s\n", positions_str_arr[i]);
 
-  /* Check if last positions final character is a newline. If not, print a
-   * newline. Also checks if there are any positions.*/
-  if (positions_str_arr[num_of_total_positions - 1]
-                       [strlen(positions_str_arr[num_of_total_positions - 1]) -
-                        1] != '\n' &&
-      num_of_total_positions != 0)
-    fprintf(fp, "\n");
   fclose(fp);
 }
 
@@ -144,7 +138,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
 
   printf("\nEXISTING POSITIONS:\n");
   for (i = 0; i < *num_of_total_positions; i++)
-    printf("%d = %s", i + 1, positions_str_arr[i]);
+    printf("%d = %s\n", i + 1, positions_str_arr[i]);
 
   printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE: ");
   scanf("%d", &position_value);
