@@ -114,7 +114,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                      ? strlen(positions_str_arr[i]) - 1
                      : strlen(temp_string))) {
       duplicate_check = true;
-      strcpy(*display_choice, "THIS POSITION ALREADY EXISTS!");
+      sprintf(display_choice[0], "THIS POSITION ALREADY EXISTS!");
       display_screen(display_choice,
                      sizeof(display_choice) / sizeof(display_choice[0]) - 1);
       break;
@@ -122,7 +122,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   }
   if (duplicate_check == false) {
     strcpy(positions_str_arr[*num_of_total_positions], temp_string);
-    sprintf(*display_choice, "POSITION %s HAS BEEN ADDED",
+    sprintf(display_choice[0], "POSITION %s HAS BEEN ADDED",
             positions_str_arr[*num_of_total_positions]);
     display_screen(display_choice,
                    sizeof(display_choice) / sizeof(display_choice[0]) - 1);

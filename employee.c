@@ -180,30 +180,30 @@ void choose_employee_information_to_change(int *information_to_change) {
  * the size of the employees array. Is decremented if an employee is deleted.
  */
 void delete_employee(employee_s employees[], int *num_of_employees) {
-  int current_employee, i = 0, j, k;
+  int current_employee, i, j, k = 0;
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
 
   while (confirmation_prompt("delete")) {
     scan_name_edit_or_delete_employee(employees, *num_of_employees,
                                       &current_employee, "delete");
 
-    sprintf(display_choice[i++], "EMPLOYEE SELECTED:");
-    sprintf(display_choice[i++], "NAME: %s", employees[current_employee].name);
-    sprintf(display_choice[i++], "PHONE NUMBER: %s",
+    sprintf(display_choice[k++], "EMPLOYEE SELECTED:");
+    sprintf(display_choice[k++], "NAME: %s", employees[current_employee].name);
+    sprintf(display_choice[k++], "PHONE NUMBER: %s",
             employees[current_employee].phone_number);
-    sprintf(display_choice[i++], "YOUTH WORKER: %s",
+    sprintf(display_choice[k++], "YOUTH WORKER: %s",
             employees[current_employee].youth_worker == 1 ? "YES" : "NO");
-    sprintf(display_choice[i++], "AVAILABLE ON WEEKDAYS FROM 8-16: %s",
+    sprintf(display_choice[k++], "AVAILABLE ON WEEKDAYS FROM 8-16: %s",
             employees[current_employee].weekday_availability == 1 ? "YES"
                                                                   : "NO");
-    sprintf(display_choice[i++], "NUMBER OF POSITIONS: %d",
+    sprintf(display_choice[k++], "NUMBER OF POSITIONS: %d",
             employees[current_employee].number_of_positions);
-    sprintf(display_choice[i++], "CHOSEN POSITIONS: ");
-    for (k = 0; k < employees[current_employee].number_of_positions; k++)
-      sprintf(display_choice[i++], "[%s] ",
-              employees[current_employee].positions[k]);
+    sprintf(display_choice[k++], "CHOSEN POSITIONS: ");
+    for (i = 0; i < employees[current_employee].number_of_positions; i++)
+      sprintf(display_choice[k++], "[%s] ",
+              employees[current_employee].positions[i]);
 
-    display_screen(display_choice, i);
+    display_screen(display_choice, k);
     wait(6);
 
     if (finished_editing_or_delete_prompt("delete")) {
