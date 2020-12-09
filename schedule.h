@@ -23,14 +23,6 @@ typedef struct schedule_s {
 
 } schedule_s;
 
-typedef struct replacement_s {
-  char name[MAX_STRING_LENGTH];
-  int youth_worker;         /* Boolean */
-  int weekday_availability; /* Boolean */
-  char phone_number[MAX_PHONE];
-  char positions[MAX_POSITIONS][MAX_STRING_LENGTH];
-  int score; /*Score summarizing pay-rate (an other things)*/
-} replacement_s;
 
 void find_replacement(employee_s employees[], int num_of_employees);
 

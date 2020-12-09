@@ -13,7 +13,7 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
                    int num_of_employees);
-int check_if_possible_replacements(replacement_s possible_replacements[], int num_of_employees,
+int check_if_possible_replacements(employee_s possible_replacements[], int num_of_employees,
                              char scanned_employee_name[]);
 
 void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
@@ -90,10 +90,10 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
   int i, j = 0, l, shift, ch;
   int day = 0, month = 0;
   char name_of_absent_employee[MAX_STRING_LENGTH];
-  replacement_s *possible_replacements;
+  employee_s *possible_replacements;
 
   do {
-    possible_replacements = (replacement_s*) calloc(num_of_employees, sizeof(replacement_s));
+    possible_replacements = (employee_s*) calloc(num_of_employees, sizeof(employee_s));
     shift = -1;
     i = 0;
     do {
@@ -152,14 +152,8 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
      * and prints them together with phone number.*/
     for (i = 0; i < num_of_employees; i++) {
       if (check_for_rules(&employees[i], schedule, shift, day, month)) {
-        strcpy(possible_replacements[j].name, employees[i].name);
-        possible_replacements[j].youth_worker = employees[i].youth_worker;
-        strcpy(possible_replacements[j].phone_number, employees[i].phone_number);
-        possible_replacements[j].weekday_availability = employees[i].weekday_availability;
-        possible_replacements[j].score = 1; /*Skal ændres til rent faktiske score, alt efter hvordan bliver determined*/
-        for (l = 0; l < employees[i].number_of_positions; l++) {
-          strcpy(possible_replacements[j].positions[l], employees[i].positions[l]);
-        }
+        possible_replacements[j] = employees[i];
+        possible_replacements[j].points = 0;
         j++;
       }
     }
@@ -221,7 +215,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
  * if exists.
  * @return int
  */
-int check_if_possible_replacements(replacement_s possible_replacements[], int num_of_employees,
+int check_if_possible_replacements(employee_s possible_replacements[], int num_of_employees,
                              char scanned_employee_name[]) {
 
   int i;
