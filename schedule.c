@@ -134,8 +134,9 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     }
     shift -= i;
 
-    i = 0;
       do {
+        i = 0;
+        printf("Shift %d\n", shift);
         if (j == 0) {
           printf("ERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n", name_of_absent_employee, day, month);
         }
@@ -159,7 +160,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
           break;
         }
         shift -= i;
-      } while (i > 0);
+      } while (i != 0);
 
     j = 0;
     /*Checks which employees do not breach legislation if they took the shift,

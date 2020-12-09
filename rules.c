@@ -76,21 +76,16 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
     for (i = 0; i >= days_from_shift; i--) {
       date = yesterday(date);
     }
+    while (schedule[shift].day != date.day && schedule[shift].month == date.month) {shift--;}
+    shift++;
   }
-
   else if (days_from_shift > 0) {
     for (i = 0; i < days_from_shift; i++){
       date = tomorrow(date);
     }
-  }
-
-  if (days_from_shift <= 0) {
-    while (schedule[shift].day != date.day && schedule[shift].month == date.month) {shift--;}
-    shift++;
-  }
-  else if (days_from_shift > 0){
     while (schedule[shift].day != date.day  && schedule[shift].month == date.month) {shift++;}
   }
+
   /*In case of 1st of January, set shift to 0 if looking for shift yesterday and today*/
   /*Runs through all shift on the specified day and checks if employee has a shift, then returns the shift number*/
   while (schedule[shift].day == day + days_from_shift && schedule[shift].month == month) {
