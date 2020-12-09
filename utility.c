@@ -3,7 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
 #include <time.h>
+#else
+#include <unistd.h>
+#endif
 
 /* Function prototypes */
 int count_elements(FILE *fp);
@@ -118,7 +122,6 @@ void wait(unsigned int time) {
   fflush(stdout);
   nsleep(time * 1000);
 #else
-#include <unistd.h>
   time = time / 3;
   printf(".");
   fflush(stdout);
