@@ -89,7 +89,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
                    int num_of_employees, int num_of_total_positions) {
   int i, j = 0, shift = -1, day = 0, month = 0;
-  char name_of_absent_employee[MAX_STRING_LENGTH], throw_away_string [MAX_STRING_LENGTH];
+  char name_of_absent_employee[MAX_STRING_LENGTH], temp_string[MAX_STRING_LENGTH];
   employee_s *possible_replacements;
 
   do {
@@ -198,20 +198,19 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     do {
       printf("ENTER NAME OF REPLACEMENT.\nTO SELECT ANOTHER SHIFT "
              "TYPE 'change'\n");
-      strcpy(throw_away_string,schedule[shift].employee_name);
-      scanf(" %s", schedule[shift].employee_name);
+      scanf(" %s", temp_string);
       fflush(stdin); /* Used to clear the input buffer */
     } while (!check_if_possible_replacements(possible_replacements, num_of_employees,
-                                       schedule[shift].employee_name));
+                                       temp_string));
     free(possible_replacements);
-    if (!strcmp(schedule[shift].employee_name, "change")) {
-      strcpy(schedule[shift].employee_name,throw_away_string);
+    if (!strcmp(temp_string, "change")) {
       continue;
     }
+    strcpy(schedule[shift].employee_name,temp_string);
     /*Skal løbe array igennem over possible_replacements, det indeholder KUN
      * legal replacements, er medarbejder ikke er så fortæl user.*/
-    free(possible_replacements);
-    /*Loops until user is has done all desired changes*/
+
+    /*Loops until user has done all desired changes*/
   } while (day != 0 && month != 0);
 
   /*Opens schedule.csv in write-mode.*/
