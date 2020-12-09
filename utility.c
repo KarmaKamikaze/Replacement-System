@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 /* Function prototypes */
 int count_elements(FILE *fp);
@@ -11,6 +12,7 @@ void str_mem_alloc_check(char *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
 void wait(unsigned int time);
+void nsleep(long miliseconds);
 
 /**
  * @brief This function counts the elements in an employee file.
@@ -95,6 +97,8 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
   fflush(stdout); /* Flush the line buffer for wait function */
 }
 
+
+
 /**
  * @brief This function will pause the program for three seconds, printing
  * waiting symbols, allowing the user to read dialog.
@@ -102,18 +106,17 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
  * @param time The amount of time, in seconds, to wait for.
  */
 void wait(unsigned int time) {
-#ifdef _WIN32
-#include <Windows.h>
+  #ifdef _WIN32
   time = time / 3;
   printf(".");
   fflush(stdout);
-  Sleep(time * 1000);
+  nsleep(time * 1000);
   printf(".");
   fflush(stdout);
-  Sleep(time * 1000);
+  nsleep(time * 1000);
   printf(".");
   fflush(stdout);
-  Sleep(time * 1000);
+  nsleep(time * 1000);
 #else
 #include <unistd.h>
   time = time / 3;
@@ -127,4 +130,21 @@ void wait(unsigned int time) {
   fflush(stdout);
   sleep(time);
 #endif
+}
+
+void nsleep(long miliseconds)
+{
+   struct timespec req, rem;
+
+   if(miliseconds > 999)
+   {   
+        req.tv_sec = (int)(miliseconds / 1000);                            /* Must be Non-Negative */
+        req.tv_nsec = (miliseconds - ((long)req.tv_sec * 1000)) * 1000000; /* Must be in range of 0 to 999999999 */
+   }   
+   else
+   {   
+        req.tv_sec = 0;                         /* Must be Non-Negative */
+        req.tv_nsec = miliseconds * 1000000;    /* Must be in range of 0 to 999999999 */
+   }   
+   nanosleep(&req , &rem);
 }
