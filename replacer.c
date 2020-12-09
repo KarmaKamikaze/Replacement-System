@@ -63,7 +63,7 @@ void menu_options(int user_choice, employee_s employees[],
 
   switch (user_choice) {
   case 1:
-    find_replacement(employees, *num_of_employees);
+    find_replacement(employees, *num_of_employees, *num_of_total_positions);
     break;
 
   case 2:

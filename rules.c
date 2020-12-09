@@ -16,7 +16,11 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month);
 int check_for_48_hour_rule(employee_s *employee);
 int check_for_weekly_day_off(employee_s *employee);
-int check_for_qualifications(employee_s *employee, schedule_s schedule);
+
+void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
+
+void sort_replacements(employee_s possible_replacements[], int remaining_employees);
+int compare_replacements(const void *a, const void *b);
 
 /**
  * @brief Checks if employee does not breach any rules or legislature if they
@@ -137,11 +141,28 @@ int check_for_48_hour_rule(employee_s *employee) { return true; }
 
 int check_for_weekly_day_off(employee_s *employee) { return true; }
 
-int check_for_qualifications(employee_s *employee, schedule_s schedule) {
-  int i;
-  for (i = 0; i <= employee->number_of_positions; i++) {
-    if (schedule.shift_position == employee->positions[i])
-      return true;
+void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions){
+  int i, j;
+
+  for (i = 0; i < remaining_employees; i++){
+    for (j = 0; j < possible_replacements[i].number_of_positions; j++) {
+      if (!strcmp(possible_replacements[i].positions[j], schedule.shift_position)) {
+        possible_replacements[i].points += num_of_total_positions;
+        possible_replacements[i].points -= (possible_replacements[i].number_of_positions - 1);
+      }
+    }
   }
-  return false;
+}
+
+
+void sort_replacements(employee_s possible_replacements[], int remaining_employees){
+  qsort(possible_replacements, remaining_employees, sizeof(employee_s), compare_replacements);
+}
+
+
+int compare_replacements(const void *a, const void *b){
+  employee_s *p1 = (employee_s*) a;
+  employee_s *p2 = (employee_s*) b; 
+
+  return -( p1->points- p2->points);
 }
