@@ -469,7 +469,7 @@ void print_employee_after_adding_or_editing(
     char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     char *string_add_or_edit) {
   int i = 0, j;
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
+  char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
 
   sprintf(display_choice[i++], "EMPLOYEE %s WAS SUCCESFULLY %s.",
           employees[current_employee].name,
