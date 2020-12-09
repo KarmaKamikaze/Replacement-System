@@ -88,16 +88,15 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
                    int num_of_employees, int num_of_total_positions) {
-  int i, j = 0, l, shift;
-
-  int day = 0, month = 0;
-  char name_of_absent_employee[MAX_STRING_LENGTH];
+  int i, j = 0, shift = -1, day = 0, month = 0;
+  char name_of_absent_employee[MAX_STRING_LENGTH], throw_away_string [MAX_STRING_LENGTH];
   employee_s *possible_replacements;
 
   do {
     possible_replacements = (employee_s*) calloc(num_of_employees, sizeof(employee_s));
     shift = -1;
     i = 0;
+    j = 1;
     do {
       /*User picks date for absentee employee ((((IMPROVE: use time.h to find
        * current date as option.))))*/
@@ -135,18 +134,32 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     }
     shift -= i;
 
-    /*Gets user input as to what shift to change*/
-    printf("ENTER NAME OF ABSENT EMPLOYEE.\n");
-    scanf(" %s", name_of_absent_employee);
-    while (schedule[shift].day == day && schedule[shift].month == month) {
-      if (strcmp(schedule[shift].employee_name, name_of_absent_employee) == 0) {
-        printf("CHOSEN SHIFT:\n%s Time: %5.2f-%5.2f. Role: %s\n\n",
-               schedule[shift].employee_name, schedule[shift].shift_start,
-               schedule[shift].shift_end, schedule[shift].shift_position);
-        break;
-      }
-      shift++;
-    }
+    i = 0;
+      do {
+        if (j == 0) {
+          printf("ERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n", name_of_absent_employee, day, month);
+        }
+        j = 0; 
+        /*Gets user input as to what shift to change*/
+        printf("ENTER NAME OF ABSENT EMPLOYEE.\n");
+        scanf(" %s", name_of_absent_employee);
+        capitalize_string(name_of_absent_employee);
+        while (schedule[shift].day == day && schedule[shift].month == month) {
+          if (!strcmp(schedule[shift].employee_name, name_of_absent_employee)) {
+            printf("CHOSEN SHIFT:\n%s Time: %5.2f-%5.2f. Role: %s\n\n",
+                  schedule[shift].employee_name, schedule[shift].shift_start,
+                  schedule[shift].shift_end, schedule[shift].shift_position);
+                j = 1;
+            break;
+          }
+          shift++;
+          i++;
+        }
+        if (j == 1) {
+          break;
+        }
+        shift -= i;
+      } while (i > 0);
 
     j = 0;
     /*Checks which employees do not breach legislation if they took the shift,
@@ -184,17 +197,19 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     do {
       printf("ENTER NAME OF REPLACEMENT.\nTO SELECT ANOTHER SHIFT "
              "TYPE 'change'\n");
+      strcpy(throw_away_string,schedule[shift].employee_name);
       scanf(" %s", schedule[shift].employee_name);
       fflush(stdin); /* Used to clear the input buffer */
     } while (!check_if_possible_replacements(possible_replacements, num_of_employees,
                                        schedule[shift].employee_name));
     free(possible_replacements);
     if (!strcmp(schedule[shift].employee_name, "change")) {
+      strcpy(schedule[shift].employee_name,throw_away_string);
       continue;
     }
     /*Skal løbe array igennem over possible_replacements, det indeholder KUN
      * legal replacements, er medarbejder ikke er så fortæl user.*/
-
+    free(possible_replacements);
     /*Loops until user is has done all desired changes*/
   } while (day != 0 && month != 0);
 
