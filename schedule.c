@@ -28,14 +28,16 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
  */
 void find_replacement(employee_s employees[], int num_of_employees) {
   int number_of_shifts;
-  schedule_s *schedule  = (schedule_s*)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
-/*   printf("1yass\n");
- */
+  schedule_s *schedule =
+      (schedule_s *)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
+  /*   printf("1yass\n");
+   */
   FILE *schedule_fp = fopen("schedule.csv", "r");
   file_open_check(schedule_fp);
-  
+
   number_of_shifts = count_elements(schedule_fp);
-  schedule = (schedule_s*)realloc(schedule, sizeof(schedule_s) * number_of_shifts);
+  schedule =
+      (schedule_s *)realloc(schedule, sizeof(schedule_s) * number_of_shifts);
 
   fill_schedule_with_data(schedule, schedule_fp, number_of_shifts);
 
@@ -72,7 +74,6 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
     schedule[i].employee_name[MAX_STRING_LENGTH - 1] = '\0';
     schedule[i].shift_position[MAX_STRING_LENGTH - 1] = '\0';
   }
-
 }
 /**
  * @brief Gets input from user to find absentee's shift, check for possible
@@ -87,11 +88,12 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
                    int num_of_employees) {
-  int i, j = 0, shift, ch;
+  int i, j = 0, shift;
   int day = 0, month = 0;
   char name_of_absent_employee[MAX_STRING_LENGTH],
-      possible_replacements[MAX_EMPLOYEES][MAX_STRING_LENGTH] = {0}; /*!!!!!!!!!!!!!!!!SKAL ÆNDRES
-                                                   TIL CALLOC!!!!!!!!!!!!!!!!*/
+      possible_replacements[MAX_EMPLOYEES][MAX_STRING_LENGTH] = {
+          0}; /*!!!!!!!!!!!!!!!!SKAL ÆNDRES
+TIL CALLOC!!!!!!!!!!!!!!!!*/
 
   do {
     shift = -1;
@@ -106,8 +108,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
              month <
                  0); /*Tomorrow to check for days not existing? - day and month
                         should exit loop if 0 so can break in next while loop*/
-    while ((ch = getchar()) != '\n' && ch != EOF)
-      ;
+    fflush(stdin);   /* Used to clear the input buffer */
     if (day == 0 && month == 0) {
       continue;
     }
@@ -145,31 +146,30 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       }
       shift++;
     }
-   
-    
+
     /*Checks which employees do not breach legislation if they took the shift,
      * and prints them together with phone number.*/
-  for (i = 0; i < num_of_employees; i++) {
-    if (check_for_rules(&employees[i], schedule, shift, day, month)) {
-      strcpy(possible_replacements[j], employees[i].name);
+    for (i = 0; i < num_of_employees; i++) {
+      if (check_for_rules(&employees[i], schedule, shift, day, month)) {
+        strcpy(possible_replacements[j], employees[i].name);
+        j++;
+      }
+    }
+    printf("possible replacements\n");
+    j = 0;
+
+    while (possible_replacements[j][0] != '\0') {
+      printf("%-30s\n", possible_replacements[j]);
       j++;
     }
-  }
-  printf("possible replacements\n");
-  j = 0;
 
-  while (possible_replacements[j][0] != '\0') {
-    printf("%-30s\n", possible_replacements[j]);
-    j++;
-  }
-      
-      /*To do:*/
-      /*call check_for_rules to check all who is legally able to work*/
-      /*Checking if the replacement is also a youth worker & available in day
-       * time also needs implementation*/
-      /*call function which contains check_for_rules, and also contains youth
-       * worker check, qualificaitons check and day time check*/
- 
+    /*To do:*/
+    /*call check_for_rules to check all who is legally able to work*/
+    /*Checking if the replacement is also a youth worker & available in day
+     * time also needs implementation*/
+    /*call function which contains check_for_rules, and also contains youth
+     * worker check, qualificaitons check and day time check*/
+
     /*Here the employer/manager calls the employee they want to cover shift.*/
 
     /*Gets user input of which employee is going to cover shift. Checks if
@@ -178,8 +178,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       printf("Enter name of employee covering shift.\nTo select another shift "
              "type 'change'\n");
       scanf(" %s", schedule[shift].employee_name);
-      while ((ch = getchar()) != '\n' && ch != EOF)
-        ;
+      fflush(stdin); /* Used to clear the input buffer */
     } while (!check_if_employee_exists(employees, num_of_employees,
                                        schedule[shift].employee_name));
     if (!strcmp(schedule[shift].employee_name, "change")) {
@@ -195,7 +194,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
   /*Opens schedule.csv in write-mode.*/
   schedule_fp = fopen("schedule.csv", "w");
   file_open_check(schedule_fp);
-  
+
   /*Prints new arrays of struct into schedule.csv, closes the file and then
    * returns. This is done after all changes have been made*/
   store_schedule_file(schedule, schedule_fp, number_of_shifts);

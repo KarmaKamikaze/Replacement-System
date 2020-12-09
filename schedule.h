@@ -1,7 +1,6 @@
 #include "employee.h"
-#include <stdio.h>
 #include "utility.h"
-
+#include <stdio.h>
 
 #ifndef SCHEDULE_H
 #define SCHEDULE_H

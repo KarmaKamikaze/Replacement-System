@@ -144,7 +144,6 @@ void edit_employee(employee_s employees[], int num_of_employees,
  * the different information that can be changed.
  */
 void choose_employee_information_to_change(int *information_to_change) {
-  int ch;
   char display_choice[][MAX_STRING_LENGTH] = {
       "ENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT ",
       "TO CHANGE:",
@@ -161,8 +160,7 @@ void choose_employee_information_to_change(int *information_to_change) {
                    sizeof(display_choice) / sizeof(display_choice[0]) - 1);
 
     scanf("%d", information_to_change);
-    while ((ch = getchar()) != '\n' && ch != EOF)
-      continue;
+    fflush(stdin); /* Used to clear the input buffer */
     if (*information_to_change < 0 || *information_to_change > 5) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
@@ -244,13 +242,11 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
  * currently being added, edited or deleted.
  */
 void scan_name(employee_s employees[], int current_employee) {
-  char throwaway_string[MAX_STRING_LENGTH]; /*throwaway_string is used to
-                                prevent scanf-overflow*/
   char display_choice[][MAX_STRING_LENGTH] = {"FULL NAME"};
 
   display_screen(display_choice, 0);
   scanf(" %[a-zA-Z ]", employees[current_employee].name);
-  fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+  fflush(stdin); /* Used to clear the input buffer */
   capitalize_string(employees[current_employee].name);
 }
 
@@ -264,13 +260,12 @@ void scan_name(employee_s employees[], int current_employee) {
  * currently being added, edited or deleted.
  */
 void scan_phone_number(employee_s employees[], int current_employee) {
-  char throwaway_string[MAX_STRING_LENGTH];
   char display_choice[][MAX_STRING_LENGTH] = {"PHONE NUMBER"};
 
   do {
     display_screen(display_choice, 0);
     scanf(" %[0-9]", employees[current_employee].phone_number);
-    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+    fflush(stdin); /* Used to clear the input buffer */
     if (strlen(employees[current_employee].phone_number) != 8) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
@@ -293,7 +288,7 @@ void scan_phone_number(employee_s employees[], int current_employee) {
 void scan_youth_worker_or_availability(employee_s employees[],
                                        int current_employee,
                                        char *string_youth_or_availability) {
-  char temp_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
+  char temp_string[MAX_STRING_LENGTH];
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
 
   do {
@@ -303,7 +298,7 @@ void scan_youth_worker_or_availability(employee_s employees[],
                 : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     display_screen(display_choice, 0);
     scanf(" %s", temp_string);
-    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+    fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_string);
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
@@ -342,14 +337,13 @@ void scan_youth_worker_or_availability(employee_s employees[],
  */
 void scan_number_of_positions(employee_s employees[], int current_employee,
                               int num_of_total_positions) {
-  char throwaway_string[MAX_STRING_LENGTH];
   char display_choice[][MAX_STRING_LENGTH] = {"NUMBER OF POSITIONS"};
 
   if (num_of_total_positions != 0) {
     do {
       display_screen(display_choice, 0);
       scanf(" %d", &employees[current_employee].number_of_positions);
-      fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+      fflush(stdin); /* Used to clear the input buffer */
       if (employees[current_employee].number_of_positions >
               num_of_total_positions ||
           employees[current_employee].number_of_positions <= 0) {
@@ -384,7 +378,6 @@ void scan_positions(employee_s employees[], int current_employee,
                     char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                     int num_of_total_positions) {
   int i, j, k = 0, has_duplicates_bool, number_of_scanned_numbers;
-  char throwaway_string[MAX_STRING_LENGTH];
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
   int temp_array[MAX_POSITIONS];
 
@@ -411,7 +404,7 @@ void scan_positions(employee_s employees[], int current_employee,
           break;
         }
       }
-      fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+      fflush(stdin); /* Used to clear the input buffer */
 
       /*This for-loop checks if there are duplicate values in the array of
        *positions. The outer for-loop counts the value that is being checked
@@ -516,14 +509,14 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
                                        int *current_employee,
                                        char *string_edit_or_delete) {
   int i, found_employee_bool;
-  char temp_name_string[MAX_STRING_LENGTH], throwaway_string[MAX_STRING_LENGTH];
+  char temp_name_string[MAX_STRING_LENGTH];
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
   do {
     sprintf(display_choice[0], "EMPLOYEE TO %s (FULL NAME)",
             !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
     display_screen(display_choice, 0);
     scanf("%[a-zA-Z ]", temp_name_string);
-    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+    fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_name_string);
     found_employee_bool = 0;
     for (i = 0; i <= num_of_employees; i++) {
@@ -549,7 +542,6 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
  * @return A boolean integer.
  */
 int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
-  int ch;
   char temp_string[4];
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
   do {
@@ -559,8 +551,7 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
                 : "ARE YOU SURE YOU WANT TO DELETE EMPLOYEE?");
     display_screen(display_choice, 0);
     scanf(" %s", temp_string);
-    while ((ch = getchar()) != '\n' && ch != EOF)
-      continue;
+    fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_string);
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
@@ -579,8 +570,7 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
  * @return A boolean integer
  */
 int confirmation_prompt(char *string_add_edit_or_delete) {
-  char temp_yes_no_string[MAX_STRING_LENGTH],
-      throwaway_string[MAX_STRING_LENGTH];
+  char temp_yes_no_string[MAX_STRING_LENGTH];
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
   do {
     sprintf(display_choice[0], "%s AN EMPLOYEE? (YES/NO)",
@@ -589,7 +579,7 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
                                                          : "DELETE");
     display_screen(display_choice, 0);
     scanf("%s", temp_yes_no_string);
-    fgets(throwaway_string, MAX_STRING_LENGTH, stdin);
+    fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_yes_no_string);
     if (strcmp(temp_yes_no_string, "YES") != 0 &&
         strcmp(temp_yes_no_string, "NO") != 0) {
