@@ -33,7 +33,7 @@ int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
     fp = fopen("positions.txt", "r");
     if (fp == NULL) {
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
       fp = fopen("positions.txt", "w");
       fclose(fp);
     }
@@ -122,7 +122,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                    sizeof(display_choice) / sizeof(display_choice[0]) - 1);
     (*num_of_total_positions)++;
   }
-  wait(3);
+  wait_time(3);
 }
 
 /**
@@ -142,8 +142,8 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                      int *num_of_total_positions) {
   int position_value = 0; /*Initialised to 0 to avoid bugs when user inputs
                              letters instead of numbers*/
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH] = {"EXISTING POSITIONS",
-                                                           " "};
+  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH] = {
+      "EXISTING POSITIONS", " "};
   int i;
 
   for (i = 0; i < *num_of_total_positions; i++) {
@@ -176,5 +176,5 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     sprintf(display_choice[0], "THE CHOSEN POSITION DOES NOT EXIST!");
 
   display_screen(display_choice, 0);
-  wait(3);
+  wait_time(3);
 }

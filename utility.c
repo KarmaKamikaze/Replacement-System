@@ -15,7 +15,7 @@ void capitalize_string(char *str);
 void str_mem_alloc_check(char *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
-void wait(unsigned int time);
+void wait_time(unsigned int time);
 #ifdef _WIN32
 void nsleep(long miliseconds);
 #endif
@@ -109,7 +109,7 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
  *
  * @param time The amount of time, in seconds, to wait for.
  */
-void wait(unsigned int time) {
+void wait_time(unsigned int time) {
 #ifdef _WIN32
   time = time / 3;
   printf(".");

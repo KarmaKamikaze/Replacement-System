@@ -164,7 +164,7 @@ void choose_employee_information_to_change(int *information_to_change) {
     if (*information_to_change < 0 || *information_to_change > 5) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   } while (*information_to_change < 0 || *information_to_change > 5);
 }
@@ -202,13 +202,13 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
               employees[current_employee].positions[i]);
 
     display_screen(display_choice, k);
-    wait(6);
+    wait_time(6);
 
     if (finished_editing_or_delete_prompt("delete")) {
       sprintf(display_choice[0], "EMPLOYEE %s WAS SUCCESFULLY DELETED",
               employees[current_employee].name);
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
       /*This for-loop deletes an employee by overriding the information with the
        *next employee in the array. All the next employees are rearranged one
        *index lower*/
@@ -227,7 +227,7 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
       sprintf(display_choice[0], "EMPLOYEE %s WAS NOT DELETED",
               employees[current_employee].name);
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   }
 }
@@ -269,7 +269,7 @@ void scan_phone_number(employee_s employees[], int current_employee) {
     if (strlen(employees[current_employee].phone_number) != 8) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   } while (strlen(employees[current_employee].phone_number) != 8);
 }
@@ -303,7 +303,7 @@ void scan_youth_worker_or_availability(employee_s employees[],
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
 
@@ -349,7 +349,7 @@ void scan_number_of_positions(employee_s employees[], int current_employee,
           employees[current_employee].number_of_positions <= 0) {
         sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
         display_screen(display_choice, 0);
-        wait(3);
+        wait_time(3);
       }
 
     } while (employees[current_employee].number_of_positions >
@@ -400,7 +400,7 @@ void scan_positions(employee_s employees[], int current_employee,
         if (temp_array[i] < 0 || temp_array[i] > num_of_total_positions) {
           sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
           display_screen(display_choice, 0);
-          wait(3);
+          wait_time(3);
           break;
         }
       }
@@ -428,7 +428,7 @@ void scan_positions(employee_s employees[], int current_employee,
           if (has_duplicates_bool) {
             sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
             display_screen(display_choice, 0);
-            wait(3);
+            wait_time(3);
             break;
           }
         }
@@ -448,7 +448,7 @@ void scan_positions(employee_s employees[], int current_employee,
     sprintf(display_choice[0],
             "NO AVAILABLE POSITIONS TO CHOOSE! ADD NEW POSITIONS!");
     display_screen(display_choice, 0);
-    wait(3);
+    wait_time(3);
   }
 }
 
@@ -488,7 +488,7 @@ void print_employee_after_adding_or_editing(
             employees[current_employee].positions[j]);
 
   display_screen(display_choice, i);
-  wait(3);
+  wait_time(3);
 }
 
 /**
@@ -528,7 +528,7 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
     if (!found_employee_bool) {
       sprintf(display_choice[0], "EMPLOYEE NOT FOUND! TRY AGAIN!");
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   } while (!found_employee_bool);
   *current_employee = i;
@@ -556,7 +556,7 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
     if (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
   return !strcmp(temp_string, "YES");
@@ -585,7 +585,7 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
         strcmp(temp_yes_no_string, "NO") != 0) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
     }
   } while (strcmp(temp_yes_no_string, "YES") != 0 &&
            strcmp(temp_yes_no_string, "NO") != 0);
@@ -613,7 +613,7 @@ int parse_employee_data(employee_s employees[]) {
     fp = fopen("employee.csv", "r");
     if (fp == NULL) {
       display_screen(display_choice, 0);
-      wait(3);
+      wait_time(3);
       fp = fopen("employee.csv", "w");
       fclose(fp);
     }
@@ -696,5 +696,5 @@ void print_employees(const employee_s employees[], int num_of_employees) {
     sprintf(display_choice[k++], " ");
   }
   display_screen(display_choice, k - 2);
-  wait(10);
+  wait_time(10);
 }
