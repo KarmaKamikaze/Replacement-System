@@ -43,7 +43,6 @@ int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int 
   * If not breaching, prints employee and phone number*/
 /*   */
  if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
-    printf("\n%s\n", employee->name);
     return true;
   }
 

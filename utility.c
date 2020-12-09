@@ -1,4 +1,6 @@
 #include "utility.h"
+#include "employee.h"
+#include "schedule.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,12 +14,14 @@
 /* Function prototypes */
 int count_elements(FILE *fp);
 void capitalize_string(char *str);
-void str_mem_alloc_check(char *dynamic_array);
+void employee_mem_alloc_check(employee_s *dynamic_array);
+void schedule_mem_alloc_check(schedule_s *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
 void wait_time(unsigned int time);
 #ifdef _WIN32
 void nsleep(long miliseconds);
+int nanosleep();
 #endif
 
 /**
@@ -46,8 +50,16 @@ void capitalize_string(char *str) {
     str[i] = toupper(str[i]);
 }
 
-/*IF THIS FUNCTION IS NOT USED AT ALL, DELETE IT*/
-void str_mem_alloc_check(char *dynamic_array) {
+
+void employee_mem_alloc_check(employee_s *dynamic_array) {
+  if (dynamic_array == NULL) {
+    perror("ERROR");
+    exit(EXIT_FAILURE);
+  }
+}
+
+
+void schedule_mem_alloc_check(schedule_s *dynamic_array) {
   if (dynamic_array == NULL) {
     perror("ERROR");
     exit(EXIT_FAILURE);

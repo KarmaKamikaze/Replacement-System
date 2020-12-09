@@ -30,14 +30,14 @@ void find_replacement(employee_s employees[], int num_of_employees, int num_of_t
   int number_of_shifts;
   schedule_s *schedule =
       (schedule_s *)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
-  /*   printf("1yass\n");
-   */
   FILE *schedule_fp = fopen("schedule.csv", "r");
+  schedule_mem_alloc_check(schedule);
   file_open_check(schedule_fp);
 
   number_of_shifts = count_elements(schedule_fp);
   schedule =
       (schedule_s *)realloc(schedule, sizeof(schedule_s) * number_of_shifts);
+  schedule_mem_alloc_check(schedule);
 
   fill_schedule_with_data(schedule, schedule_fp, number_of_shifts);
 
@@ -94,7 +94,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
 
   do {
     possible_replacements = (employee_s*) calloc(num_of_employees, sizeof(employee_s));
-    str_mem_alloc_check(possible_replacements);
+    employee_mem_alloc_check(possible_replacements);
     shift = -1;
     i = 0;
     j = 1;
@@ -137,7 +137,6 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
 
       do {
         i = 0;
-        printf("Shift %d\n", shift);
         if (j == 0) {
           printf("ERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n", name_of_absent_employee, day, month);
         }
@@ -181,7 +180,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     j = 0;
     printf("POSSIBLE REPLACEMENTS ARE:\n");
     while (possible_replacements[j].name[0] != '\0') {
-      printf("Replacement score: %-15d %-30s%s\n", possible_replacements[j].points, possible_replacements[j].name, possible_replacements[j].phone_number);
+      printf("REPLACEMENT SCORE: %-15d %-30s%s\n", possible_replacements[j].points, possible_replacements[j].name, possible_replacements[j].phone_number);
       j++;
     }
       
