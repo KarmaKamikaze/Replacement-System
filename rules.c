@@ -19,6 +19,10 @@ int check_for_weekly_day_off(employee_s *employee);
 
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
 
+int days_in_month(int month);
+date_s tomorrow(date_s date);
+date_s yesterday(date_s date);
+
 void sort_replacements(employee_s possible_replacements[], int remaining_employees);
 int compare_replacements(const void *a, const void *b);
 
@@ -64,24 +68,29 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
                                            schedule_s schedule[], int shift,
                                            int day, int month,
                                            int days_from_shift) {
-  /*Looks for first shift on yesterday, today or tomorrow*/
-  printf("%d/%d\n", day, month);
-  if ((day <= 2) && month == 1 && (days_from_shift <= 0)) {shift = 0; printf("inside\n");}
-  if (shift != 0) {  
-    if (days_from_shift <= 0 && !shift == 0) {
-      printf("shift: %d\n", shift);
-      while (schedule[shift].day != day + days_from_shift - 1 && schedule[shift].month == month) {shift--;}
-      shift++;
+  date_s date;
+  int i;
+  date.day = day;
+  date.month = month;
+  if (days_from_shift <= 0) {
+    for (i = 0; i >= days_from_shift; i--) {
+      date = yesterday(date);
     }
-    else if (days_from_shift > 0 && !shift == 0){
-      printf("shift: %d\n", shift);
-      while (schedule[shift].day != day + days_from_shift && schedule[shift].month == month) {shift++;}
-    }
+    while (schedule[shift].day != date.day && schedule[shift].month == date.month) {shift--;}
+    shift++;
   }
+  else if (days_from_shift > 0) {
+    for (i = 0; i < days_from_shift; i++){
+      date = tomorrow(date);
+    }
+    while (schedule[shift].day != date.day  && schedule[shift].month == date.month) {shift++;}
+  }
+
   /*In case of 1st of January, set shift to 0 if looking for shift yesterday and today*/
   /*Runs through all shift on the specified day and checks if employee has a shift, then returns the shift number*/
   while (schedule[shift].day == day + days_from_shift && schedule[shift].month == month) {
-    if (!strcmp(schedule[shift].employee_name,employee->name)) {return shift;}
+    if (!strcmp(schedule[shift].employee_name,employee->name)) {
+      return shift;}
     shift++;
   }
   return SHIFT_NOT_FOUND;
@@ -154,6 +163,56 @@ void check_for_qualifications(employee_s possible_replacements[], int remaining_
   }
 }
 
+date_s tomorrow(date_s date) {
+  if (date.month == 12 && date.day == days_in_month(date.month)) {
+    date.month = 1;
+    date.day = 1;
+  } else if (date.day == days_in_month(date.month)) {
+    date.month++;
+    date.day = 1;
+  } else {
+    date.day++;
+  }
+
+  return date;
+}
+
+date_s yesterday(date_s date) {
+  if (date.month == 1 && date.day == 1) {
+    date.month = 12;
+    date.day = 31;
+  } else if (date.day == 1) {
+    date.month--;
+    date.day = days_in_month(date.month);
+  } else {
+    date.day--;
+  }
+
+  return date;
+}
+
+int days_in_month(int month) {
+  switch (month) {
+  case 1:
+  case 3:
+  case 5:
+  case 7:
+  case 8:
+  case 10:
+  case 12:
+    return 31;
+  case 2:
+      return 28;
+  case 4:
+  case 6:
+  case 9:
+  case 11:
+    return 30;
+
+  default:
+    return 0;
+  }
+}
 
 void sort_replacements(employee_s possible_replacements[], int remaining_employees){
   qsort(possible_replacements, remaining_employees, sizeof(employee_s), compare_replacements);
