@@ -94,6 +94,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
 
   do {
     possible_replacements = (employee_s*) calloc(num_of_employees, sizeof(employee_s));
+    str_mem_alloc_check(possible_replacements);
     shift = -1;
     i = 0;
     j = 1;
@@ -264,7 +265,7 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
   int i;
   fseek(schedule_fp, 0, SEEK_SET);
   for (i = 0; i < number_of_shifts; i++) {
-    fprintf(schedule_fp, "%s,%d,%d,%.2f,%.2f,%s,%s,%d\n", schedule[i].weekday,
+    fprintf(schedule_fp, "%s,%.2d,%.2d,%4.2f,%4.2f,%s,%s,%d\n", schedule[i].weekday,
             schedule[i].day, schedule[i].month, schedule[i].shift_start,
             schedule[i].shift_end, schedule[i].employee_name,
             schedule[i].shift_position, schedule[i].youth_worker);
