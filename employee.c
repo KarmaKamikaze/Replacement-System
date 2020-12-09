@@ -681,17 +681,20 @@ void store_employee_data(const employee_s employees[], int num_of_employees) {
  * @param num_of_employees The number of employees in the struct array.
  */
 void print_employees(const employee_s employees[], int num_of_employees) {
-  int i, j;
+  char display_choice[MAX_LINE_LENGTH][MAX_STRING_LENGTH];
+  int i, j, k = 0;
 
   for (i = 0; i < num_of_employees; i++) {
-    printf("%s %d %d %s %d", employees[i].name, employees[i].youth_worker,
-           employees[i].weekday_availability, employees[i].phone_number,
-           employees[i].number_of_positions);
+    sprintf(display_choice[k++], "%s %d %d %s %d", employees[i].name,
+            employees[i].youth_worker, employees[i].weekday_availability,
+            employees[i].phone_number, employees[i].number_of_positions);
     j = 0;
     while (employees[i].positions[j][0] != '\0') {
-      printf(" %s", employees[i].positions[j]);
+      sprintf(display_choice[k++], " %s", employees[i].positions[j]);
       j++;
     }
-    printf("\n");
+    sprintf(display_choice[k++], " ");
   }
+  display_screen(display_choice, k - 2);
+  wait(10);
 }
