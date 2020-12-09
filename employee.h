@@ -7,7 +7,6 @@
 #define MAX_POSITIONS 100
 #define MAX_PHONE 9
 
-
 typedef struct employee_s {
   char name[MAX_STRING_LENGTH];
   int youth_worker;         /* Boolean */
