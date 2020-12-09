@@ -6,6 +6,7 @@
 #ifndef MAX_STRING_LENGTH
 #define MAX_STRING_LENGTH 200
 #define MAX_LINE_LENGTH 500
+#define MAX_DISPLAY_ELEMENTS 40
 #endif
 
 /* Function prototypes */

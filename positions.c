@@ -142,7 +142,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                      int *num_of_total_positions) {
   int position_value = 0; /*Initialised to 0 to avoid bugs when user inputs
                              letters instead of numbers*/
-  char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH] = {"EXISTING POSITIONS",
+  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH] = {"EXISTING POSITIONS",
                                                            " "};
   int i;
 
