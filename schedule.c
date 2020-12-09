@@ -7,12 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void find_replacement(employee_s employees[], int num_of_employees);
+void find_replacement(employee_s employees[], int num_of_employees, int num_of_total_positions);
 void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
                              int shifts);
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
-                   int num_of_employees);
+                   int num_of_employees, int num_of_total_positions);
 int check_if_employee_exists(employee_s employees[], int num_of_employees,
                              char scanned_employee_name[]);
 
@@ -26,7 +26,7 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
  * @param employees array of structs of employees.
  * @param num_of_employees number of employees in employees.csv file.
  */
-void find_replacement(employee_s employees[], int num_of_employees) {
+void find_replacement(employee_s employees[], int num_of_employees, int num_of_total_positions) {
   int number_of_shifts;
   schedule_s *schedule  = (schedule_s*)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
 /*   printf("1yass\n");
@@ -42,7 +42,7 @@ void find_replacement(employee_s employees[], int num_of_employees) {
   fclose(schedule_fp);
 
   edit_schedule(schedule, schedule_fp, number_of_shifts, employees,
-                num_of_employees);
+                num_of_employees, num_of_total_positions);
 }
 
 /**
@@ -86,12 +86,11 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
  */
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
-                   int num_of_employees) {
+                   int num_of_employees, int num_of_total_positions) {
   int i, j = 0, shift, ch;
   int day = 0, month = 0;
-  char name_of_absent_employee[MAX_STRING_LENGTH],
-      possible_replacements[MAX_EMPLOYEES][MAX_STRING_LENGTH] = {0}; /*!!!!!!!!!!!!!!!!SKAL ÆNDRES
-                                                   TIL CALLOC!!!!!!!!!!!!!!!!*/
+  char name_of_absent_employee[MAX_STRING_LENGTH];
+  employee_s possible_replacements[MAX_EMPLOYEES];
 
   do {
     shift = -1;
@@ -151,17 +150,22 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
      * and prints them together with phone number.*/
   for (i = 0; i < num_of_employees; i++) {
     if (check_for_rules(&employees[i], schedule, shift, day, month)) {
-      strcpy(possible_replacements[j], employees[i].name);
+      possible_replacements[j] = employees[i];
+      possible_replacements[j].points = 0;
       j++;
     }
   }
+  check_for_qualifications(possible_replacements, j, schedule[shift], num_of_total_positions);
+
+
+  /*
   printf("possible replacements\n");
   j = 0;
 
   while (possible_replacements[j][0] != '\0') {
     printf("%-30s\n", possible_replacements[j]);
     j++;
-  }
+  }*/
       
       /*To do:*/
       /*call check_for_rules to check all who is legally able to work*/

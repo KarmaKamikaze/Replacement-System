@@ -11,7 +11,10 @@ int check_what_shift_employee_has_this_day (employee_s *employee, schedule_s sch
 int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[], int shift, int day, int month);
 int check_for_48_hour_rule(employee_s *employee);
 int check_for_weekly_day_off(employee_s *employee);
-int check_for_qualifications(employee_s *employee, schedule_s schedule);
+
+void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
+
+
 
 /**
  * @brief Checks if employee does not breach any rules or legislature if they were to cover the shift.
@@ -126,11 +129,16 @@ int check_for_weekly_day_off(employee_s *employee){
 }
 
 
-int check_for_qualifications(employee_s *employee, schedule_s schedule){
-  int i;
-  for (i = 0; i <= employee->number_of_positions; i++){
-    if (schedule.shift_position == employee->positions[i])
-      return true;
+void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions){
+  int i, j;
+
+  for (i = 0; i < remaining_employees; i++){
+    for (j = 0; j < possible_replacements[i].number_of_positions; j++) {
+      if (!strcmp(possible_replacements[i].positions[j], schedule.shift_position)) {
+        possible_replacements[i].points += num_of_total_positions;
+        possible_replacements[i].points -= (possible_replacements[i].number_of_positions - 1);
+        printf("test, %d", possible_replacements[i].points);
+      }
+    }
   }
-  return false;
 }

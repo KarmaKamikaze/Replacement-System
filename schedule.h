@@ -23,6 +23,6 @@ typedef struct schedule_s {
 
 } schedule_s;
 
-void find_replacement(employee_s employees[], int num_of_employees);
+void find_replacement(employee_s employees[], int num_of_employees, int num_of_total_positions);
 
 #endif
