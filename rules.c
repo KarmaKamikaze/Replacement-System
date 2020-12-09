@@ -30,16 +30,12 @@ int check_for_qualifications(employee_s *employee, schedule_s schedule);
  * @param month month of the date.
  * @return int
  */
-int check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
-                    int day, int month) {
-  /*Checks whether employee does not breach 11-hour rule, 48-hour rule and
-   * weekly day off. If not breaching, prints employee and phone number*/
-  /*  printf("\n%s\n", employee->name);
-   */
-  if (check_for_11_hour_rule(employee, schedule, shift, day, month) &&
-      check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
-    /*     printf("%-20s%s\n", employee->name, employee->phone_number);
-     */
+int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int day, int month) {
+  /*Checks whether employee does not breach 11-hour rule, 48-hour rule and weekly day off.
+  * If not breaching, prints employee and phone number*/
+/*   */
+ if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
+    printf("\n%s\n", employee->name);
     return true;
   }
 
@@ -65,32 +61,23 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
                                            int day, int month,
                                            int days_from_shift) {
   /*Looks for first shift on yesterday, today or tomorrow*/
-  if ((day == 1 || day == 2) && month == 1 &&
-      (days_from_shift == -1 || days_from_shift == 0)) {
-    shift = 0;
-  }
-
-  if (days_from_shift <= 0 && shift) {
-    while (schedule[shift].day != day + days_from_shift - 1 &&
-           schedule[shift].month == month) {
-      shift--;
-    }
-    shift++;
-  } else if (days_from_shift > 0 && shift) {
-    while (schedule[shift].day != day + days_from_shift &&
-           schedule[shift].month == month) {
+  printf("%d/%d\n", day, month);
+  if ((day <= 2) && month == 1 && (days_from_shift <= 0)) {shift = 0; printf("inside\n");}
+  if (shift != 0) {  
+    if (days_from_shift <= 0 && !shift == 0) {
+      printf("shift: %d\n", shift);
+      while (schedule[shift].day != day + days_from_shift - 1 && schedule[shift].month == month) {shift--;}
       shift++;
     }
-  }
-  /*In case of 1st of January, set shift to 0 if looking for shift yesterday and
-   * today*/
-  /*Runs through all shift on the specified day and checks if employee has a
-   * shift, then returns the shift number*/
-  while (schedule[shift].day == day + days_from_shift &&
-         schedule[shift].month == month) {
-    if (!strcmp(schedule[shift].employee_name, employee->name)) {
-      return shift;
+    else if (days_from_shift > 0 && !shift == 0){
+      printf("shift: %d\n", shift);
+      while (schedule[shift].day != day + days_from_shift && schedule[shift].month == month) {shift++;}
     }
+  }
+  /*In case of 1st of January, set shift to 0 if looking for shift yesterday and today*/
+  /*Runs through all shift on the specified day and checks if employee has a shift, then returns the shift number*/
+  while (schedule[shift].day == day + days_from_shift && schedule[shift].month == month) {
+    if (!strcmp(schedule[shift].employee_name,employee->name)) {return shift;}
     shift++;
   }
   return SHIFT_NOT_FOUND;
@@ -120,7 +107,6 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
     /*Does not check if it is comparing itself with the employees first shift -
      * this might not be implemented - because prototype.*/
     if ((24 - schedule[found_shift].shift_end + absentee_shift_start) < 11) {
-      printf("shift yesterday\n");
       return false;
     }
   }
@@ -131,21 +117,16 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   if ((found_shift = check_what_shift_employee_has_this_day(
            employee, schedule, shift, day, month, 1)) != SHIFT_NOT_FOUND) {
     if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < 11) {
-      printf("shift tomorrow\n");
       return false;
     }
   }
 
   /*If shift was not found on the specified day of shift - returns true.
-   * If shift was found; checks whether employee has at least 11 hour rest
-   * between that starting and shift on specified day ending */
-  if ((found_shift = check_what_shift_employee_has_this_day(
-           employee, schedule, shift, day, month, 0)) == SHIFT_NOT_FOUND) {
-    return true;
-  } else {
-    if ((schedule[found_shift].shift_start - absentee_shift_end) < 11 &&
-        (absentee_shift_start - schedule[found_shift].shift_end) < 11) {
-      printf("shift today\n");
+  * If shift was found; checks whether employee has at least 11 hour rest
+  * between that starting and shift on specified day ending */
+  if ((found_shift = check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, 0)) == SHIFT_NOT_FOUND) {return true;}
+  else {
+    if ((schedule[found_shift].shift_start - absentee_shift_end) < 11 && (absentee_shift_start - schedule[found_shift].shift_end) < 11) {
       return false;
     }
   }
