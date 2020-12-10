@@ -1,18 +1,28 @@
 #include "utility.h"
+#include "employee.h"
+#include "schedule.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
 #include <time.h>
+#else
+#include <unistd.h>
+#endif
 
 /* Function prototypes */
 int count_elements(FILE *fp);
 void capitalize_string(char *str);
-void str_mem_alloc_check(char *dynamic_array);
+void employee_mem_alloc_check(employee_s *dynamic_array);
+void schedule_mem_alloc_check(schedule_s *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
-void wait(unsigned int time);
+void wait_time(unsigned int time);
+#ifdef _WIN32
 void nsleep(long miliseconds);
+int nanosleep();
+#endif
 
 /**
  * @brief This function counts the elements in an employee file.
@@ -40,8 +50,16 @@ void capitalize_string(char *str) {
     str[i] = toupper(str[i]);
 }
 
-/*IF THIS FUNCTION IS NOT USED AT ALL, DELETE IT*/
-void str_mem_alloc_check(char *dynamic_array) {
+
+void employee_mem_alloc_check(employee_s *dynamic_array) {
+  if (dynamic_array == NULL) {
+    perror("ERROR");
+    exit(EXIT_FAILURE);
+  }
+}
+
+
+void schedule_mem_alloc_check(schedule_s *dynamic_array) {
   if (dynamic_array == NULL) {
     perror("ERROR");
     exit(EXIT_FAILURE);
@@ -97,16 +115,14 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
   fflush(stdout); /* Flush the line buffer for wait function */
 }
 
-
-
 /**
  * @brief This function will pause the program for three seconds, printing
  * waiting symbols, allowing the user to read dialog.
  *
  * @param time The amount of time, in seconds, to wait for.
  */
-void wait(unsigned int time) {
-  #ifdef _WIN32
+void wait_time(unsigned int time) {
+#ifdef _WIN32
   time = time / 3;
   printf(".");
   fflush(stdout);
@@ -118,7 +134,6 @@ void wait(unsigned int time) {
   fflush(stdout);
   nsleep(time * 1000);
 #else
-#include <unistd.h>
   time = time / 3;
   printf(".");
   fflush(stdout);
@@ -132,19 +147,19 @@ void wait(unsigned int time) {
 #endif
 }
 
-void nsleep(long miliseconds)
-{
-   struct timespec req, rem;
+#ifdef _WIN32
+void nsleep(long miliseconds) {
+  struct timespec req, rem;
 
-   if(miliseconds > 999)
-   {   
-        req.tv_sec = (int)(miliseconds / 1000);                            /* Must be Non-Negative */
-        req.tv_nsec = (miliseconds - ((long)req.tv_sec * 1000)) * 1000000; /* Must be in range of 0 to 999999999 */
-   }   
-   else
-   {   
-        req.tv_sec = 0;                         /* Must be Non-Negative */
-        req.tv_nsec = miliseconds * 1000000;    /* Must be in range of 0 to 999999999 */
-   }   
-   nanosleep(&req , &rem);
+  if (miliseconds > 999) {
+    req.tv_sec = (int)(miliseconds / 1000); /* Must be Non-Negative */
+    req.tv_nsec = (miliseconds - ((long)req.tv_sec * 1000)) *
+                  1000000; /* Must be in range of 0 to 999999999 */
+  } else {
+    req.tv_sec = 0; /* Must be Non-Negative */
+    req.tv_nsec =
+        miliseconds * 1000000; /* Must be in range of 0 to 999999999 */
+  }
+  nanosleep(&req, &rem);
 }
+#endif

@@ -7,12 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void find_replacement(employee_s employees[], int num_of_employees);
+void find_replacement(employee_s employees[], int num_of_employees, int num_of_total_positions);
 void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
                              int shifts);
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
-                   int num_of_employees);
+                   int num_of_employees, int num_of_total_positions);
 int check_if_possible_replacements(employee_s possible_replacements[], int num_of_employees,
                              char scanned_employee_name[]);
 
@@ -26,23 +26,25 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
  * @param employees array of structs of employees.
  * @param num_of_employees number of employees in employees.csv file.
  */
-void find_replacement(employee_s employees[], int num_of_employees) {
+void find_replacement(employee_s employees[], int num_of_employees, int num_of_total_positions) {
   int number_of_shifts;
-  schedule_s *schedule  = (schedule_s*)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
-/*   printf("1yass\n");
- */
+  schedule_s *schedule =
+      (schedule_s *)calloc(MAX_NUMBER_OF_SHIFTS, sizeof(schedule_s));
   FILE *schedule_fp = fopen("schedule.csv", "r");
+  schedule_mem_alloc_check(schedule);
   file_open_check(schedule_fp);
-  
+
   number_of_shifts = count_elements(schedule_fp);
-  schedule = (schedule_s*)realloc(schedule, sizeof(schedule_s) * number_of_shifts);
+  schedule =
+      (schedule_s *)realloc(schedule, sizeof(schedule_s) * number_of_shifts);
+  schedule_mem_alloc_check(schedule);
 
   fill_schedule_with_data(schedule, schedule_fp, number_of_shifts);
 
   fclose(schedule_fp);
 
   edit_schedule(schedule, schedule_fp, number_of_shifts, employees,
-                num_of_employees);
+                num_of_employees, num_of_total_positions);
 }
 
 /**
@@ -72,7 +74,6 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
     schedule[i].employee_name[MAX_STRING_LENGTH - 1] = '\0';
     schedule[i].shift_position[MAX_STRING_LENGTH - 1] = '\0';
   }
-
 }
 /**
  * @brief Gets input from user to find absentee's shift, check for possible
@@ -86,16 +87,17 @@ void fill_schedule_with_data(schedule_s schedule[], FILE *schedule_fp,
  */
 void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
-                   int num_of_employees) {
-  int i, j = 0, l, shift, ch;
-  int day = 0, month = 0;
-  char name_of_absent_employee[MAX_STRING_LENGTH];
+                   int num_of_employees, int num_of_total_positions) {
+  int i, j = 0, shift = -1, day = 0, month = 0;
+  char name_of_absent_employee[MAX_STRING_LENGTH], temp_string[MAX_STRING_LENGTH];
   employee_s *possible_replacements;
 
   do {
     possible_replacements = (employee_s*) calloc(num_of_employees, sizeof(employee_s));
+    employee_mem_alloc_check(possible_replacements);
     shift = -1;
     i = 0;
+    j = 1;
     do {
       /*User picks date for absentee employee ((((IMPROVE: use time.h to find
        * current date as option.))))*/
@@ -106,8 +108,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
              month <
                  0); /*Tomorrow to check for days not existing? - day and month
                         should exit loop if 0 so can break in next while loop*/
-    while ((ch = getchar()) != '\n' && ch != EOF)
-      ;
+    fflush(stdin);   /* Used to clear the input buffer */
     if (day == 0 && month == 0) {
       free(possible_replacements);
       continue;
@@ -134,18 +135,32 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     }
     shift -= i;
 
-    /*Gets user input as to what shift to change*/
-    printf("ENTER NAME OF ABSENT EMPLOYEE.\n");
-    scanf(" %s", name_of_absent_employee);
-    while (schedule[shift].day == day && schedule[shift].month == month) {
-      if (strcmp(schedule[shift].employee_name, name_of_absent_employee) == 0) {
-        printf("CHOSEN SHIFT:\n%s Time: %5.2f-%5.2f. Role: %s\n\n",
-               schedule[shift].employee_name, schedule[shift].shift_start,
-               schedule[shift].shift_end, schedule[shift].shift_position);
-        break;
-      }
-      shift++;
-    }
+      do {
+        i = 0;
+        if (j == 0) {
+          printf("ERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n", name_of_absent_employee, day, month);
+        }
+        j = 0; 
+        /*Gets user input as to what shift to change*/
+        printf("ENTER NAME OF ABSENT EMPLOYEE.\n");
+        scanf(" %s", name_of_absent_employee);
+        capitalize_string(name_of_absent_employee);
+        while (schedule[shift].day == day && schedule[shift].month == month) {
+          if (!strcmp(schedule[shift].employee_name, name_of_absent_employee)) {
+            printf("CHOSEN SHIFT:\n%s Time: %5.2f-%5.2f. Role: %s\n\n",
+                  schedule[shift].employee_name, schedule[shift].shift_start,
+                  schedule[shift].shift_end, schedule[shift].shift_position);
+                j = 1;
+            break;
+          }
+          shift++;
+          i++;
+        }
+        if (j == 1) {
+          break;
+        }
+        shift -= i;
+      } while (i != 0);
 
     j = 0;
     /*Checks which employees do not breach legislation if they took the shift,
@@ -153,15 +168,21 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     for (i = 0; i < num_of_employees; i++) {
       if (check_for_rules(&employees[i], schedule, shift, day, month)) {
         possible_replacements[j] = employees[i];
-        possible_replacements[j].points = 0;
         j++;
       }
     }
+    check_for_weekday_availability(possible_replacements, j, schedule[shift]);
+
+    check_for_qualifications(possible_replacements, j, schedule[shift], num_of_total_positions);
+
+    sort_replacements(possible_replacements, j);
 
     j = 0;
     printf("POSSIBLE REPLACEMENTS ARE:\n");
     while (possible_replacements[j].name[0] != '\0') {
-      printf("%-30s%s\n", possible_replacements[j].name, possible_replacements[j].phone_number);
+      if (possible_replacements[j].points > 0) {
+        printf("REPLACEMENT SCORE: %-15d %-30s%s\n", possible_replacements[j].points, possible_replacements[j].name, possible_replacements[j].phone_number);
+      }
       j++;
     }
       
@@ -179,25 +200,25 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     do {
       printf("ENTER NAME OF REPLACEMENT.\nTO SELECT ANOTHER SHIFT "
              "TYPE 'change'\n");
-      scanf(" %s", schedule[shift].employee_name);
-      while ((ch = getchar()) != '\n' && ch != EOF)
-        ;
+      scanf(" %s", temp_string);
+      fflush(stdin); /* Used to clear the input buffer */
     } while (!check_if_possible_replacements(possible_replacements, num_of_employees,
-                                       schedule[shift].employee_name));
+                                       temp_string));
     free(possible_replacements);
-    if (!strcmp(schedule[shift].employee_name, "change")) {
+    if (!strcmp(temp_string, "change")) {
       continue;
     }
+    strcpy(schedule[shift].employee_name,temp_string);
     /*Skal løbe array igennem over possible_replacements, det indeholder KUN
      * legal replacements, er medarbejder ikke er så fortæl user.*/
 
-    /*Loops until user is has done all desired changes*/
+    /*Loops until user has done all desired changes*/
   } while (day != 0 && month != 0);
 
   /*Opens schedule.csv in write-mode.*/
   schedule_fp = fopen("schedule.csv", "w");
   file_open_check(schedule_fp);
-  
+
   /*Prints new arrays of struct into schedule.csv, closes the file and then
    * returns. This is done after all changes have been made*/
   store_schedule_file(schedule, schedule_fp, number_of_shifts);
@@ -245,7 +266,7 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
   int i;
   fseek(schedule_fp, 0, SEEK_SET);
   for (i = 0; i < number_of_shifts; i++) {
-    fprintf(schedule_fp, "%s,%d,%d,%.2f,%.2f,%s,%s,%d\n", schedule[i].weekday,
+    fprintf(schedule_fp, "%s,%.2d,%.2d,%4.2f,%4.2f,%s,%s,%d\n", schedule[i].weekday,
             schedule[i].day, schedule[i].month, schedule[i].shift_start,
             schedule[i].shift_end, schedule[i].employee_name,
             schedule[i].shift_position, schedule[i].youth_worker);
@@ -264,4 +285,4 @@ void store_schedule_file(schedule_s schedule[], FILE *schedule_fp,
              schedule[i].shift_position);
     }
   }
-} baba*/
+} */

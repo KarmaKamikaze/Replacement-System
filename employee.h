@@ -3,10 +3,13 @@
 #ifndef EMPLOYEE_H
 #define EMPLOYEE_H
 
+#define MAX_STRING_LENGTH 200
+#define MAX_LINE_LENGTH 500
+#define MAX_DISPLAY_ELEMENTS 40
+
 #define MAX_EMPLOYEES 40
 #define MAX_POSITIONS 100
 #define MAX_PHONE 9
-
 
 typedef struct employee_s {
   char name[MAX_STRING_LENGTH];

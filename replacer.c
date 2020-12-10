@@ -1,7 +1,7 @@
+#include "utility.h"
 #include "employee.h"
 #include "positions.h"
 #include "schedule.h"
-#include "utility.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,9 +9,9 @@ void menu_options(int user_choice, employee_s employees[],
                   char positions_str_arr[][MAX_STRING_LENGTH],
                   int *num_of_employees, int *num_of_total_positions);
 
-int main(int argc, char const *argv[]) {
+int main(void) {
   employee_s employees[MAX_POSITIONS];
-  int num_of_employees, num_of_total_positions, ch, menu_choice;
+  int num_of_employees, num_of_total_positions, menu_choice;
   char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH];
   char menu_prompts[][MAX_STRING_LENGTH] = {
       "Please choose the option below that you wish to execute. 0 to quit.",
@@ -31,8 +31,7 @@ int main(int argc, char const *argv[]) {
     display_screen(menu_prompts,
                    sizeof(menu_prompts) / sizeof(menu_prompts[0]) - 1);
     scanf(" %d", &menu_choice);
-    while ((ch = getchar()) != '\n' && ch != EOF)
-      continue;
+    fflush(stdin); /* Used to clear the input buffer */
     if (menu_choice != 0) {
       menu_options(menu_choice, employees, positions_str_arr, &num_of_employees,
                    &num_of_total_positions);
@@ -64,7 +63,7 @@ void menu_options(int user_choice, employee_s employees[],
 
   switch (user_choice) {
   case 1:
-    find_replacement(employees, *num_of_employees);
+    find_replacement(employees, *num_of_employees, *num_of_total_positions);
     break;
 
   case 2:
