@@ -145,20 +145,25 @@ void edit_employee(employee_s employees[], int num_of_employees,
  * the different information that can be changed.
  */
 void choose_employee_information_to_change(int *information_to_change) {
-  char display_choice[][MAX_STRING_LENGTH] = {
-      "ENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT ",
-      "TO CHANGE:",
-      "",
-      "0 = NAME",
-      "1 = PHONE NUMBER",
-      "2 = YOUTH WORKER",
-      "3 = WEEKDAY AVAILABILITY",
-      "4 = POSITIONS",
-      "5 = CHANGE NOTHING"};
+  int i;
+  char **display_choice = calloc(MAX_DISPLAY_ELEMENTS, sizeof(char *));
+  for (i = 0; i < MAX_DISPLAY_ELEMENTS; i++)
+    display_choice[i] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+
+  i = 0;
+  sprintf(display_choice[i++],
+          "ENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT");
+  sprintf(display_choice[i++], "TO CHANGE:");
+  sprintf(display_choice[i++], " ");
+  sprintf(display_choice[i++], "0 = NAME");
+  sprintf(display_choice[i++], "1 = PHONE NUMBER");
+  sprintf(display_choice[i++], "2 = YOUTH WORKER");
+  sprintf(display_choice[i++], "3 = WEEKDAY AVAILABILITY");
+  sprintf(display_choice[i++], "4 = POSITIONS");
+  sprintf(display_choice[i++], "5 = CHANGE NOTHING");
 
   do {
-    display_screen(display_choice,
-                   sizeof(display_choice) / sizeof(display_choice[0]) - 1);
+    display_screen(display_choice, i - 1);
 
     scanf("%d", information_to_change);
     fflush(stdin); /* Used to clear the input buffer */
@@ -168,6 +173,10 @@ void choose_employee_information_to_change(int *information_to_change) {
       wait_time(3);
     }
   } while (*information_to_change < 0 || *information_to_change > 5);
+
+  for (i = 0; i < MAX_LINE_LENGTH; i++)
+    free(display_choice[i]);
+  free(display_choice);
 }
 
 /**
@@ -180,8 +189,9 @@ void choose_employee_information_to_change(int *information_to_change) {
  */
 void delete_employee(employee_s employees[], int *num_of_employees) {
   int current_employee, i, j, k = 0;
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(MAX_DISPLAY_ELEMENTS, sizeof(char *));
+  for (i = 0; i < MAX_DISPLAY_ELEMENTS; i++)
+    display_choice[i] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
   while (confirmation_prompt("delete")) {
     scan_name_edit_or_delete_employee(employees, *num_of_employees,
@@ -203,7 +213,7 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
       sprintf(display_choice[k++], "[%s] ",
               employees[current_employee].positions[i]);
 
-    display_screen(display_choice, k);
+    display_screen(display_choice, k - 1);
     wait_time(6);
 
     if (finished_editing_or_delete_prompt("delete")) {
@@ -232,6 +242,9 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
       wait_time(3);
     }
   }
+  for (i = 0; i < MAX_LINE_LENGTH; i++)
+    free(display_choice[i]);
+  free(display_choice);
 }
 
 /**
@@ -244,12 +257,17 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
  * currently being added, edited or deleted.
  */
 void scan_name(employee_s employees[], int current_employee) {
-  char display_choice[][MAX_STRING_LENGTH] = {"FULL NAME"};
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+  sprintf(display_choice[0], "FULL NAME");
 
   display_screen(display_choice, 0);
   scanf(" %[a-zA-Z ]", employees[current_employee].name);
   fflush(stdin); /* Used to clear the input buffer */
   capitalize_string(employees[current_employee].name);
+
+  free(display_choice[0]);
+  free(display_choice);
 }
 
 /**
@@ -262,7 +280,9 @@ void scan_name(employee_s employees[], int current_employee) {
  * currently being added, edited or deleted.
  */
 void scan_phone_number(employee_s employees[], int current_employee) {
-  char display_choice[][MAX_STRING_LENGTH] = {"PHONE NUMBER"};
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+  sprintf(display_choice[0], "PHONE NUMBER");
 
   do {
     display_screen(display_choice, 0);
@@ -274,6 +294,8 @@ void scan_phone_number(employee_s employees[], int current_employee) {
       wait_time(3);
     }
   } while (strlen(employees[current_employee].phone_number) != 8);
+  free(display_choice[0]);
+  free(display_choice);
 }
 
 /**
@@ -291,8 +313,8 @@ void scan_youth_worker_or_availability(employee_s employees[],
                                        int current_employee,
                                        char *string_youth_or_availability) {
   char temp_string[MAX_STRING_LENGTH];
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
   do {
     sprintf(display_choice[0], "%s (YES/NO)",
@@ -325,6 +347,8 @@ void scan_youth_worker_or_availability(employee_s employees[],
       employees[current_employee].weekday_availability = 0;
     }
   }
+  free(display_choice[0]);
+  free(display_choice);
 }
 
 /**
@@ -340,7 +364,9 @@ void scan_youth_worker_or_availability(employee_s employees[],
  */
 void scan_number_of_positions(employee_s employees[], int current_employee,
                               int num_of_total_positions) {
-  char display_choice[][MAX_STRING_LENGTH] = {"NUMBER OF POSITIONS"};
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+  sprintf(display_choice[0], "NUMBER OF POSITIONS");
 
   if (num_of_total_positions != 0) {
     do {
@@ -359,6 +385,8 @@ void scan_number_of_positions(employee_s employees[], int current_employee,
                  num_of_total_positions ||
              employees[current_employee].number_of_positions <= 0);
   }
+  free(display_choice[0]);
+  free(display_choice);
 }
 
 /**
@@ -381,9 +409,10 @@ void scan_positions(employee_s employees[], int current_employee,
                     char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
                     int num_of_total_positions) {
   int i, j, k = 0, has_duplicates_bool, number_of_scanned_numbers;
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
   int temp_array[MAX_POSITIONS];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(MAX_DISPLAY_ELEMENTS, sizeof(char *));
+  for (i = 0; i < MAX_DISPLAY_ELEMENTS; i++)
+    display_choice[i] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
   if (num_of_total_positions != 0) {
     do {
@@ -393,7 +422,7 @@ void scan_positions(employee_s employees[], int current_employee,
       for (i = 0; i <= num_of_total_positions - 1; i++)
         sprintf(display_choice[k++], "%d = %s", i + 1, positions_str_arr[i]);
 
-      display_screen(display_choice, k);
+      display_screen(display_choice, k - 1);
       number_of_scanned_numbers = 0;
       for (i = 0; i < employees[current_employee].number_of_positions; i++) {
         number_of_scanned_numbers += scanf("%d,", &temp_array[i]);
@@ -454,6 +483,9 @@ void scan_positions(employee_s employees[], int current_employee,
     display_screen(display_choice, 0);
     wait_time(3);
   }
+  for (i = 0; i < MAX_LINE_LENGTH; i++)
+    free(display_choice[i]);
+  free(display_choice);
 }
 
 /**
@@ -472,10 +504,12 @@ void print_employee_after_adding_or_editing(
     employee_s employees[], int current_employee,
     char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     char *string_add_or_edit) {
-  int i = 0, j;
-  char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  int i, j;
+  char **display_choice = calloc(MAX_DISPLAY_ELEMENTS, sizeof(char *));
+  for (i = 0; i < MAX_DISPLAY_ELEMENTS; i++)
+    display_choice[i] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
+  i = 0;
   sprintf(display_choice[i++], "EMPLOYEE %s WAS SUCCESFULLY %s.",
           employees[current_employee].name,
           !strcmp(string_add_or_edit, "add") ? "ADDED" : "EDITED");
@@ -492,8 +526,11 @@ void print_employee_after_adding_or_editing(
     sprintf(display_choice[i++], "%s",
             employees[current_employee].positions[j]);
 
-  display_screen(display_choice, i);
+  display_screen(display_choice, i - 1);
   wait_time(3);
+  for (i = 0; i < MAX_LINE_LENGTH; i++)
+    free(display_choice[i]);
+  free(display_choice);
 }
 
 /**
@@ -515,8 +552,9 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
                                        char *string_edit_or_delete) {
   int i, found_employee_bool;
   char temp_name_string[MAX_STRING_LENGTH];
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+
   do {
     sprintf(display_choice[0], "EMPLOYEE TO %s (FULL NAME)",
             !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
@@ -537,6 +575,8 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
       wait_time(3);
     }
   } while (!found_employee_bool);
+  free(display_choice[0]);
+  free(display_choice);
   *current_employee = i;
 }
 
@@ -549,8 +589,9 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
  */
 int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
   char temp_string[4];
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+
   do {
     sprintf(display_choice[0], "%s (YES/NO)",
             !strcmp(string_edit_or_delete, "edit")
@@ -566,6 +607,9 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
       wait_time(3);
     }
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
+
+  free(display_choice[0]);
+  free(display_choice);
   return !strcmp(temp_string, "YES");
 }
 
@@ -577,10 +621,9 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
  * @return A boolean integer
  */
 int confirmation_prompt(char *string_add_edit_or_delete) {
-  int i;
   char temp_yes_no_string[MAX_STRING_LENGTH];
   char **display_choice = calloc(1, sizeof(char *));
-  *display_choice[0] = calloc(MAX_STRING_LENGTH, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
   do {
     sprintf(display_choice[0], "%s AN EMPLOYEE? (YES/NO)",
@@ -596,11 +639,12 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
       wait_time(3);
-      free(display_choice[i]);
-      free(display_choice);
     }
   } while (strcmp(temp_yes_no_string, "YES") != 0 &&
            strcmp(temp_yes_no_string, "NO") != 0);
+
+  free(display_choice[0]);
+  free(display_choice);
   return !strcmp(temp_yes_no_string, "YES");
 }
 
@@ -617,9 +661,12 @@ int parse_employee_data(employee_s employees[]) {
   int i, j; /* Counters */
   int num_of_elements;
   char temp_positions[MAX_STRING_LENGTH], input_string[MAX_LINE_LENGTH];
-  char display_choice[][MAX_STRING_LENGTH] = {
-      "File positions.txt was not found. Creating new file."};
   char *token;
+  char **display_choice = calloc(1, sizeof(char *));
+  display_choice[0] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
+  sprintf(display_choice[0],
+          "File positions.txt was not found. Creating new file.");
+
   /* Creates a new file if it does not exist.*/
   do {
     fp = fopen("employee.csv", "r");
@@ -655,6 +702,8 @@ int parse_employee_data(employee_s employees[]) {
     employees[i].number_of_positions = j;
   }
   fclose(fp);
+  free(display_choice[0]);
+  free(display_choice);
   return num_of_elements;
 }
 
