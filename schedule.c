@@ -224,10 +224,11 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     /*Gets user input of which employee is going to cover shift. Checks if
      * employer exists in array.*/
     do {
-      printf("ENTER NAME OF REPLACEMENT.\nTO SELECT ANOTHER SHIFT "
+      printf("ENTER NAME OF REPLACEMENT.\nTO SELECT ANOTHER SHIFT\n"
              "TYPE 'CHANGE'\n");
       scanf(" %s", temp_string);
       fflush(stdin); /* Used to clear the input buffer */
+      capitalize_string(temp_string);
     } while (!check_if_possible_replacements(possible_replacements, num_of_employees,
                                              temp_string));
     free(possible_replacements);
@@ -274,14 +275,13 @@ int check_if_possible_replacements(employee_s possible_replacements[], int num_o
   if (!strcmp(scanned_employee_name, "CHANGE")) {
     return true;
   }
-  capitalize_string(scanned_employee_name);
   for (i = 0; i <= num_of_employees; i++) {
     if (!strcmp(scanned_employee_name, possible_replacements[i].name)) {
       return true;
     }
   }
-  wait_time(3);
   printf("EMPLOYEE SELECTED NOT LEGAL REPLACEMENT\n");
+  wait_time(3);
   return false;
 }
 
