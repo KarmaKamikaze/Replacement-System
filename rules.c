@@ -147,7 +147,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
 }
 
 /**
- * @brief Function returns true if employee has less than 48 hours on a weekly average in
+ * @brief Function returns true if employee has less than 48 hours on a weekly average in 4 months.
  * 
  * @param employee 
  * @param schedule 
