@@ -15,7 +15,9 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
                                            int days_from_shift);
 int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month);
+bool checks_hours_since_last_shift(schedule_s schedule[], employee_s *employee, double absentee_shift_end, int found_shift, int day_to_look_at);
 int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift, int month);
+double total_hours_worked(employee_s *employee, schedule_s schedule[], int number_of_shifts);
 double convert_minutes_to_fractions(double minutes);
 int check_for_weekly_day_off(employee_s *employee);
 
@@ -119,26 +121,17 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   double absentee_shift_start = schedule[shift].shift_start,
          absentee_shift_end = schedule[shift].shift_end;
   /*If shift was found day before shift,
-   * checks whether employee has at least 11 hour rest between that ending,
+   * checks whether employee has at least 11 hours of rest if above 18 and 12 hours if youth worker, between that ending,
    * and shift on specified day starting*/
   if ((found_shift = check_what_shift_employee_has_this_day(
            employee, schedule, shift, day, month, -1)) != SHIFT_NOT_FOUND) {
     /*Check for if previous_shift_end ends after midnight*/
-    /*Does not check if it is comparing itself with the employees first shift -
-     * this might not be implemented - because prototype.*/
-    if ((24 - schedule[found_shift].shift_end + absentee_shift_start) < (employee->youth_worker == 1 ? 12 : 11)){
-      return false;
-    }
+    checks_hours_since_last_shift(schedule, employee, absentee_shift_end, found_shift, -1);
   }
-
-  /*If shift was found day after,
-   * checks whether employee has at least 11 hour rest between that ending,
-   * and shift on specified day starting*/
+  /*If shift was found day after,*/
   if ((found_shift = check_what_shift_employee_has_this_day(
            employee, schedule, shift, day, month, 1)) != SHIFT_NOT_FOUND) {
-    if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < (employee->youth_worker == 1 ? 12 : 11)) {
-      return false;
-    }
+    checks_hours_since_last_shift(schedule, employee, absentee_shift_end, found_shift, 1);
   }
 
   /*If shift was not found on the specified day of shift - returns true.
@@ -153,26 +146,28 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   return true;
 }
 
+bool checks_hours_since_last_shift(schedule_s schedule[], employee_s *employee, double absentee_shift_end, int found_shift, int day_to_look_at){
+  if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < (employee->youth_worker == day_to_look_at ? 12 : 11)) {
+    return false;
+  }
+  return true;
+}
+
 /** @brief Function returns true if employee has less than 48 hours on a weekly average in 4 months.
  * 
- * @param employee 
- * @param schedule 
- * @param number_of_shifts 
- * @return int 
+ * @param employee Parse in the employee choosen.
+ * @param schedule Parse in the schedule array containing all shifts.
+ * @param number_of_shifts Parse in the number of shifts.
+ * @return true or false.
  */
 int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift, int month) { 
-  int i, days_in_4_months;
+  int i, days_in_4_months = 0;
   double hours_worked = 0, average_hours_worked = 0;
 
   /* Counts days in a 4 month period. */
   for (i = month; i <= month + 3; i++) { days_in_4_months += days_in_month(i);}
   /* loops through all shifts and counts the total hours worked in 4 months for employee. */
-  for(i = 0; i < number_of_shifts; i++) {
-    if (strcmp(schedule[i].employee_name, employee->name) == 0) {
-      hours_worked += (int)schedule[i].shift_end - (int)schedule[i].shift_start;
-      hours_worked += convert_minutes_to_fractions(schedule[i].shift_end) - convert_minutes_to_fractions(schedule[i].shift_start);
-    }
-  }
+  hours_worked = total_hours_worked(employee, schedule, number_of_shifts);
 
   /* calculates averages weekly hours worked for employee. */
   average_hours_worked = ( hours_worked / days_in_4_months) * WEEK_LENGTH;
@@ -180,13 +175,42 @@ int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int numb
   return true;
 }
 
+/**
+ * @brief Funtion returns a total hours worked for an employee as a double.
+ * 
+ * @param employee Parse in the employee choosen.
+ * @param schedule Parse in the schedule array containing all shifts.
+ * @param number_of_shifts Number of shifts in schedule.
+ * @return double 
+ */
+double total_hours_worked(employee_s *employee, schedule_s schedule[], int number_of_shifts) {
+  int i;
+  double hours_worked = 0;
+  
+  for(i = 0; i < number_of_shifts; i++) {
+    if (strcmp(schedule[i].employee_name, employee->name) == 0) {
+      hours_worked += (int)schedule[i].shift_end - (int)schedule[i].shift_start;
+      hours_worked += convert_minutes_to_fractions(schedule[i].shift_end) - convert_minutes_to_fractions(schedule[i].shift_start);
+    }
+  }
+  return hours_worked;
+}
+
 double convert_minutes_to_fractions(double minutes) {
   double fraction = minutes - (int)minutes;
   return (fraction == 0 ? 0 :((fraction > 0.14 && fraction < 0.16) ? 0.25 : ((fraction > 0.29 && fraction < 0.31) ? 0.5 : 0.75)));
-  }
+}
 
 int check_for_weekly_day_off(employee_s *employee) { return true; }
 
+/**
+ * @brief Compares an employees qulifications to the qulifications needed to cover a shift.
+ * Assign points to employees with qulifications.
+ * @param possible_replacements Takes in an emoloyee
+ * @param remaining_employees 
+ * @param absentee_shift_in_schedule Shift that needs to have a replacement.
+ * @param num_of_total_positions Total number of qulifications for employee.
+ */
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule, int num_of_total_positions){
   int i, j;
   bool has_position;
@@ -249,7 +273,12 @@ void check_for_youth_worker(employee_s possible_replacements[], int remaining_em
   }
 }
 
-
+/**
+ * @brief Function returns the day after the day parsed in.
+ * 
+ * @param date Date parsed in
+ * @return date, returns the day after the day parsed in.
+ */
 date_s tomorrow(date_s date) {
   if (date.month == 12 && date.day == days_in_month(date.month)) {
     date.month = 1;
@@ -264,6 +293,12 @@ date_s tomorrow(date_s date) {
   return date;
 }
 
+/**
+ * @brief Function returns the day before the day parsed in.
+ * 
+ * @param date Date parsed in
+ * @return date, returns the day before the day parsed in.
+ */
 date_s yesterday(date_s date) {
   if (date.month == 1 && date.day == 1) {
     date.month = 12;
@@ -278,6 +313,12 @@ date_s yesterday(date_s date) {
   return date;
 }
 
+/**
+ * @brief Funtion returns the days in a specific month.
+ * 
+ * @param month input the month you want to find the days in.
+ * @return int, return days in a specific month. 
+ */
 int days_in_month(int month) {
   switch (month) {
     case 1:
