@@ -104,7 +104,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       /*User picks date for absentee employee ((((IMPROVE: use time.h to find
        * current date as option.))))*/
       sprintf(display_choice[k++],"ENTER DAY AND MONTH FOR ABSENT EMPLOYEE'S SHIFT");
-      sprintf(display_choice[k++], "TYPE '0/0 TO QUIT'");
+      sprintf(display_choice[k], "TYPE '0/0 TO QUIT'");
       display_screen(display_choice, k);
       scanf(" %d/%d", &day, &month);
     } while (day > 31 || month > 12 || day < 0 ||
