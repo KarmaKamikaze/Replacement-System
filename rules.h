@@ -18,6 +18,8 @@ int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int 
                     int day, int month);
 
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
+void check_for_weekday_availability(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule);
+void check_for_youth_worker(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule);
 
 void sort_replacements(employee_s possible_replacements[], int remaining_employees);
 #endif
