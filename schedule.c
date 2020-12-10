@@ -92,7 +92,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
                    int number_of_shifts, employee_s employees[],
                    int num_of_employees, int num_of_total_positions)
 {
-  int i, j = 0, shift = -1, day = 0, month = 0;
+  int i, j, shift, day = 0, month = 0;
   bool any_employee_has_no_points = false;
   char name_of_absent_employee[MAX_STRING_LENGTH], temp_string[MAX_STRING_LENGTH];
   employee_s *possible_replacements;
@@ -135,15 +135,16 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
         i++;
         shift++;
       }
-      if (i > 0)
+      if (i > 0 || shift == number_of_shifts)
       {
         break;
       }
     } while (schedule[shift].day != day || schedule[shift].month != month);
 
-    if (i == 0)
-    {
+    if (i == 0) {
       printf("ERROR. NO SHIFTS FOUND ON SPECIFIED DATE: %d/%d\n", day, month);
+      free(possible_replacements);
+      continue;
     }
     shift -= i;
 
