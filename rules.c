@@ -21,7 +21,7 @@ void check_for_qualifications(employee_s possible_replacements[], int remaining_
 
 void check_for_weekday_availability(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule);
 bool shift_is_weekday(schedule_s absentee_shift_in_schedule);
-void check_for_youth_worker(employee_s *employee, schedule_s absentee_shift_in_schedule);
+void check_for_youth_worker(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule);
 
 
 int days_in_month(int month);
@@ -48,12 +48,7 @@ int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int 
   * If not breaching, prints employee and phone number*/
 /*   */
  if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
-    employee->points = 0;
-    check_for_youth_worker(employee, schedule[shift]);
-    if (employee->points != 0)
-      return true;
-    else
-      return false;
+    return true;
   }
 
   return false;
@@ -173,7 +168,7 @@ void check_for_qualifications(employee_s possible_replacements[], int remaining_
       }
     }
     if (!has_position)
-      possible_replacements[i].points -= num_of_total_positions;
+      possible_replacements[i].points = 0; 
   }
 }
 
@@ -191,11 +186,12 @@ void check_for_weekday_availability(employee_s possible_replacements[], int rema
   for (i = 0; i < remaining_employees; i++)
   {
     if (!possible_replacements[i].weekday_availability && shift_is_weekday(absentee_shift_in_schedule))
-      possible_replacements[i].points += 2;
+      possible_replacements[i].points += 2; /*non-weekday available worker for sick weekday available worker*/
     else if (possible_replacements[i].weekday_availability && !shift_is_weekday(absentee_shift_in_schedule))
-      possible_replacements[i].points += 3;
+      possible_replacements[i].points += 3; /*weekday available worker for sick non-weekday available worker*/
     else
-      possible_replacements[i].points += 7;
+      possible_replacements[i].points += 7;/*weekday available worker for sick weekday available worker
+                                            *non-weekday available worker for sick non-weekday available worker*/
   }
 }
 
@@ -206,16 +202,19 @@ bool shift_is_weekday(schedule_s absentee_shift_in_schedule)
       absentee_shift_in_schedule.shift_start < 16.00);
 }
 
-void check_for_youth_worker(employee_s *employee, schedule_s absentee_shift_in_schedule)
+void check_for_youth_worker(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule)
 {
-  if (!employee->youth_worker && absentee_shift_in_schedule.youth_worker)
-    employee->points += 2; /*non-youthworker for sick youthworker*/
-  else if (employee->youth_worker && !absentee_shift_in_schedule.youth_worker)
-    employee->points = 0; /*youthworker for sick non-youthworker*/
-  else
-    employee->points += 10; 
+  int i;
+  for (i = 0; i < remaining_employees; i++)
+  {
+    if (!possible_replacements[i].youth_worker && absentee_shift_in_schedule.youth_worker)
+      possible_replacements[i].points += 2; /*non-youthworker for sick youthworker*/
+    else if (possible_replacements[i].youth_worker && !absentee_shift_in_schedule.youth_worker)
+      possible_replacements[i].points += 15;  /*youthworker for sick non-youthworker*/
+    else
+      possible_replacements[i].points += 8; /*both youthworker for sick youthworker and non-youthworker for sick non-youthworker*/
+  }
 }
-
 
 
 date_s tomorrow(date_s date) {
