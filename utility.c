@@ -17,7 +17,7 @@ void capitalize_string(char *str);
 void employee_mem_alloc_check(employee_s *dynamic_array);
 void schedule_mem_alloc_check(schedule_s *dynamic_array);
 void file_open_check(FILE *file_pointer);
-void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
+void display_screen(char **print_list, int size);
 void wait_time(unsigned int time);
 #ifdef _WIN32
 void nsleep(long miliseconds);
@@ -50,14 +50,12 @@ void capitalize_string(char *str) {
     str[i] = toupper(str[i]);
 }
 
-
 void employee_mem_alloc_check(employee_s *dynamic_array) {
   if (dynamic_array == NULL) {
     perror("ERROR");
     exit(EXIT_FAILURE);
   }
 }
-
 
 void schedule_mem_alloc_check(schedule_s *dynamic_array) {
   if (dynamic_array == NULL) {
@@ -81,7 +79,7 @@ void file_open_check(FILE *file_pointer) {
  * @param print_list The array of strings that will be displayed in the
  * "window".
  */
-void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
+void display_screen(char **print_list, int size) {
   int i;
 
 #ifdef _WIN32

@@ -1,7 +1,7 @@
-#include "utility.h"
 #include "employee.h"
 #include "positions.h"
 #include "schedule.h"
+#include "utility.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,25 +11,30 @@ void menu_options(int user_choice, employee_s employees[],
 
 int main(void) {
   employee_s employees[MAX_POSITIONS];
-  int num_of_employees, num_of_total_positions, menu_choice;
+  int i, num_of_employees, num_of_total_positions, menu_choice;
   char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH];
-  char menu_prompts[][MAX_STRING_LENGTH] = {
-      "Please choose the option below that you wish to execute. 0 to quit.",
-      "",
-      "1. Replacement of employee.",
-      "2. Display all employees.",
-      "3. Add new employee.",
-      "4. Edit employee.",
-      "5. Remove employee.",
-      "6. Add new position.",
-      "7. Remove position."};
+  char **menu_prompts = calloc(9, sizeof(char *));
+  for (i = 0; i < 9; i++)
+    menu_prompts[i] = (char *)calloc(MAX_POSITIONS, sizeof(char));
+
+  i = 0;
+  sprintf(
+      menu_prompts[i++],
+      "Please choose the option below that you wish to execute. 0 to quit.");
+  sprintf(menu_prompts[i++], " ");
+  sprintf(menu_prompts[i++], "1. Replacement of employee.");
+  sprintf(menu_prompts[i++], "2. Display all employees.");
+  sprintf(menu_prompts[i++], "3. Add new employee.");
+  sprintf(menu_prompts[i++], "4. Edit employee.");
+  sprintf(menu_prompts[i++], "5. Remove employee.");
+  sprintf(menu_prompts[i++], "6. Add new position.");
+  sprintf(menu_prompts[i++], "7. Remove position.");
 
   do {
     num_of_employees = parse_employee_data(employees);
     num_of_total_positions = parse_positions(positions_str_arr);
 
-    display_screen(menu_prompts,
-                   sizeof(menu_prompts) / sizeof(menu_prompts[0]) - 1);
+    display_screen(menu_prompts, 8);
     scanf(" %d", &menu_choice);
     fflush(stdin); /* Used to clear the input buffer */
     if (menu_choice != 0) {
@@ -40,6 +45,10 @@ int main(void) {
     store_employee_data(employees, num_of_employees);
     store_positions(positions_str_arr, num_of_total_positions);
   } while (menu_choice != 0);
+
+  for (i = 0; i < 9; i++)
+    free(menu_prompts[i]);
+  free(menu_prompts);
 
   return 0;
 }
