@@ -14,6 +14,7 @@ void employee_mem_alloc_check(employee_s *dynamic_array);
 void schedule_mem_alloc_check(schedule_s *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
+void clear_screen();
 void wait_time(unsigned int time);
 
 #endif
