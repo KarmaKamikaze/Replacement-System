@@ -7,7 +7,7 @@
 
 #define MAX_DETERMINANT_LENGTH 10
 #define SHIFT_NOT_FOUND -1
-#define WEEK_LENGHT 7
+#define WEEK_LENGTH 7
 
 typedef struct date_s {
   int day;

@@ -147,7 +147,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
 }
 
 /**
- * @brief Function returns true if employee has less than 48 hours on a weekly average in 4 months.
+ * @brief Function returns true if employee has less than 48 hours on a weekly average in
  * 
  * @param employee 
  * @param schedule 
@@ -165,7 +165,7 @@ int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int numb
   for (i = 0; i < 4; i++) { days_in_4_months += days_in_month(i + 1); }
 
   /* loops through all shifts and counts the total hours worked in 4 months for employee. */
-  for(i = 0; i < 1241; i++){
+  for(i = 0; i < shift; i++){
     if (strcmp(schedule[i].employee_name, employee->name) == 0){
       hours_worked += schedule[i].shift_end - schedule[i].shift_start;
     }
@@ -173,9 +173,9 @@ int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int numb
 
   /* calculates averages weekly hours worked for employee. 
   *  (schedule[current_shift].shift_end - schedule[current_shift].shift_start)
-  * */
+  */
   hours_worked += (schedule[current_shift].shift_end - schedule[current_shift].shift_start);
-  average_hours_worked = ( hours_worked / days_in_4_months) * WEEK_LENGHT;
+  average_hours_worked = ( hours_worked / days_in_4_months) * WEEK_LENGTH;
 
   if (average_hours_worked >= (employee->youth_worker ? 40 : 48)) { return false; }
   
@@ -227,7 +227,6 @@ date_s yesterday(date_s date) {
 
 int days_in_month(int month) {
   switch (month) {
-    /* case 1, 3, 5, 7, 8, 10, 12: */
     case 1:
     case 3:
     case 5:
