@@ -677,7 +677,7 @@ void store_employee_data(const employee_s employees[], int num_of_employees) {
  * @brief This function prints the employee struct array to show that it has
  * been filled correctly.
  *
- * @param employees An employee struct array witch is prefilled.
+ * @param employees An employee struct array which is prefilled.
  * @param num_of_employees The number of employees in the struct array.
  */
 void print_employees(const employee_s employees[], int num_of_employees) {
