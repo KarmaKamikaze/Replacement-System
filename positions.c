@@ -145,7 +145,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH] = {
       "EXISTING POSITIONS", " "};
   int i;
-  memset(display_choice + 1, '\0', MAX_STRING_LENGTH);
+  memset(display_choice + 1, 0, MAX_STRING_LENGTH);
 
   for (i = 0; i < *num_of_total_positions; i++) {
     sprintf(display_choice[i + 2], "%d = %s", i + 1, positions_str_arr[i]);

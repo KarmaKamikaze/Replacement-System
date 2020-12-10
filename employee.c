@@ -180,7 +180,7 @@ void choose_employee_information_to_change(int *information_to_change) {
 void delete_employee(employee_s employees[], int *num_of_employees) {
   int current_employee, i, j, k = 0;
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
 
   while (confirmation_prompt("delete")) {
     scan_name_edit_or_delete_employee(employees, *num_of_employees,
@@ -291,7 +291,7 @@ void scan_youth_worker_or_availability(employee_s employees[],
                                        char *string_youth_or_availability) {
   char temp_string[MAX_STRING_LENGTH];
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
 
   do {
     sprintf(display_choice[0], "%s (YES/NO)",
@@ -382,7 +382,7 @@ void scan_positions(employee_s employees[], int current_employee,
   int i, j, k = 0, has_duplicates_bool, number_of_scanned_numbers;
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
   int temp_array[MAX_POSITIONS];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
 
   if (num_of_total_positions != 0) {
     do {
@@ -473,7 +473,7 @@ void print_employee_after_adding_or_editing(
     char *string_add_or_edit) {
   int i = 0, j;
   char display_choice[MAX_POSITIONS][MAX_STRING_LENGTH];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
 
   sprintf(display_choice[i++], "EMPLOYEE %s WAS SUCCESFULLY %s.",
           employees[current_employee].name,
@@ -515,7 +515,7 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
   int i, found_employee_bool;
   char temp_name_string[MAX_STRING_LENGTH];
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
   do {
     sprintf(display_choice[0], "EMPLOYEE TO %s (FULL NAME)",
             !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
@@ -549,7 +549,7 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
 int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
   char temp_string[4];
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
   do {
     sprintf(display_choice[0], "%s (YES/NO)",
             !strcmp(string_edit_or_delete, "edit")
@@ -578,7 +578,7 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
 int confirmation_prompt(char *string_add_edit_or_delete) {
   char temp_yes_no_string[MAX_STRING_LENGTH];
   char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
   do {
     sprintf(display_choice[0], "%s AN EMPLOYEE? (YES/NO)",
             !strcmp(string_add_edit_or_delete, "add")    ? "ADD"
@@ -690,7 +690,7 @@ void store_employee_data(const employee_s employees[], int num_of_employees) {
 void print_employees(const employee_s employees[], int num_of_employees) {
   char display_choice[MAX_LINE_LENGTH][MAX_STRING_LENGTH];
   int i, j, k = 0;
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
 
   for (i = 0; i < num_of_employees; i++) {
     sprintf(display_choice[k++], "%s %d %d %s %d", employees[i].name,

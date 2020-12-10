@@ -98,8 +98,8 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH],
       display_choice_error_messages[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
   employee_s *possible_replacements;
-  memset(display_choice, '\0', MAX_STRING_LENGTH);
-  memset(display_choice_error_messages, '\0', MAX_STRING_LENGTH);
+  memset(display_choice, 0, MAX_STRING_LENGTH);
+  memset(display_choice_error_messages, 0, MAX_STRING_LENGTH);
 
   do {
     possible_replacements =
