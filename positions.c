@@ -93,28 +93,29 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   bool duplicate_check;
   int i;
 
-  printf("ENTER NEW POSITION:\n");
+  printf("ENTER NEW POSITION(TYPE EXIT TO QUIT):\n");
   scanf("%[^\n]", temp_string);
   fflush(stdin); /* Used to clear the input buffer */
   capitalize_string(temp_string);
-
-  for (i = 0; i < *num_of_total_positions; i++) {
-    /* Because the existing positions end with a newline, but temp_string does
-     * not, we use strncmp to only compare the relevant characters. */
-    if (!strncmp(positions_str_arr[i], temp_string,
-                 strlen(positions_str_arr[i]) > strlen(temp_string)
-                     ? strlen(positions_str_arr[i]) - 1
-                     : strlen(temp_string))) {
-      duplicate_check = true;
-      printf("\nTHIS POSITION ALREADY EXISTS!\n");
-      break;
+  if (strcmp(temp_string, "EXIT")) {
+    for (i = 0; i < *num_of_total_positions; i++) {
+      /* Because the existing positions end with a newline, but temp_string does
+      * not, we use strncmp to only compare the relevant characters. */
+      if (!strncmp(positions_str_arr[i], temp_string,
+                  strlen(positions_str_arr[i]) > strlen(temp_string)
+                      ? strlen(positions_str_arr[i]) - 1
+                      : strlen(temp_string))) {
+        duplicate_check = true;
+        printf("\nTHIS POSITION ALREADY EXISTS!\n");
+        break;
+      }
     }
-  }
-  if (duplicate_check == false) {
-    strcpy(positions_str_arr[*num_of_total_positions], temp_string);
-    printf("\nPOSITION %s HAS BEEN ADDED.\n",
-            positions_str_arr[*num_of_total_positions]);
-    (*num_of_total_positions)++;
+    if (duplicate_check == false) {
+      strcpy(positions_str_arr[*num_of_total_positions], temp_string);
+      printf("\nPOSITION %s HAS BEEN ADDED.\n",
+              positions_str_arr[*num_of_total_positions]);
+      (*num_of_total_positions)++;
+    }
   }
   wait_time(3);
   clear_screen();
@@ -142,7 +143,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   for (i = 0; i < *num_of_total_positions; i++) {
     printf("%d = %s\n", i + 1, positions_str_arr[i]);
   }
-  printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE:\n");
+  printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE(TYPE 0 TO EXIT):\n");
   scanf("%d", &position_value);
   fflush(stdin); /* Used to clear the input buffer */
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
