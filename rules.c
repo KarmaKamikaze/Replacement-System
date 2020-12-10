@@ -1,6 +1,7 @@
 #include "rules.h"
 #include "employee.h"
 #include "schedule.h"
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +15,8 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
                                            int days_from_shift);
 int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month);
-int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift);
+int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift, int month);
+double convert_minutes_to_fractions(double minutes);
 int check_for_weekly_day_off(employee_s *employee);
 
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
@@ -48,7 +50,7 @@ int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int 
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and weekly day off.
   * If not breaching, prints employee and phone number*/
 /*   */
- if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee, schedule, number_of_shifts, shift) && check_for_weekly_day_off(employee)) {
+ if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee, schedule, number_of_shifts, shift, month) && check_for_weekly_day_off(employee)) {
     return true;
   }
 
@@ -151,41 +153,37 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   return true;
 }
 
-/**
- * @brief Function returns true if employee has less than 48 hours on a weekly average in 4 months.
+/** @brief Function returns true if employee has less than 48 hours on a weekly average in 4 months.
  * 
  * @param employee 
  * @param schedule 
  * @param number_of_shifts 
  * @return int 
  */
-int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift) { 
-  int i, days_in_4_months = 0, shift = 0;
+int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift, int month) { 
+  int i, days_in_4_months;
   double hours_worked = 0, average_hours_worked = 0;
 
-  /* Counts total shifts in a four month period. */
-  while (schedule[shift].month <= 4) { shift++; } 
-
   /* Counts days in a 4 month period. */
-  for (i = 0; i < 4; i++) { days_in_4_months += days_in_month(i + 1); }
-
+  for (i = month; i <= month + 3; i++) { days_in_4_months += days_in_month(i);}
   /* loops through all shifts and counts the total hours worked in 4 months for employee. */
-  for(i = 0; i < shift; i++){
-    if (strcmp(schedule[i].employee_name, employee->name) == 0){
-      hours_worked += schedule[i].shift_end - schedule[i].shift_start;
+  for(i = 0; i < number_of_shifts; i++) {
+    if (strcmp(schedule[i].employee_name, employee->name) == 0) {
+      hours_worked += (int)schedule[i].shift_end - (int)schedule[i].shift_start;
+      hours_worked += convert_minutes_to_fractions(schedule[i].shift_end) - convert_minutes_to_fractions(schedule[i].shift_start);
     }
   }
 
-  /* calculates averages weekly hours worked for employee. 
-  *  (schedule[current_shift].shift_end - schedule[current_shift].shift_start)
-  */
-  hours_worked += (schedule[current_shift].shift_end - schedule[current_shift].shift_start);
+  /* calculates averages weekly hours worked for employee. */
   average_hours_worked = ( hours_worked / days_in_4_months) * WEEK_LENGTH;
-
-  if (average_hours_worked >= (employee->youth_worker ? 40 : 48)) { return false; }
-  
+  if (average_hours_worked > (employee->youth_worker ? 40 : 48)) { return false; }
   return true;
 }
+
+double convert_minutes_to_fractions(double minutes) {
+  double fraction = minutes - (int)minutes;
+  return (fraction == 0 ? 0 :((fraction > 0.14 && fraction < 0.16) ? 0.25 : ((fraction > 0.29 && fraction < 0.31) ? 0.5 : 0.75)));
+  }
 
 int check_for_weekly_day_off(employee_s *employee) { return true; }
 
