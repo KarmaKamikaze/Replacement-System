@@ -1,6 +1,7 @@
 #include "employee.h"
 #include "utility.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void add_new_employee(employee_s employees[], int *num_of_employees,
@@ -576,9 +577,11 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
  * @return A boolean integer
  */
 int confirmation_prompt(char *string_add_edit_or_delete) {
+  int i;
   char temp_yes_no_string[MAX_STRING_LENGTH];
-  char display_choice[MAX_DISPLAY_ELEMENTS][MAX_STRING_LENGTH];
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(1, sizeof(char *));
+  *display_choice[0] = calloc(MAX_STRING_LENGTH, sizeof(char *));
+
   do {
     sprintf(display_choice[0], "%s AN EMPLOYEE? (YES/NO)",
             !strcmp(string_add_edit_or_delete, "add")    ? "ADD"
@@ -593,6 +596,8 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
       sprintf(display_choice[0], "INVALID INPUT! TRY AGAIN!");
       display_screen(display_choice, 0);
       wait_time(3);
+      free(display_choice[i]);
+      free(display_choice);
     }
   } while (strcmp(temp_yes_no_string, "YES") != 0 &&
            strcmp(temp_yes_no_string, "NO") != 0);
@@ -688,9 +693,10 @@ void store_employee_data(const employee_s employees[], int num_of_employees) {
  * @param num_of_employees The number of employees in the struct array.
  */
 void print_employees(const employee_s employees[], int num_of_employees) {
-  char display_choice[MAX_LINE_LENGTH][MAX_STRING_LENGTH];
   int i, j, k = 0;
-  memset(display_choice, 0, MAX_STRING_LENGTH);
+  char **display_choice = calloc(MAX_LINE_LENGTH, sizeof(char *));
+  for (i = 0; i < MAX_LINE_LENGTH; i++)
+    display_choice[i] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
   for (i = 0; i < num_of_employees; i++) {
     sprintf(display_choice[k++], "%s %d %d %s %d", employees[i].name,
@@ -705,4 +711,8 @@ void print_employees(const employee_s employees[], int num_of_employees) {
   }
   display_screen(display_choice, k - 2);
   wait_time(10);
+
+  for (i = 0; i < MAX_LINE_LENGTH; i++)
+    free(display_choice[i]);
+  free(display_choice);
 }

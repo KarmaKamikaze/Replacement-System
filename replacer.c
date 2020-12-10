@@ -15,7 +15,7 @@ int main(void) {
   char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH];
   char **menu_prompts = calloc(9, sizeof(char *));
   for (i = 0; i < 9; i++)
-    menu_prompts[i] = (char *)calloc(MAX_POSITIONS, sizeof(char));
+    menu_prompts[i] = (char *)calloc(MAX_STRING_LENGTH, sizeof(char));
 
   i = 0;
   sprintf(
