@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
+int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int number_of_shifts,
                     int day, int month);
 int check_what_shift_employee_has_this_day(employee_s *employee,
                                            schedule_s schedule[], int shift,
@@ -14,7 +14,7 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
                                            int days_from_shift);
 int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month);
-int check_for_48_hour_rule(employee_s *employee);
+int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift);
 int check_for_weekly_day_off(employee_s *employee);
 
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
@@ -43,11 +43,12 @@ int compare_replacements(const void *a, const void *b);
  * @param month month of the date.
  * @return int
  */
-int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int day, int month) {
+int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int number_of_shifts,
+                    int day, int month) {
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and weekly day off.
   * If not breaching, prints employee and phone number*/
 /*   */
- if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee) && check_for_weekly_day_off(employee)) {
+ if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee, schedule, number_of_shifts, shift) && check_for_weekly_day_off(employee)) {
     return true;
   }
 
@@ -123,7 +124,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
     /*Check for if previous_shift_end ends after midnight*/
     /*Does not check if it is comparing itself with the employees first shift -
      * this might not be implemented - because prototype.*/
-    if ((24 - schedule[found_shift].shift_end + absentee_shift_start) < 11) {
+    if ((24 - schedule[found_shift].shift_end + absentee_shift_start) < (employee->youth_worker == 1 ? 12 : 11)){
       return false;
     }
   }
@@ -133,7 +134,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
    * and shift on specified day starting*/
   if ((found_shift = check_what_shift_employee_has_this_day(
            employee, schedule, shift, day, month, 1)) != SHIFT_NOT_FOUND) {
-    if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < 11) {
+    if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < (employee->youth_worker == 1 ? 12 : 11)) {
       return false;
     }
   }
@@ -143,14 +144,48 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   * between that starting and shift on specified day ending */
   if ((found_shift = check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, 0)) == SHIFT_NOT_FOUND) {return true;}
   else {
-    if ((schedule[found_shift].shift_start - absentee_shift_end) < 11 && (absentee_shift_start - schedule[found_shift].shift_end) < 11) {
+    if ((schedule[found_shift].shift_start - absentee_shift_end) < (employee->youth_worker == 1 ? 12 : 11) && (absentee_shift_start - schedule[found_shift].shift_end) < (employee->youth_worker == 1 ? 12 : 11)) {
       return false;
     }
   }
   return true;
 }
 
-int check_for_48_hour_rule(employee_s *employee) { return true; }
+/**
+ * @brief Function returns true if employee has less than 48 hours on a weekly average in 4 months.
+ * 
+ * @param employee 
+ * @param schedule 
+ * @param number_of_shifts 
+ * @return int 
+ */
+int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift) { 
+  int i, days_in_4_months = 0, shift = 0;
+  double hours_worked = 0, average_hours_worked = 0;
+
+  /* Counts total shifts in a four month period. */
+  while (schedule[shift].month <= 4) { shift++; } 
+
+  /* Counts days in a 4 month period. */
+  for (i = 0; i < 4; i++) { days_in_4_months += days_in_month(i + 1); }
+
+  /* loops through all shifts and counts the total hours worked in 4 months for employee. */
+  for(i = 0; i < shift; i++){
+    if (strcmp(schedule[i].employee_name, employee->name) == 0){
+      hours_worked += schedule[i].shift_end - schedule[i].shift_start;
+    }
+  }
+
+  /* calculates averages weekly hours worked for employee. 
+  *  (schedule[current_shift].shift_end - schedule[current_shift].shift_start)
+  */
+  hours_worked += (schedule[current_shift].shift_end - schedule[current_shift].shift_start);
+  average_hours_worked = ( hours_worked / days_in_4_months) * WEEK_LENGTH;
+
+  if (average_hours_worked >= (employee->youth_worker ? 40 : 48)) { return false; }
+  
+  return true;
+}
 
 int check_for_weekly_day_off(employee_s *employee) { return true; }
 
@@ -247,24 +282,24 @@ date_s yesterday(date_s date) {
 
 int days_in_month(int month) {
   switch (month) {
-  case 1:
-  case 3:
-  case 5:
-  case 7:
-  case 8:
-  case 10:
-  case 12:
-    return 31;
-  case 2:
-      return 28;
-  case 4:
-  case 6:
-  case 9:
-  case 11:
-    return 30;
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+      return 31;
+    case 2:
+        return 28;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+      return 30;
 
-  default:
-    return 0;
+    default:
+      return 0;
   }
 }
 
