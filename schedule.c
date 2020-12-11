@@ -123,6 +123,10 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     then it prints all shifts with the inputted day and month*/
     do {
       shift++;
+      if (schedule[shift].day == day && schedule[shift].month == month) {
+        clear_screen();
+        printf("\nDATE: %s %d/%d\n", schedule[shift].weekday, schedule[shift].day, schedule[shift].month);
+      }
       while (schedule[shift].day == day && schedule[shift].month == month) {
         printf("EMPLOYEE: %-20s TIME: %5.2f-%5.2f. ROLE: %s\n",
                schedule[shift].employee_name, schedule[shift].shift_start,
@@ -158,7 +162,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       while (schedule[shift].day == day && schedule[shift].month == month) {
         if (!strcmp(schedule[shift].employee_name, name_of_absent_employee)) {
           clear_screen();
-          printf("CHOSEN SHIFT:\n%s  DATE: %d/%d TIME: %5.2f-%5.2f. ROLE: %s\n\n", schedule[shift].employee_name, schedule[shift].day, 
+          printf("CHOSEN SHIFT:\n%s DATE: %s %d/%d TIME: %5.2f-%5.2f. ROLE: %s\n\n", schedule[shift].employee_name, schedule[shift].weekday, schedule[shift].day, 
           schedule[shift].month, schedule[shift].shift_start,
                  schedule[shift].shift_end, schedule[shift].shift_position);
           j = 1;
