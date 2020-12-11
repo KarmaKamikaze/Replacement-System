@@ -419,12 +419,22 @@ int days_in_month(int month) {
   }
 }
 
+/**
+ * @brief This function sorts employees using qsort
+ * @param possible_replacements A possible replacement struct array which is prefilled.
+ * @param remaining_employees The number of remaining employees in the struct array.
+ */
 void sort_replacements(employee_s possible_replacements[],
                        int remaining_employees) {
   qsort(possible_replacements, remaining_employees, sizeof(employee_s),
         compare_replacements);
 }
 
+/**
+ * @brief This is the comparison function used in qsort that compares possible replacements based on their point
+ * @param a element 1 for comparison
+ * @param b element 2 for comparison
+ */
 int compare_replacements(const void *a, const void *b) {
   employee_s *p1 = (employee_s *)a;
   employee_s *p2 = (employee_s *)b;

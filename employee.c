@@ -668,17 +668,27 @@ void print_employees(employee_s employees[], int num_of_employees) {
       j++;
     }
   }
-  printf("\n\nPRESS ANY BUTTON TO CONTINUE");
+  printf("\n\nPRESS ENTER TO CONTINUE");
   while ((c = getchar()) != '\n' && c != EOF)
     continue;
   getchar();
   clear_screen();
 }
 
+/**
+ * @brief This function sorts employees using qsort
+ * @param employees An employee struct array which is prefilled.
+ * @param num_of_employees The number of employees in the struct array.
+ */
 void sort_employees(employee_s employees[], int num_of_employees) {
   qsort(employees, num_of_employees, sizeof(employee_s), compare_employees);
 }
 
+/**
+ * @brief This is the comparison function used in qsort that compares employees based on their name
+ * @param a element 1 for comparison
+ * @param b element 2 for comparison
+ */
 int compare_employees(const void *a, const void *b) {
   employee_s *p1 = (employee_s *)a;
   employee_s *p2 = (employee_s *)b;
