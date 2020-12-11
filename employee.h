@@ -31,6 +31,6 @@ void edit_employee(employee_s employees[], int num_of_employees,
 void delete_employee(employee_s employees[], int *num_of_employees);
 int parse_employee_data(employee_s employees[]);
 void store_employee_data(const employee_s employees[], int num_of_employees);
-void print_employees(const employee_s employees[], int num_of_employees);
+void print_employees(employee_s employees[], int num_of_employees);
 
 #endif

@@ -32,6 +32,7 @@ int main(void) {
                    sizeof(menu_prompts) / sizeof(menu_prompts[0]) - 1);
     scanf(" %d", &menu_choice);
     fflush(stdin); /* Used to clear the input buffer */
+    clear_screen();
     if (menu_choice != 0) {
       menu_options(menu_choice, employees, positions_str_arr, &num_of_employees,
                    &num_of_total_positions);
