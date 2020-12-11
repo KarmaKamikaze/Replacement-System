@@ -15,7 +15,6 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
                                            int days_from_shift);
 int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month);
-bool checks_hours_since_last_shift(schedule_s schedule[], employee_s *employee, double absentee_shift_end, int found_shift, int day_to_look_at);
 int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift, int month);
 double total_hours_worked(employee_s *employee, schedule_s schedule[], int number_of_shifts);
 double convert_minutes_to_fractions(double minutes);
@@ -126,12 +125,16 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   if ((found_shift = check_what_shift_employee_has_this_day(
            employee, schedule, shift, day, month, -1)) != SHIFT_NOT_FOUND) {
     /*Check for if previous_shift_end ends after midnight*/
-    checks_hours_since_last_shift(schedule, employee, absentee_shift_end, found_shift, -1);
+    if ((24 - schedule[found_shift].shift_end + absentee_shift_start) < (employee->youth_worker == 1 ? 12 : 11)){
+      return false;
+    }
   }
   /*If shift was found day after,*/
   if ((found_shift = check_what_shift_employee_has_this_day(
            employee, schedule, shift, day, month, 1)) != SHIFT_NOT_FOUND) {
-    checks_hours_since_last_shift(schedule, employee, absentee_shift_end, found_shift, 1);
+    if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < (employee->youth_worker == 1 ? 12 : 11)) {
+      return false;
+    }
   }
 
   /*If shift was not found on the specified day of shift - returns true.
@@ -142,13 +145,6 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
     if ((schedule[found_shift].shift_start - absentee_shift_end) < (employee->youth_worker == 1 ? 12 : 11) && (absentee_shift_start - schedule[found_shift].shift_end) < (employee->youth_worker == 1 ? 12 : 11)) {
       return false;
     }
-  }
-  return true;
-}
-
-bool checks_hours_since_last_shift(schedule_s schedule[], employee_s *employee, double absentee_shift_end, int found_shift, int day_to_look_at){
-  if ((24 - absentee_shift_end + schedule[found_shift].shift_start) < (employee->youth_worker == day_to_look_at ? 12 : 11)) {
-    return false;
   }
   return true;
 }
@@ -209,7 +205,7 @@ int check_for_weekly_day_off(employee_s *employee) { return true; }
  * @param possible_replacements Takes in an emoloyee
  * @param remaining_employees 
  * @param absentee_shift_in_schedule Shift that needs to have a replacement.
- * @param num_of_total_positions Total number of qulifications for employee.
+ * @param num_of_total_positions Total number of qulifications existing.
  */
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule, int num_of_total_positions){
   int i, j;
