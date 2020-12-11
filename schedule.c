@@ -136,7 +136,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     } while (schedule[shift].day != day || schedule[shift].month != month);
 
     if (i == 0) {
-      printf("\nERROR. NO SHIFTS FOUND ON SPECIFIED DATE: %d/%d\n", day, month);
+      printf("\nERROR. NO SHIFTS FOUND ON SPECIFIED DATE: %d/%d\n\n", day, month);
       wait_time(3);
       clear_screen();
       free(possible_replacements);
@@ -147,18 +147,17 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     do {
       i = 0;
       if (j == 0) {
-        printf("\nERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n", name_of_absent_employee, day, month); 
-        wait_time(3);
-        clear_screen();
+        printf("\n\nERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n\n", name_of_absent_employee, day, month); 
+        
         }
       j = 0;
       /*Gets user input as to what shift to change*/
       printf("\nENTER NAME OF ABSENT EMPLOYEE.\n");
       scanf(" %s", name_of_absent_employee);
       capitalize_string(name_of_absent_employee);
-      clear_screen();
       while (schedule[shift].day == day && schedule[shift].month == month) {
         if (!strcmp(schedule[shift].employee_name, name_of_absent_employee)) {
+          clear_screen();
           printf("CHOSEN SHIFT:\n%s  DATE: %d/%d TIME: %5.2f-%5.2f. ROLE: %s\n\n", schedule[shift].employee_name, schedule[shift].day, 
           schedule[shift].month, schedule[shift].shift_start,
                  schedule[shift].shift_end, schedule[shift].shift_position);
