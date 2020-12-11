@@ -209,19 +209,15 @@ int check_for_weekly_day_off(employee_s *employee) { return true; }
  */
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s absentee_shift_in_schedule, int num_of_total_positions){
   int i, j;
-  bool has_position;
 
   for (i = 0; i < remaining_employees; i++){
-    has_position = false;
     for (j = 0; j < possible_replacements[i].number_of_positions; j++) {
       if (!strcmp(possible_replacements[i].positions[j], absentee_shift_in_schedule.shift_position)) {
         possible_replacements[i].points += 2 * num_of_total_positions;
         possible_replacements[i].points -= (possible_replacements[i].number_of_positions - 1);
-        has_position = true;
+        possible_replacements[i].is_qualified = true;
       }
     }
-    if (!has_position)
-      possible_replacements[i].points = 0; 
   }
 }
 

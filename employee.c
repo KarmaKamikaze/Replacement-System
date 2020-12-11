@@ -683,6 +683,4 @@ int compare_employees(const void *a, const void *b){
   employee_s *p2 = (employee_s*) b; 
 
   return strcmp(p1->name, p2->name);
-
-
 }
