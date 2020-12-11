@@ -26,7 +26,7 @@ int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   FILE *fp;
   int i, num_of_total_positions;
   char input_string[MAX_STRING_LENGTH];
-  
+
   do {
     fp = fopen("positions.txt", "r");
     if (fp == NULL) {
@@ -100,11 +100,11 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   if (strcmp(temp_string, "EXIT")) {
     for (i = 0; i < *num_of_total_positions; i++) {
       /* Because the existing positions end with a newline, but temp_string does
-      * not, we use strncmp to only compare the relevant characters. */
+       * not, we use strncmp to only compare the relevant characters. */
       if (!strncmp(positions_str_arr[i], temp_string,
-                  strlen(positions_str_arr[i]) > strlen(temp_string)
-                      ? strlen(positions_str_arr[i]) - 1
-                      : strlen(temp_string))) {
+                   strlen(positions_str_arr[i]) > strlen(temp_string)
+                       ? strlen(positions_str_arr[i]) - 1
+                       : strlen(temp_string))) {
         duplicate_check = true;
         printf("\nTHIS POSITION ALREADY EXISTS!\n");
         break;
@@ -113,7 +113,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     if (duplicate_check == false) {
       strcpy(positions_str_arr[*num_of_total_positions], temp_string);
       printf("\nPOSITION %s HAS BEEN ADDED.\n",
-              positions_str_arr[*num_of_total_positions]);
+             positions_str_arr[*num_of_total_positions]);
       (*num_of_total_positions)++;
     }
   }
@@ -143,12 +143,12 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   for (i = 0; i < *num_of_total_positions; i++) {
     printf("%d = %s\n", i + 1, positions_str_arr[i]);
   }
-  printf("\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE(TYPE 0 TO EXIT):\n");
+  printf(
+      "\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE(TYPE 0 TO EXIT):\n");
   scanf("%d", &position_value);
   fflush(stdin); /* Used to clear the input buffer */
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
-    printf("\nPOSITION DELETED: %s\n",
-            positions_str_arr[position_value - 1]);
+    printf("\nPOSITION DELETED: %s\n", positions_str_arr[position_value - 1]);
     if (*num_of_total_positions == 1) {
       remove("positions.txt");
     } else {
@@ -156,8 +156,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
         strcpy(positions_str_arr[i], positions_str_arr[i + 1]);
     }
     (*num_of_total_positions)--;
-  } 
-  else {
+  } else {
     printf("\nTHE CHOSEN POSITION DOES NOT EXIST!\n");
   }
   wait_time(3);

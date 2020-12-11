@@ -3,9 +3,8 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include "schedule.h"
 #include "employee.h"
-
+#include "schedule.h"
 
 /* Function prototypes */
 int count_elements(FILE *fp);
