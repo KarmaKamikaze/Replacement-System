@@ -53,15 +53,11 @@ int compare_replacements(const void *a, const void *b);
  * @param month month of absentee's shift
  * @return true or false.
  */
-<<<<<<< HEAD
-=======
-
->>>>>>> 9ccc801c7b7479bf31c1164b08a903bbc68d302e
 bool check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
                     int number_of_shifts, int day, int month) {
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and
    * weekly day off. If not breaching, prints employee and phone number*/
-  /*   */
+
   if (check_for_11_hour_rule(employee, schedule, shift, day, month) &&
       check_for_48_hour_rule(employee, schedule, number_of_shifts, shift,
                              month) &&
@@ -267,12 +263,12 @@ bool check_for_weekly_day_off(employee_s *employee, schedule_s schedule[], int s
    *or if it it hasn't finished looking through the days*/
   while (count < (employee->youth_worker ? 5 : 6) && (shift_not_found_days_before == false || shift_not_found_days_after == false)){
     /*looking through the days before the shift*/
-    if (!shift_not_found_days_before && check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, i) != SHIFT_NOT_FOUND)
+    if (!shift_not_found_days_before && check_what_shift_employee_has_on_specified_date(employee, schedule, shift, day, month, i) != SHIFT_NOT_FOUND)
       count++;
     else
       shift_not_found_days_before = true;
     /*looking through the days after the shift*/
-    if (!shift_not_found_days_after && check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, j) != SHIFT_NOT_FOUND)
+    if (!shift_not_found_days_after && check_what_shift_employee_has_on_specified_date(employee, schedule, shift, day, month, j) != SHIFT_NOT_FOUND)
       count++;
     else
       shift_not_found_days_after = true;
