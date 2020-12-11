@@ -18,6 +18,7 @@ void employee_mem_alloc_check(employee_s *dynamic_array);
 void schedule_mem_alloc_check(schedule_s *dynamic_array);
 void file_open_check(FILE *file_pointer);
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
+void clear_screen();
 void wait_time(unsigned int time);
 #ifdef _WIN32
 void nsleep(long miliseconds);
@@ -84,16 +85,7 @@ void file_open_check(FILE *file_pointer) {
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
   int i;
 
-#ifdef _WIN32
-  system("cls");
-
-#elif __APPLE__
-  system("clear");
-
-#elif __linux__
-  system("clear");
-
-#endif
+clear_screen();
 
   /* What isn't pretty in the code will have to be pretty elsewhere */
   printf("+--------------------------------------------------------------------"
@@ -114,6 +106,20 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
          "");
   fflush(stdout); /* Flush the line buffer for wait function */
 }
+
+void clear_screen(){
+  #ifdef _WIN32
+    system("cls");
+
+  #elif __APPLE__
+    system("clear");
+
+  #elif __linux__
+    system("clear");
+
+  #endif
+}
+
 
 /**
  * @brief This function will pause the program for three seconds, printing
