@@ -1,4 +1,4 @@
-CFLAGS = -Wall -ansi -pedantic
+CFLAGS = -Wall -ansi -pedantic -lm
 TARGET = replacer
 
 .PHONY: clean
