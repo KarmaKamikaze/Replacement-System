@@ -1,7 +1,7 @@
-#include "utility.h"
 #include "employee.h"
 #include "positions.h"
 #include "schedule.h"
+#include "utility.h"
 #include <stdio.h>
 #include <stdlib.h>
 

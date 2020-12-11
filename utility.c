@@ -51,14 +51,12 @@ void capitalize_string(char *str) {
     str[i] = toupper(str[i]);
 }
 
-
 void employee_mem_alloc_check(employee_s *dynamic_array) {
   if (dynamic_array == NULL) {
     perror("ERROR");
     exit(EXIT_FAILURE);
   }
 }
-
 
 void schedule_mem_alloc_check(schedule_s *dynamic_array) {
   if (dynamic_array == NULL) {
@@ -85,7 +83,7 @@ void file_open_check(FILE *file_pointer) {
 void display_screen(char print_list[][MAX_STRING_LENGTH], int size) {
   int i;
 
-clear_screen();
+  clear_screen();
 
   /* What isn't pretty in the code will have to be pretty elsewhere */
   printf("+--------------------------------------------------------------------"
@@ -107,19 +105,18 @@ clear_screen();
   fflush(stdout); /* Flush the line buffer for wait function */
 }
 
-void clear_screen(){
-  #ifdef _WIN32
-    system("cls");
+void clear_screen() {
+#ifdef _WIN32
+  system("cls");
 
-  #elif __APPLE__
-    system("clear");
+#elif __APPLE__
+  system("clear");
 
-  #elif __linux__
-    system("clear");
+#elif __linux__
+  system("clear");
 
-  #endif
+#endif
 }
-
 
 /**
  * @brief This function will pause the program for three seconds, printing
