@@ -150,10 +150,11 @@ void wait_time(unsigned int time) {
 #endif
 }
 
-#ifdef _WIN32 
+#ifdef _WIN32
 
 /**
- * @brief This function is from: https://stackoverflow.com/questions/7684359/how-to-use-nanosleep-in-c-what-are-tim-tv-sec-and-tim-tv-nsec
+ * @brief This function is from:
+ * https://stackoverflow.com/questions/7684359/how-to-use-nanosleep-in-c-what-are-tim-tv-sec-and-tim-tv-nsec
  * It is an alternative to sleep, where we wait for a number of miliseconds
  * @param miliseconds The amount of time, in miliseconds, to wait for.
  */

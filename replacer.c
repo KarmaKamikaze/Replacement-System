@@ -8,12 +8,13 @@
  *         Simon Peter Rasmussen (spra20@student.aau.dk)
  *         Tobias Lausten (tlaust18@student.aau.dk)
  *         Field of study: Software. Student group: A411
- * @brief This program finds a replacement for an absent employee, based on rules and legislation.
+ * @brief This program finds a replacement for an absent employee, based on
+ * rules and legislation.
  * @version 0.1.0
  * @date 2020-12-18
- * 
+ *
  * @copyright Copyright (c) 2020
- * 
+ *
  */
 
 #include "employee.h"

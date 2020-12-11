@@ -19,7 +19,7 @@ typedef struct employee_s {
   char phone_number[MAX_PHONE];
   int number_of_positions; /* Used internally */
   char positions[MAX_POSITIONS][MAX_STRING_LENGTH];
-  int points; /*internal score system to rank possible replacements*/
+  int points;        /*internal score system to rank possible replacements*/
   bool is_qualified; /*internal value to sort possible replacements*/
 } employee_s;
 

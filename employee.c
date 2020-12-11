@@ -685,7 +685,8 @@ void sort_employees(employee_s employees[], int num_of_employees) {
 }
 
 /**
- * @brief This is the comparison function used in qsort that compares employees based on their name
+ * @brief This is the comparison function used in qsort that compares employees
+ * based on their name
  * @param a element 1 for comparison
  * @param b element 2 for comparison
  */
