@@ -109,7 +109,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     shift = -1, i = 0, day = 0, month = 0, employee_found = true;
 
     do {
-      /*clear_screen();*/
+      clear_screen();
       printf("\nIS THE ABSENT EMPLOYEE'S SHIFT TODAY? (YES/NO)\n");
       scanf(" %s", temp_string);
       fflush(stdin); /* Used to clear the input buffer */
@@ -122,7 +122,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
         printf("SYSTEM DATE TODAY: %d/%d\n", day, month);
         break;
       }
-      /*clear_screen();*/
+      clear_screen();
     } while (strcmp(temp_string,"NO") && strcmp(temp_string,"YES"));
 
     if (day == 0 && month == 0) {
@@ -132,7 +132,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
               "TYPE '0/0' TO QUIT'\n");
         scanf(" %d/%d", &day, &month);
         fflush(stdin);
-        /* clear_screen(); */
+        clear_screen();
       } while (day > 31 || month > 12 || day < 0 ||
               month <
                   0); /*Tomorrow to check for days not existing? - day and month
@@ -250,14 +250,14 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     * Checks if employer is in legal replacement array.*/
     do {
       printf("\nENTER NAME OF REPLACEMENT.\nTO SELECT ANOTHER SHIFT\n"
-             "TYPE 'CHANGE'\n");
+             "TYPE 'CANCEL'\n");
       scanf(" %s", temp_string);
       fflush(stdin); /* Used to clear the input buffer */
       capitalize_string(temp_string);
     } while (!check_if_possible_replacements(possible_replacements,
                                              num_of_employees, temp_string));
     free(possible_replacements);
-    if (!strcmp(temp_string, "CHANGE")) {
+    if (!strcmp(temp_string, "CANCEL")) {
       clear_screen();
       continue;
     }
@@ -296,7 +296,7 @@ bool check_if_possible_replacements(employee_s possible_replacements[],
                                    char scanned_employee_name[]) {
 
   int i;
-  if (!strcmp(scanned_employee_name, "CHANGE")) {
+  if (!strcmp(scanned_employee_name, "CANCEL")) {
     return true;
   }
   for (i = 0; i <= num_of_employees; i++) {

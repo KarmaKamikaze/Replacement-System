@@ -30,7 +30,7 @@ int parse_positions(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH]) {
   do {
     fp = fopen("positions.txt", "r");
     if (fp == NULL) {
-      printf("File positions.txt was not found. Creating new file.\n");
+      printf("\nFile positions.txt was not found. Creating new file.\n");
       wait_time(3);
       clear_screen();
       fp = fopen("positions.txt", "w");
@@ -93,7 +93,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   bool duplicate_check;
   int i;
 
-  printf("ENTER NEW POSITION(TYPE EXIT TO QUIT):\n");
+  printf("\nENTER NEW POSITION(TYPE EXIT TO QUIT):\n");
   scanf("%[^\n]", temp_string);
   fflush(stdin); /* Used to clear the input buffer */
   capitalize_string(temp_string);
@@ -139,7 +139,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   int i, position_value = 0; /*Initialised to 0 to avoid bugs when user inputs
                              letters instead of numbers*/
 
-  printf("EXISTING POSITIONS:\n\n");
+  printf("\nEXISTING POSITIONS:\n\n");
   for (i = 0; i < *num_of_total_positions; i++) {
     printf("%d = %s\n", i + 1, positions_str_arr[i]);
   }
@@ -157,7 +157,8 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
     }
     (*num_of_total_positions)--;
   } else {
-    printf("\nTHE CHOSEN POSITION DOES NOT EXIST!\n");
+    if (position_value != 0)
+      printf("\nTHE CHOSEN POSITION DOES NOT EXIST!\n");
   }
   wait_time(3);
   clear_screen();

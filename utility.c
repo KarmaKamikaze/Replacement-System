@@ -21,7 +21,7 @@ void display_screen(char print_list[][MAX_STRING_LENGTH], int size);
 void clear_screen();
 void wait_time(unsigned int time);
 #ifdef _WIN32
-void nsleep(long miliseconds);
+void msleep(long miliseconds);
 int nanosleep();
 #endif
 
@@ -129,13 +129,13 @@ void wait_time(unsigned int time) {
   time = time / 3;
   printf(".");
   fflush(stdout);
-  nsleep(time * 1000);
+  msleep(time * 1000);
   printf(".");
   fflush(stdout);
-  nsleep(time * 1000);
+  msleep(time * 1000);
   printf(".");
   fflush(stdout);
-  nsleep(time * 1000);
+  msleep(time * 1000);
 #else
   time = time / 3;
   printf(".");
@@ -150,8 +150,14 @@ void wait_time(unsigned int time) {
 #endif
 }
 
-#ifdef _WIN32
-void nsleep(long miliseconds) {
+#ifdef _WIN32 
+
+/**
+ * @brief This function is from: https://stackoverflow.com/questions/7684359/how-to-use-nanosleep-in-c-what-are-tim-tv-sec-and-tim-tv-nsec
+ * It is an alternative to sleep, where we wait for a number of miliseconds
+ * @param miliseconds The amount of time, in miliseconds, to wait for.
+ */
+void msleep(long miliseconds) {
   struct timespec req, rem;
 
   if (miliseconds > 999) {
