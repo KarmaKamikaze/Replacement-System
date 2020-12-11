@@ -1,8 +1,8 @@
 #include "employee.h"
 #include "utility.h"
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 void add_new_employee(employee_s employees[], int *num_of_employees,
                       char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
@@ -144,9 +144,10 @@ void edit_employee(employee_s employees[], int num_of_employees,
  * the different information that can be changed.
  */
 void choose_employee_information_to_change(int *information_to_change) {
-  
-    do {
-    printf("\nENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT TO CHANGE:\n"
+
+  do {
+    printf("\nENTER DIGITS FOR THE CORRESPONDING EMPLOYEE INFORMATION YOU WANT "
+           "TO CHANGE:\n"
            "0 = NAME\n"
            "1 = PHONE NUMBER\n"
            "2 = YOUTH WORKER\n"
@@ -159,7 +160,7 @@ void choose_employee_information_to_change(int *information_to_change) {
       printf("INVALID INPUT! TRY AGAIN!\n");
       wait_time(3);
     }
-    
+
     clear_screen();
   } while (*information_to_change < 0 || *information_to_change > 5);
 }
@@ -181,22 +182,21 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
 
     printf("\nEMPLOYEE SELECTED:\n");
     printf("NAME: %s\n", employees[current_employee].name);
-    printf("PHONE NUMBER: %s\n",
-            employees[current_employee].phone_number);
+    printf("PHONE NUMBER: %s\n", employees[current_employee].phone_number);
     printf("YOUTH WORKER: %s\n",
-            employees[current_employee].youth_worker == 1 ? "YES" : "NO");
+           employees[current_employee].youth_worker == 1 ? "YES" : "NO");
     printf("AVAILABLE ON WEEKDAYS FROM 8-16: %s\n",
-            employees[current_employee].weekday_availability == 1 ? "YES"
-                                                                  : "NO");
+           employees[current_employee].weekday_availability == 1 ? "YES"
+                                                                 : "NO");
     printf("NUMBER OF POSITIONS: %d\n",
-            employees[current_employee].number_of_positions);
+           employees[current_employee].number_of_positions);
     printf("CHOSEN POSITIONS:\n");
     for (i = 0; i < employees[current_employee].number_of_positions; i++)
       printf("[%s]\n", employees[current_employee].positions[i]);
 
     if (finished_editing_or_delete_prompt("delete")) {
       printf("\nEMPLOYEE %s WAS SUCCESFULLY DELETED!\n",
-              employees[current_employee].name);
+             employees[current_employee].name);
       /*This for-loop deletes an employee by overriding the information with the
        *next employee in the array. All the next employees are rearranged one
        *index lower*/
@@ -211,8 +211,7 @@ void delete_employee(employee_s employees[], int *num_of_employees) {
           strcpy(employees[i].positions[j], employees[i + 1].positions[j]);
       }
       (*num_of_employees)--;
-    } 
-    else {
+    } else {
       printf("EMPLOYEE %s WAS NOT DELETED\n", employees[current_employee].name);
     }
     wait_time(3);
@@ -279,9 +278,9 @@ void scan_youth_worker_or_availability(employee_s employees[],
 
   do {
     printf("\n%s (YES/NO) ",
-            !strcmp(string_youth_or_availability, "youth")
-                ? "IS EMPLOYEE A YOUTH WORKER?"
-                : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
+           !strcmp(string_youth_or_availability, "youth")
+               ? "IS EMPLOYEE A YOUTH WORKER?"
+               : "IS EMPLOYEE AVAILABLE ON WEEKDAYS FROM 8-16?");
     scanf(" %s", temp_string);
     fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_string);
@@ -334,12 +333,11 @@ void scan_number_of_positions(employee_s employees[], int current_employee,
         printf("\nINVALID INPUT! TRY AGAIN!\n");
         wait_time(3);
       }
-    clear_screen();
+      clear_screen();
     } while (employees[current_employee].number_of_positions >
                  num_of_total_positions ||
              employees[current_employee].number_of_positions <= 0);
   }
- 
 }
 
 /**
@@ -366,7 +364,8 @@ void scan_positions(employee_s employees[], int current_employee,
 
   if (num_of_total_positions != 0) {
     do {
-      printf("\nENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
+      printf(
+          "\nENTER DIGITS FOR THE CORRESPONDING POSITIONS: (FORMAT: x,y,z)\n");
       for (i = 0; i <= num_of_total_positions - 1; i++) {
         printf("%d = %s\n", i + 1, positions_str_arr[i]);
       }
@@ -428,7 +427,6 @@ void scan_positions(employee_s employees[], int current_employee,
     wait_time(3);
     clear_screen();
   }
- 
 }
 
 /**
@@ -450,20 +448,18 @@ void print_employee_after_adding_or_editing(
   int j;
 
   printf("\nEMPLOYEE %s WAS SUCCESFULLY %s.\n",
-          employees[current_employee].name,
-          !strcmp(string_add_or_edit, "add") ? "ADDED" : "EDITED");
-  printf("PHONE NUMBER: %s.\n",
-          employees[current_employee].phone_number);
+         employees[current_employee].name,
+         !strcmp(string_add_or_edit, "add") ? "ADDED" : "EDITED");
+  printf("PHONE NUMBER: %s.\n", employees[current_employee].phone_number);
   printf("YOUTH WORKER: %s.\n",
-          employees[current_employee].youth_worker == 1 ? "YES" : "NO");
+         employees[current_employee].youth_worker == 1 ? "YES" : "NO");
   printf("AVAILABLE ON WEEKDAYS FROM 8-16: %s.\n",
-          employees[current_employee].weekday_availability == 1 ? "YES" : "NO");
+         employees[current_employee].weekday_availability == 1 ? "YES" : "NO");
   printf("NUMBER OF POSITIONS: %d.\n",
-          employees[current_employee].number_of_positions);
+         employees[current_employee].number_of_positions);
   printf("CHOSEN POSITIONS:\n");
   for (j = 0; j < employees[current_employee].number_of_positions; j++)
-    printf("%s\n",
-            employees[current_employee].positions[j]);
+    printf("%s\n", employees[current_employee].positions[j]);
   wait_time(6);
   clear_screen();
 }
@@ -490,7 +486,7 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
 
   do {
     printf("\nEMPLOYEE TO %s (FULL NAME)\n",
-            !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
+           !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
     scanf("%[a-zA-Z ]", temp_name_string);
     fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_name_string);
@@ -519,12 +515,11 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
  */
 int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
   char temp_string[4];
-  
+
   do {
-    printf("\n%s (YES/NO) ",
-            !strcmp(string_edit_or_delete, "edit")
-                ? "FINISHED EDITING EMPLOYEE?"
-                : "ARE YOU SURE YOU WANT TO DELETE EMPLOYEE?");
+    printf("\n%s (YES/NO) ", !strcmp(string_edit_or_delete, "edit")
+                                 ? "FINISHED EDITING EMPLOYEE?"
+                                 : "ARE YOU SURE YOU WANT TO DELETE EMPLOYEE?");
     scanf(" %s", temp_string);
     fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_string);
@@ -532,7 +527,7 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
       printf("INVALID INPUT! TRY AGAIN!\n");
       wait_time(3);
     }
-    
+
   } while (strcmp(temp_string, "YES") != 0 && strcmp(temp_string, "NO") != 0);
   clear_screen();
   return !strcmp(temp_string, "YES");
@@ -547,12 +542,12 @@ int finished_editing_or_delete_prompt(char *string_edit_or_delete) {
  */
 int confirmation_prompt(char *string_add_edit_or_delete) {
   char temp_yes_no_string[MAX_STRING_LENGTH];
-  
+
   do {
     printf("\n%s AN EMPLOYEE? (YES/NO) ",
-            !strcmp(string_add_edit_or_delete, "add")    ? "ADD"
-            : !strcmp(string_add_edit_or_delete, "edit") ? "EDIT"
-                                                         : "DELETE");
+           !strcmp(string_add_edit_or_delete, "add")    ? "ADD"
+           : !strcmp(string_add_edit_or_delete, "edit") ? "EDIT"
+                                                        : "DELETE");
     scanf("%s", temp_yes_no_string);
     fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_yes_no_string);
@@ -564,7 +559,7 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
     clear_screen();
   } while (strcmp(temp_yes_no_string, "YES") != 0 &&
            strcmp(temp_yes_no_string, "NO") != 0);
-  
+
   return !strcmp(temp_yes_no_string, "YES");
 }
 
@@ -580,7 +575,7 @@ int parse_employee_data(employee_s employees[]) {
   FILE *fp;
   int i, j; /* Counters */
   int num_of_elements;
-  char temp_positions[MAX_STRING_LENGTH], input_string[MAX_LINE_LENGTH];   
+  char temp_positions[MAX_STRING_LENGTH], input_string[MAX_LINE_LENGTH];
   char *token;
   /* Creates a new file if it does not exist.*/
   do {
@@ -656,13 +651,17 @@ void store_employee_data(const employee_s employees[], int num_of_employees) {
  * @param num_of_employees The number of employees in the struct array.
  */
 void print_employees(employee_s employees[], int num_of_employees) {
+  char c;
   int i, j;
 
   sort_employees(employees, num_of_employees);
   for (i = 0; i < num_of_employees; i++) {
     printf("\n%s | %s | %s | %s\n", employees[i].name,
-            employees[i].youth_worker ? "YOUTH WORKER": "NOT YOUTH WORKER", employees[i].weekday_availability ? "AVAILABLE ON WEEKDAYS FROM 8-16" : "NOT AVAILABLE ON WEEKDAYS FROM 8-16",
-            employees[i].phone_number);
+           employees[i].youth_worker ? "YOUTH WORKER" : "NOT YOUTH WORKER",
+           employees[i].weekday_availability
+               ? "AVAILABLE ON WEEKDAYS FROM 8-16"
+               : "NOT AVAILABLE ON WEEKDAYS FROM 8-16",
+           employees[i].phone_number);
     j = 0;
     while (employees[i].positions[j][0] != '\0') {
       printf(" %s\n", employees[i].positions[j]);
@@ -670,17 +669,19 @@ void print_employees(employee_s employees[], int num_of_employees) {
     }
   }
   printf("\n\nPRESS ANY BUTTON TO CONTINUE");
+  while ((c = getchar()) != '\n' && c != EOF)
+    continue;
   getchar();
   clear_screen();
 }
 
-void sort_employees(employee_s employees[], int num_of_employees){
+void sort_employees(employee_s employees[], int num_of_employees) {
   qsort(employees, num_of_employees, sizeof(employee_s), compare_employees);
 }
 
-int compare_employees(const void *a, const void *b){
-  employee_s *p1 = (employee_s*) a;
-  employee_s *p2 = (employee_s*) b; 
+int compare_employees(const void *a, const void *b) {
+  employee_s *p1 = (employee_s *)a;
+  employee_s *p2 = (employee_s *)b;
 
   return strcmp(p1->name, p2->name);
 }
