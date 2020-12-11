@@ -7,15 +7,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-int check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
+bool check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
                     int number_of_shifts, int day, int month);
-int check_what_shift_employee_has_this_day(employee_s *employee,
+int check_what_shift_employee_has_on_specified_date(employee_s *employee,
                                            schedule_s schedule[], int shift,
                                            int day, int month,
                                            int days_from_shift);
-int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
+bool check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month);
-int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[],
+bool check_for_48_hour_rule(employee_s *employee, schedule_s schedule[],
                            int number_of_shifts, int current_shift, int month);
 double total_hours_worked(employee_s *employee, schedule_s schedule[],
                           int number_of_shifts);
@@ -46,20 +46,18 @@ int compare_replacements(const void *a, const void *b);
  * @brief Checks if employee does not breach any rules or legislature if they
  * were to cover the shift.
  *
- * @param employee specific element (meaning specific employee) of array of
- * structs of employees.
+ * @param employee The struct of the employee being checked for legislation, qualifications, etc.
  * @param schedule array of structs of shifts.
- * @param shift number shift.
- * @param day day of date.
- * @param month month of the date.
- * @return int
+ * @param shift What number element the absentee's shift has in schedule array.
+ * @param day date of absentee's shift
+ * @param month month of absentee's shift
+ * @return true or false.
  */
-
-int check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
+bool check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
                     int number_of_shifts, int day, int month) {
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and
    * weekly day off. If not breaching, prints employee and phone number*/
-  /*   */
+
   if (check_for_11_hour_rule(employee, schedule, shift, day, month) &&
       check_for_48_hour_rule(employee, schedule, number_of_shifts, shift,
                              month) &&
@@ -73,18 +71,17 @@ int check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
 /**
  * @brief Checks if employee has shift on the specified days since the
  * absentee's shift.
- *
- * @param employee the specific employee checked
+ * 
+ * @param employee The struct of the employee being checked for legislation, qualifications, etc.
  * @param schedule array of structs of shifts.
- * @param shift number shift.
- * @param day day of date.
- * @param month month of date.
+ * @param shift What number element the absentee's shift has in schedule array.
+ * @param day date of absentee's shift
+ * @param month month of absentee's shift
  * @param days_from_shift number of days from the absentee's shift to look if
  * employee has a shift.
- * @return int. number of shifts if employee has a shift on specified day.
- * Otherwise returns false.
+ * @return int. Subscript value for the checked employees shift OR sentinel value.
  */
-int check_what_shift_employee_has_this_day(employee_s *employee,
+int check_what_shift_employee_has_on_specified_date(employee_s *employee,
                                            schedule_s schedule[], int shift,
                                            int day, int month,
                                            int days_from_shift) {
@@ -92,29 +89,34 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
   int i;
   date.day = day;
   date.month = month;
+
+  /*Finds the date for the shift x+1 days before absentee's shift*/
   if (days_from_shift <= 0) {
     for (i = 0; i >= days_from_shift; i--) {
       date = yesterday(date);
     }
+    /*Decrements shift until it finds the last shift on the date before the specified days from the absentee's shift,
+    then increments shift by 1 to get shift that is x days from the absentee's shift*/
     while (schedule[shift].day != date.day &&
            schedule[shift].month == date.month) {
       shift--;
     }
     shift++;
-  } else if (days_from_shift > 0) {
+
+  /*Finds the date for the shift x days after absentee's shift*/
+  } else if (days_from_shift > 0) { 
     for (i = 0; i < days_from_shift; i++) {
       date = tomorrow(date);
     }
+    /*Increments shift until it finds the first shift on the date of the specified days from the absentee's shift*/
     while (schedule[shift].day != date.day &&
            schedule[shift].month == date.month) {
       shift++;
     }
   }
 
-  /*In case of 1st of January, set shift to 0 if looking for shift yesterday and
-   * today*/
   /*Runs through all shift on the specified day and checks if employee has a
-   * shift, then returns the shift number*/
+   * shift, then returns the shift number. If not found, returns sentinel value*/
   while (schedule[shift].day == day + days_from_shift &&
          schedule[shift].month == month) {
     if (!strcmp(schedule[shift].employee_name, employee->name)) {
@@ -128,23 +130,23 @@ int check_what_shift_employee_has_this_day(employee_s *employee,
 /**
  * @brief Checks if employee has at least 11 hour rest in-between shifts.
  *
- * @param employee the specific employee checked
+ * @param employee The struct of the employee being checked for legislation, qualifications, etc.
  * @param schedule array of structs of shifts.
- * @param shift number shift.
- * @param day day of date
- * @param month month of date
- * @return int
+ * @param shift What number element the absentee's shift has in schedule array.
+ * @param day date of absentee's shift
+ * @param month month of absentee's shift
+ * @return true or false. Based on if employee meets requirements for legislation
  */
-int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
+bool check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
                            int shift, int day, int month) {
-  int found_shift;
+  int found_shift; /*Value for shift number returned from check_what_shift_employee_has_on_specified_date*/
   double absentee_shift_start = schedule[shift].shift_start,
          absentee_shift_end = schedule[shift].shift_end;
   /*If shift was found day before shift,
    * checks whether employee has at least 11 hours of rest if above 18 and 12
    * hours if youth worker, between that ending, and shift on specified day
    * starting*/
-  if ((found_shift = check_what_shift_employee_has_this_day(
+  if ((found_shift = check_what_shift_employee_has_on_specified_date(
            employee, schedule, shift, day, month, -1)) != SHIFT_NOT_FOUND) {
     /*Check for if previous_shift_end ends after midnight*/
     if ((24 - schedule[found_shift].shift_end + absentee_shift_start) <
@@ -153,7 +155,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
     }
   }
   /*If shift was found day after,*/
-  if ((found_shift = check_what_shift_employee_has_this_day(
+  if ((found_shift = check_what_shift_employee_has_on_specified_date(
            employee, schedule, shift, day, month, 1)) != SHIFT_NOT_FOUND) {
     if ((24 - absentee_shift_end + schedule[found_shift].shift_start) <
         (employee->youth_worker == 1 ? 12 : 11)) {
@@ -164,7 +166,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
   /*If shift was not found on the specified day of shift - returns true.
    * If shift was found; checks whether employee has at least 11 hour rest
    * between that starting and shift on specified day ending */
-  if ((found_shift = check_what_shift_employee_has_this_day(
+  if ((found_shift = check_what_shift_employee_has_on_specified_date(
            employee, schedule, shift, day, month, 0)) == SHIFT_NOT_FOUND) {
     return true;
   } else {
@@ -181,12 +183,12 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
 /** @brief Function returns true if employee has less than 48 hours on a weekly
  * average in 4 months.
  *
- * @param employee Parse in the employee choosen.
+ * @param employee The struct of the employee being checked for legislation, qualifications, etc.
  * @param schedule Parse in the schedule array containing all shifts.
  * @param number_of_shifts Parse in the number of shifts.
  * @return true or false.
  */
-int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[],
+bool check_for_48_hour_rule(employee_s *employee, schedule_s schedule[],
                            int number_of_shifts, int current_shift, int month) {
   int i, days_in_4_months = 0;
   double hours_worked = 0, average_hours_worked = 0;
@@ -213,13 +215,12 @@ int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[],
  * @param employee Parse in the employee choosen.
  * @param schedule Parse in the schedule array containing all shifts.
  * @param number_of_shifts Number of shifts in schedule.
- * @return double
+ * @return double. Total accumulated hours worked as number with fraction.
  */
 double total_hours_worked(employee_s *employee, schedule_s schedule[],
                           int number_of_shifts) {
   int i;
   double hours_worked = 0;
-
   for (i = 0; i < number_of_shifts; i++) {
     if (strcmp(schedule[i].employee_name, employee->name) == 0) {
       hours_worked += (int)schedule[i].shift_end - (int)schedule[i].shift_start;
@@ -230,8 +231,15 @@ double total_hours_worked(employee_s *employee, schedule_s schedule[],
   return hours_worked;
 }
 
+/**
+ * @brief convert minutes to fractions.
+ * 
+ * @param minutes hours and minutes with minutes in hourly interval.
+ * @return double. minutes converted to standard fractions.
+ */
 double convert_minutes_to_fractions(double minutes) {
   double fraction = minutes - (int)minutes;
+  /*Uses intervals for fractions because of imprecision of doubles*/
   return (fraction == 0
               ? 0
               : ((fraction > 0.14 && fraction < 0.16)
@@ -255,12 +263,12 @@ bool check_for_weekly_day_off(employee_s *employee, schedule_s schedule[], int s
    *or if it it hasn't finished looking through the days*/
   while (count < (employee->youth_worker ? 5 : 6) && (shift_not_found_days_before == false || shift_not_found_days_after == false)){
     /*looking through the days before the shift*/
-    if (!shift_not_found_days_before && check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, i) != SHIFT_NOT_FOUND)
+    if (!shift_not_found_days_before && check_what_shift_employee_has_on_specified_date(employee, schedule, shift, day, month, i) != SHIFT_NOT_FOUND)
       count++;
     else
       shift_not_found_days_before = true;
     /*looking through the days after the shift*/
-    if (!shift_not_found_days_after && check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, j) != SHIFT_NOT_FOUND)
+    if (!shift_not_found_days_after && check_what_shift_employee_has_on_specified_date(employee, schedule, shift, day, month, j) != SHIFT_NOT_FOUND)
       count++;
     else
       shift_not_found_days_after = true;
