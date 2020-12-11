@@ -5,8 +5,7 @@
 #ifndef RULES_H
 #define RULES_H
 
-#define MAX_DETERMINANT_LENGTH 10
-#define SHIFT_NOT_FOUND -1
+#define SHIFT_NOT_FOUND -1 /*Sentinel value if no shift is found*/
 #define WEEK_LENGTH 7
 
 typedef struct date_s {
@@ -14,7 +13,7 @@ typedef struct date_s {
   int month;
 } date_s;
 
-int check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
+bool check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
                     int number_of_shifts, int day, int month);
 
 
