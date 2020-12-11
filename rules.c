@@ -18,7 +18,7 @@ int check_for_11_hour_rule(employee_s *employee, schedule_s schedule[],
 int check_for_48_hour_rule(employee_s *employee, schedule_s schedule[], int number_of_shifts, int current_shift, int month);
 double total_hours_worked(employee_s *employee, schedule_s schedule[], int number_of_shifts);
 double convert_minutes_to_fractions(double minutes);
-int check_for_weekly_day_off(employee_s *employee);
+bool check_for_weekly_day_off(employee_s *employee, schedule_s schedule[], int shift, int day, int month);
 
 void check_for_qualifications(employee_s possible_replacements[], int remaining_employees, schedule_s schedule, int num_of_total_positions);
 
@@ -51,7 +51,7 @@ int check_for_rules(employee_s *employee, schedule_s schedule[], int shift, int 
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and weekly day off.
   * If not breaching, prints employee and phone number*/
 /*   */
- if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee, schedule, number_of_shifts, shift, month) && check_for_weekly_day_off(employee)) {
+ if (check_for_11_hour_rule(employee, schedule, shift, day, month) && check_for_48_hour_rule(employee, schedule, number_of_shifts, shift, month) && check_for_weekly_day_off(employee, schedule, shift, day, month)) {
     return true;
   }
 
@@ -197,7 +197,41 @@ double convert_minutes_to_fractions(double minutes) {
   return (fraction == 0 ? 0 :((fraction > 0.14 && fraction < 0.16) ? 0.25 : ((fraction > 0.29 && fraction < 0.31) ? 0.5 : 0.75)));
 }
 
-int check_for_weekly_day_off(employee_s *employee) { return true; }
+/**
+ * @brief Checks if employee can take a shift and still get a weekly day off. returns true if they can
+ * @param employee the specific employee checked
+ * @param schedule array of structs of shifts in schedule.
+ * @param shift shift number.
+ * @param day day of date
+ * @param month month of date
+ * @return bool
+ * */
+bool check_for_weekly_day_off(employee_s *employee, schedule_s schedule[], int shift, int day, int month){
+  int i = -1,j = 1,count = 0;
+  bool shift_not_found_days_before = false , shift_not_found_days_after = false;
+  /*While loop that runs as long as it hasn't found 5/6 consecutive days (5 for youthworkers, 6 for non-youthworkers) where the employee has a shift from the sick leave day - 
+   *or if it it hasn't finished looking through the days*/
+  while (count < (employee->youth_worker ? 5 : 6) && (shift_not_found_days_before == false || shift_not_found_days_after == false)){
+    /*looking through the days before the shift*/
+    if (!shift_not_found_days_before && check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, i) != SHIFT_NOT_FOUND)
+      count++;
+    else
+      shift_not_found_days_before = true;
+    /*looking through the days after the shift*/
+    if (!shift_not_found_days_after && check_what_shift_employee_has_this_day(employee, schedule, shift, day, month, j) != SHIFT_NOT_FOUND)
+      count++;
+    else
+      shift_not_found_days_after = true;
+    i--;
+    j++;
+  }
+  if (count >= (employee->youth_worker ? 5 : 6))
+    {
+      return false;
+    }
+  return true;
+}
+
 
 /**
  * @brief Compares an employees qulifications to the qulifications needed to cover a shift.
