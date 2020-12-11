@@ -190,15 +190,14 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
         j++;
       }
     }
-    /*lav for loop med de næste 3 funktioner i sig - kræver ændring i
-     * funktionerne*/
-    check_for_weekday_availability(possible_replacements, j, schedule[shift]);
 
-    check_for_youth_worker(possible_replacements, j, schedule[shift]);
-
-    check_for_qualifications(possible_replacements, j, schedule[shift],
-                             num_of_total_positions);
-
+    for (i = 0; i < j; i++)
+    {
+      check_for_weekday_availability(&possible_replacements[i], schedule[shift]);
+      check_for_youth_worker(&possible_replacements[i], schedule[shift]);
+      check_for_qualifications(&possible_replacements[i], schedule[shift],
+                              num_of_total_positions);
+    }
     sort_replacements(possible_replacements, j);
 
     j = 0;

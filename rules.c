@@ -22,17 +22,15 @@ double total_hours_worked(employee_s *employee, schedule_s schedule[],
 double convert_minutes_to_fractions(double minutes);
 bool check_for_weekly_day_off(employee_s *employee, schedule_s schedule[], int shift, int day, int month);
 
-void check_for_qualifications(employee_s possible_replacements[],
-                              int remaining_employees, schedule_s schedule,
-                              int num_of_total_positions);
 
-void check_for_weekday_availability(employee_s possible_replacements[],
-                                    int remaining_employees,
+void check_for_weekday_availability(employee_s *possible_replacement,
                                     schedule_s absentee_shift_in_schedule);
 bool shift_is_weekday(schedule_s absentee_shift_in_schedule);
-void check_for_youth_worker(employee_s possible_replacements[],
-                            int remaining_employees,
+void check_for_youth_worker(employee_s *possible_replacement,
                             schedule_s absentee_shift_in_schedule);
+void check_for_qualifications(employee_s *possible_replacement, schedule_s schedule,
+                              int num_of_total_positions);
+
 
 int days_in_month(int month);
 date_s tomorrow(date_s date);
@@ -276,82 +274,71 @@ bool check_for_weekly_day_off(employee_s *employee, schedule_s schedule[], int s
 
 
 /**
- * @brief Compares an employees qulifications to the qulifications needed to
- * cover a shift. Assign points to employees with qulifications.
- * @param possible_replacements Takes in an emoloyee
- * @param remaining_employees
- * @param absentee_shift_in_schedule Shift that needs to have a replacement.
- * @param num_of_total_positions Total number of qulifications existing.
- */
-void check_for_qualifications(employee_s possible_replacements[],
-                              int remaining_employees,
-                              schedule_s absentee_shift_in_schedule,
-                              int num_of_total_positions) {
-  int i, j;
-
-  for (i = 0; i < remaining_employees; i++){
-    for (j = 0; j < possible_replacements[i].number_of_positions; j++) {
-      if (!strcmp(possible_replacements[i].positions[j],
-                  absentee_shift_in_schedule.shift_position)) {
-        possible_replacements[i].points += 2 * num_of_total_positions;
-        possible_replacements[i].points -= (possible_replacements[i].number_of_positions - 1);
-        possible_replacements[i].is_qualified = true;
-      }
-    }
-  }
-}
-
-/**
- * @brief stuff
- * @param employee the specific employee checked
- * @param absentee_shift_in_schedule array of structs of shifts.
- * @param shift number shift.
+ * @brief gives points based on an employee's and the absentee's weekday availability
+ * @param possible_replacement the employee that is a possible replacement
+ * @param absentee_shift_in_schedule Shift that needs a replacement.
  * @return void
  * */
-void check_for_weekday_availability(employee_s possible_replacements[],
-                                    int remaining_employees,
+void check_for_weekday_availability(employee_s *possible_replacement,
                                     schedule_s absentee_shift_in_schedule) {
-  int i;
-  for (i = 0; i < remaining_employees; i++) {
-    if (!possible_replacements[i].weekday_availability &&
-        shift_is_weekday(absentee_shift_in_schedule))
-      possible_replacements[i].points +=
-          2; /*non-weekday available worker for sick weekday available worker*/
-    else if (possible_replacements[i].weekday_availability &&
-             !shift_is_weekday(absentee_shift_in_schedule))
-      possible_replacements[i].points +=
-          3; /*weekday available worker for sick non-weekday available worker*/
-    else
-      possible_replacements[i].points +=
-          7; /*weekday available worker for sick weekday available worker
-              *non-weekday available worker for sick non-weekday available
-              *worker*/
-  }
+  if (!possible_replacement->weekday_availability &&
+      shift_is_weekday(absentee_shift_in_schedule))
+    possible_replacement->points += 2; /*non-weekday available worker for sick weekday available worker*/
+  else if (possible_replacement->weekday_availability &&
+            !shift_is_weekday(absentee_shift_in_schedule))
+    possible_replacement->points += 3; /*weekday available worker for sick non-weekday available worker*/
+  else
+    possible_replacement->points += 7; /*weekday available worker for sick weekday available worker
+                                        *non-weekday available worker for sick non-weekday available worker*/
 }
-
+/**
+ * @brief a function that checks if a shift is a weekday shift or not
+ * @param absentee_shift_in_schedule the absentee's shift
+ * @return bool
+ * */
 bool shift_is_weekday(schedule_s absentee_shift_in_schedule) {
   return (strcmp(absentee_shift_in_schedule.weekday, "SATURDAY") &&
           strcmp(absentee_shift_in_schedule.weekday, "SUNDAY") &&
           absentee_shift_in_schedule.shift_start < 16.00);
 }
 
-void check_for_youth_worker(employee_s possible_replacements[],
-                            int remaining_employees,
+/**
+ * @brief gives points based on if the employee and the absentee is a youth worker or not
+ * @param possible_replacement the employee that is a possible replacement
+ * @param absentee_shift_in_schedule Shift that needs a replacement.
+ * @return void
+ * */
+void check_for_youth_worker(employee_s *possible_replacement,
                             schedule_s absentee_shift_in_schedule) {
+  if (!possible_replacement->youth_worker &&
+      absentee_shift_in_schedule.youth_worker)
+    possible_replacement->points += 2; /*non-youthworker for sick youthworker*/
+  else if (possible_replacement->youth_worker &&
+            !absentee_shift_in_schedule.youth_worker)
+    possible_replacement->points += 15; /*youthworker for sick non-youthworker*/
+  else
+    possible_replacement->points += 8; /*both youthworker for sick youthworker and non-youthworker for
+              sick non-youthworker*/
+}
+
+/**
+ * @brief Compares an employees qualifications to the qualifications needed to
+ * cover a shift. Assigns points to employees with qualifications.
+ * @param possible_replacement the employee that is a possible replacement
+ * @param absentee_shift_in_schedule Shift that needs a replacement.
+ * @param num_of_total_positions Total number of qualifications existing.
+ */
+void check_for_qualifications(employee_s *possible_replacement,
+                              schedule_s absentee_shift_in_schedule,
+                              int num_of_total_positions) {
   int i;
-  for (i = 0; i < remaining_employees; i++) {
-    if (!possible_replacements[i].youth_worker &&
-        absentee_shift_in_schedule.youth_worker)
-      possible_replacements[i].points +=
-          2; /*non-youthworker for sick youthworker*/
-    else if (possible_replacements[i].youth_worker &&
-             !absentee_shift_in_schedule.youth_worker)
-      possible_replacements[i].points +=
-          15; /*youthworker for sick non-youthworker*/
-    else
-      possible_replacements[i].points +=
-          8; /*both youthworker for sick youthworker and non-youthworker for
-                sick non-youthworker*/
+  for (i = 0; i < possible_replacement->number_of_positions; i++) {
+    if (!strcmp(possible_replacement->positions[i],
+                absentee_shift_in_schedule.shift_position)) {
+      possible_replacement->points += 2 * num_of_total_positions;
+      possible_replacement->points -= (possible_replacement->number_of_positions - 1);
+      possible_replacement->is_qualified = true;
+    }
   }
 }
 
