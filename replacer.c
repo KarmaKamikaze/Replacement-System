@@ -1,3 +1,21 @@
+/**
+ * @file replacer.c
+ * @author Casper Bekhøi Roskær (croska19@student.aau.dk)
+ *         Lasse Mølgaard Andersen (lman20@student.aau.dk)
+ *         Mads Lildholdt Hansen (mlha20@student.aau.dk)
+ *         Nicolai Hejlesen Jørgensen (njarge20@student.aau.dk)
+ *         Sarmilan Tharmabalan (stharm20@student.aau.dk)
+ *         Simon Peter Rasmussen (spra20@student.aau.dk)
+ *         Tobias Lausten (tlaust18@student.aau.dk)
+ *         Field of study: Software. Student group: A411
+ * @brief This program finds a replacement for an absent employee, based on rules and legislation.
+ * @version 0.1.0
+ * @date 2020-12-18
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
+
 #include "employee.h"
 #include "positions.h"
 #include "schedule.h"
