@@ -53,6 +53,10 @@ int compare_replacements(const void *a, const void *b);
  * @param month month of absentee's shift
  * @return true or false.
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9ccc801c7b7479bf31c1164b08a903bbc68d302e
 bool check_for_rules(employee_s *employee, schedule_s schedule[], int shift,
                     int number_of_shifts, int day, int month) {
   /*Checks whether employee does not breach 11-hour rule, 48-hour rule and
