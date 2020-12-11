@@ -147,6 +147,10 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     then it prints all shifts with the inputted day and month*/
     do {
       shift++;
+      if (schedule[shift].day == day && schedule[shift].month == month) {
+        clear_screen();
+        printf("\nDATE: %s %d/%d\n", schedule[shift].weekday, schedule[shift].day, schedule[shift].month);
+      }
       while (schedule[shift].day == day && schedule[shift].month == month) {
         printf("EMPLOYEE: %-20s TIME: %5.2f-%5.2f. ROLE: %s\n",
                schedule[shift].employee_name, schedule[shift].shift_start,
@@ -158,7 +162,7 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     } while (schedule[shift].day != day || schedule[shift].month != month);
 
     if (i == 0) {
-      printf("ERROR. NO SHIFTS FOUND ON SPECIFIED DATE: %d/%d\n", day, month);
+      printf("\nERROR. NO SHIFTS FOUND ON SPECIFIED DATE: %d/%d\n\n", day, month);
       wait_time(3);
       /* clear_screen(); */ /* !!!!!!!!!!!!!!!!!!!!!!!DONT FORGET SARMI
                                :CHEEMSGUN:!!!!!!!!!!!! */
@@ -171,10 +175,15 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     do {
       i = 0;
       if (employee_found == false) {
-        printf("ERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n", name_of_absent_employee, day, month); 
+        printf("\n\nERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n\n", name_of_absent_employee, day, month); 
         wait_time(3);
       }
       employee_found = false;
+
+      if (j == 0) {
+        printf("\n\nERROR. NO SHIFTS FOUND FOR %s ON SPECIFIED DATE: %d/%d\n\n", name_of_absent_employee, day, month); 
+        }
+
       /*Gets user input as to what shift to change*/
       printf("ENTER NAME OF ABSENT EMPLOYEE.\n");
       scanf(" %s", name_of_absent_employee);
@@ -182,8 +191,9 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
       capitalize_string(name_of_absent_employee);
       while (schedule[shift].day == day && schedule[shift].month == month) {
         if (!strcmp(schedule[shift].employee_name, name_of_absent_employee)) {
-          printf("CHOSEN SHIFT:\n%s Time: %5.2f-%5.2f. Role: %s\n\n",
-                 schedule[shift].employee_name, schedule[shift].shift_start,
+          clear_screen();
+          printf("CHOSEN SHIFT:\n%s DATE: %s %d/%d TIME: %5.2f-%5.2f. ROLE: %s\n\n", schedule[shift].employee_name, schedule[shift].weekday, schedule[shift].day, 
+          schedule[shift].month, schedule[shift].shift_start,
                  schedule[shift].shift_end, schedule[shift].shift_position);
           employee_found = true; /*Check to make sure that shift for specified employee was found*/
           break;
