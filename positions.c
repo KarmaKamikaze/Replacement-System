@@ -94,7 +94,7 @@ void new_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   int i;
 
   printf("\nENTER NEW POSITION(TYPE EXIT TO QUIT):\n");
-  scanf("%[^\n]", temp_string);
+  scanf(" %[^\n]", temp_string);
   fflush(stdin); /* Used to clear the input buffer */
   capitalize_string(temp_string);
   if (strcmp(temp_string, "EXIT")) {
@@ -145,7 +145,7 @@ void delete_position(char positions_str_arr[MAX_POSITIONS][MAX_STRING_LENGTH],
   }
   printf(
       "\nENTER DIGIT CORRESPONDING TO POSITION TO DELETE(TYPE 0 TO EXIT):\n");
-  scanf("%d", &position_value);
+  scanf(" %d", &position_value);
   fflush(stdin); /* Used to clear the input buffer */
   if (position_value >= 1 && position_value <= *num_of_total_positions) {
     printf("\nPOSITION DELETED: %s\n", positions_str_arr[position_value - 1]);
