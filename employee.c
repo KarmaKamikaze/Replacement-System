@@ -154,7 +154,7 @@ void choose_employee_information_to_change(int *information_to_change) {
            "3 = WEEKDAY AVAILABILITY\n"
            "4 = POSITIONS\n"
            "5 = CHANGE NOTHING\n");
-    scanf("%d", information_to_change);
+    scanf(" %d", information_to_change);
     fflush(stdin); /* Used to clear the input buffer */
     if (*information_to_change < 0 || *information_to_change > 5) {
       printf("INVALID INPUT! TRY AGAIN!\n");
@@ -487,7 +487,7 @@ void scan_name_edit_or_delete_employee(employee_s employees[],
   do {
     printf("\nEMPLOYEE TO %s (FULL NAME)\n",
            !strcmp(string_edit_or_delete, "edit") ? "EDIT" : "DELETE");
-    scanf("%[a-zA-Z ]", temp_name_string);
+    scanf(" %[a-zA-Z ]", temp_name_string);
     fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_name_string);
     found_employee_bool = 0;
@@ -548,7 +548,7 @@ int confirmation_prompt(char *string_add_edit_or_delete) {
            !strcmp(string_add_edit_or_delete, "add")    ? "ADD"
            : !strcmp(string_add_edit_or_delete, "edit") ? "EDIT"
                                                         : "DELETE");
-    scanf("%s", temp_yes_no_string);
+    scanf(" %s", temp_yes_no_string);
     fflush(stdin); /* Used to clear the input buffer */
     capitalize_string(temp_yes_no_string);
     if (strcmp(temp_yes_no_string, "YES") != 0 &&

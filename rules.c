@@ -205,8 +205,12 @@ bool check_for_48_hour_rule(employee_s *employee, schedule_s schedule[],
   double hours_worked = 0, average_hours_worked = 0;
 
   /* Counts days in a 4 month period. */
-  for (i = month; i <= month + 3; i++) {
-    days_in_4_months += days_in_month(i);
+  for (i = 0; i < 4; i++) {
+    if (month > 12) {
+      month = 1;
+    }
+    days_in_4_months += days_in_month(month);
+    month++;
   }
   /* loops through all shifts and counts the total hours worked in 4 months for
    * employee. */
