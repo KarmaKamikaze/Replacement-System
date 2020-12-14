@@ -16,7 +16,7 @@ typedef struct schedule_s {
   int month;
   double shift_start;
   double shift_end;
-  char employee_name[MAX_STRING_LENGTH]; /*Burde være mindre symbolsk konstant*/
+  char employee_name[MAX_STRING_LENGTH];
   char shift_position[MAX_STRING_LENGTH];
   int youth_worker;
 

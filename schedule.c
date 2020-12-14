@@ -295,7 +295,6 @@ void edit_schedule(schedule_s schedule[], FILE *schedule_fp,
     /*Loops until user has done all desired changes*/
   } while (day != 0 && month != 0);
 
-  /*Opens schedule.csv in write-mode.*/
   schedule_fp = fopen("schedule.csv", "w");
   file_open_check(schedule_fp);
 
